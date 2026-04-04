@@ -6,7 +6,11 @@ import { displayTopError } from '../../ui/components/displayTopError.js';
 import { openExerciseEditor,  getNewExerciseData} from '../../ui/components/exerciseEditor.js';
 
 import { getExerciseById, getWorkoutById } from '../../utils/finders.js';
-import { programs, savePrograms } from '../../storage/storage.js';
+import { loadPrograms, savePrograms } from '../../storage/storage.js';
+
+// UUID
+import { v4 as uuidv4 } from 'https://jspm.dev/uuid';
+
 
 let newExerciseData = {};
 
@@ -80,12 +84,17 @@ function getWorkoutByExerciseId(id) {
 /////////////////////////
 
 function updateExercisesWithNewExercise(exerciseArr) { 
-    const newExercise = newExerciseData;
 
-    if (!newExercise) { 
+    if (!newExerciseData) { 
         console.warn('Error: new exercise data was not found')
         return exerciseArr
     }
+
+    const newExercise = 
+                        {
+                            id: uuidv4(),
+                            ...newExerciseData
+                        }
 
     return [
         newExercise,
@@ -94,7 +103,6 @@ function updateExercisesWithNewExercise(exerciseArr) {
 
 } 
 
-// We first need to identify the parent workout. We already can do that by GetWorkoutById() and we pass in the Id we get from  getWorkoutId
 function updateWorkoutWithExerciseAddition(workoutObj, id) { 
 
     if (workoutObj.id !== id) {
@@ -125,11 +133,12 @@ function updateProgramsArrWithNewProgram(programsArr, id) {
 }
 
 function renderProgramsWithExerciseAddition(id) { 
-    const programs = JSON.parse(localStorage.getItem('programs'));
+    const programs = loadPrograms();
+    const updatedPrograms = updateProgramsArrWithNewProgram(programs, id)
 
-    if (!programs) return;
+    if (!updatedPrograms) return;
 
-    localStorage.setItem('programs', JSON.stringify(updateProgramsArrWithNewProgram(programs, id)));
+    savePrograms(updatedPrograms)
     renderExercises();
 }
 
@@ -137,11 +146,15 @@ function renderProgramsWithExerciseAddition(id) {
 /// EXERCISE EDITING ///
 ////////////////////////
 
-// Updatex the program Array with the new adjusted exercise and saves to localStorge and renders UI accordingly
+// Update the program Array with the new adjusted exercise and saves to localStorge and renders UI accordingly
 function editExercise(id) {
     const selectedExercise = getExerciseById(id);
 
-    console.log(selectedExercise.id)
+    if (!selectedExercise) {
+        console.error('ERROR: Exercise not found')
+    }
+    const programs = loadPrograms();
+
     selectedExercise.name = newExerciseData.name;
     selectedExercise.sets = newExerciseData.sets;
     selectedExercise.minReps = newExerciseData.minReps;

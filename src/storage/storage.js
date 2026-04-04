@@ -2,7 +2,7 @@ import { getDefaultPrograms } from '../data/programs.js'
 
 // Uncomment to reset program to defaults
 // localStorage.clear()
-function loadPrograms() {
+export function loadPrograms() {
     const savedPrograms = localStorage.getItem('programs');
     if (savedPrograms) {
         console.log('Loading programs from local storage....');
@@ -18,9 +18,6 @@ function loadPrograms() {
 }
 
 
-
-export const programs = loadPrograms();
-
-export function savePrograms() {
+export function savePrograms(programs) {
     localStorage.setItem('programs', JSON.stringify(programs))
 }

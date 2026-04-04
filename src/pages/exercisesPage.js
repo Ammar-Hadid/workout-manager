@@ -1,5 +1,5 @@
 import { muscleGroups } from '../data/muscleGroups.js';
-import { programs } from '../storage/storage.js';
+import { loadPrograms } from '../storage/storage.js';
 
 
 function getWorkoutId() {
@@ -10,10 +10,9 @@ function getWorkoutId() {
 
 function getWorkoutById() {
     const workoutId = getWorkoutId();
-    const persistedPrograms = JSON.parse(localStorage.getItem('programs'));
-    const currentProgram = persistedPrograms ? persistedPrograms : programs;
+    const programs = loadPrograms();
 
-    for (const program of currentProgram) {
+    for (const program of programs) {
 
         for (const workout of program.workouts) {
 
