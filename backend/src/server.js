@@ -4,6 +4,8 @@ dotenv.config();
 import express from 'express';
 import mongoose from 'mongoose';
 
+import authRouter from './routes/authRoutes.js';
+
 
 const app = express();
 
@@ -21,5 +23,8 @@ const startServer = async () => {
         console.error(error)
     }
 }
+
+app.use(express.json());
+app.use('/api/auth', authRouter);
 
 startServer();
