@@ -5,6 +5,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 
 import authRouter from './routes/authRoutes.js';
+import programRouter from './routes/programRoutes.js';
 
 
 const app = express();
@@ -26,5 +27,6 @@ const startServer = async () => {
 
 app.use(express.json());
 app.use('/api/auth', authRouter);
+app.use('/api/program', programRouter)
 
 startServer();
