@@ -93,7 +93,7 @@ User can register and login and receive a JWT.
 ### Logic
 - [x] Create program controller
 - [x] Get all programs controller
-- [ ] Update program controller
+- [x] Update program controller
 - [ ] Delete program controller
 
 ### Access

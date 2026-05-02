@@ -105,3 +105,24 @@ export const updateProgram = async (req, res) => {
         return res.status(500).json({ error: 'Server error' });
     };
 };
+
+export const deleteProgram = async (req, res) => {
+    const { id } = req.params;
+
+    if (!mongoose.isValidObjectId(id)) {
+        return res.status(400).json({ error: 'Invalid program id' })
+    }
+
+    try {
+        const program = await Program.findOneAndDelete({ user: req.userId, _id: id });
+
+        if (!program) return res.status(404).json({ error: 'Program not found' });
+
+        return res.status(200).json({ program, message: 'Program deleted successfully' })
+    }
+
+    catch (error) {
+        console.error(`ERROR: ${error}`);
+        return res.status(500).json({ error: 'Server error' })
+    }
+};

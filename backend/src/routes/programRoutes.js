@@ -4,7 +4,8 @@ import {
     createProgram,
     getAllPrograms,
     getProgramById,
-    updateProgram
+    updateProgram,
+    deleteProgram
 } from '../controllers/programController.js';
 
 import requireAuth from '../middleware/requireAuth.js';
@@ -23,6 +24,9 @@ router.post('/', requireAuth, createProgram);
 
 // Update program
 router.patch('/:id', requireAuth, updateProgram)
+
+// Delete program
+router.delete('/:id', requireAuth, deleteProgram)
 
 
 
