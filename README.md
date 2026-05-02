@@ -91,8 +91,8 @@ User can register and login and receive a JWT.
 - [x] Create Program model
 
 ### Logic
-- [ ] Create program controller
-- [ ] Get all programs controller
+- [x] Create program controller
+- [x] Get all programs controller
 - [ ] Update program controller
 - [ ] Delete program controller
 
