@@ -8,7 +8,11 @@ const validateProgram = ({ name, split, trainingDaysPerWeek }, isUpdate = false)
     }
 
     if (!isUpdate || split !== undefined) {
+        const validSplits = ['full-body', 'ppl', 'upper-lower', 'custom'];
+
         if (!split) errors.split = 'Please select a split to structure your workouts.';
+
+        else if (!validSplits.includes(split)) errors.split = 'Please select a valid split.';
     }
 
     if (!isUpdate || trainingDaysPerWeek !== undefined) {

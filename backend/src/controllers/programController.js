@@ -1,6 +1,8 @@
 import Program from "../models/Program.js";
 import mongoose from "mongoose";
 
+import validateProgram from "../utils/validators/programValidator.js";
+
 export const getAllPrograms = async (req, res) => {
     try {
         const programs = await Program.find({ user: req.userId }).sort({ createdAt: -1 });
@@ -38,27 +40,13 @@ export const getProgramById = async (req, res) => {
 export const createProgram = async (req, res) => {
     const { name, split, trainingDaysPerWeek } = req.body;
 
-    // #region name validation
-    if (!name) return res.status(400).json({ error: 'Please name your program to continue.' });
-    if (name.trim().length < 3) return res.status(400).json({ error: 'Program names must be at least 3 characters long.' })
-    // #endregion
+    const errors = validateProgram(req.body);
 
-    // #region split validation
-    if (!split) return res.status(400).json({ error: 'Please select a split to structure your workouts.' });
-    // #endregion
-
-    // #region trainingDaysPerWeek validation
-    if (trainingDaysPerWeek === undefined) return res.status(400).json({ error: 'Please select how many days a week you plan to train.' });
+    if (Object.keys(errors).length > 0) {
+        return res.status(400).json({ errors })
+    }
 
     const days = Number(trainingDaysPerWeek);
-
-    if (isNaN(days)) return res.status(400).json({ error: 'Please enter a number for training days per week.' });
-
-    if (!Number.isInteger(days)) return res.status(400).json({ error: 'Please enter a whole number for training days per week.' })
-
-    if (days < 1 || days > 7) return res.status(400).json({ error: `You entered [${trainingDaysPerWeek}]. Please pick a number of days between 1 and 7.` })
-
-    // #endregion
 
     try {
         const program = await Program.create({
@@ -84,20 +72,36 @@ export const updateProgram = async (req, res) => {
         return res.status(400).json({ error: `Invalid program Id: ${id}` });
     }
 
+    const { name, split, trainingDaysPerWeek } = req.body;
+
+    const errors = validateProgram(req.body, true);
+
+    if (Object.keys(errors).length > 0) {
+        return res.status(400).json({ errors })
+    }
+
+
+    const updatedFields = {
+        ...(name && { name }),
+        ...(split && { split }),
+        ...(trainingDaysPerWeek !== undefined && { trainingDaysPerWeek: Number(trainingDaysPerWeek) })
+    }
+
+
     try {
         const program = await Program.findOneAndUpdate(
             { user: req.userId, _id: id },
-            { ...req.body },
+            updatedFields,
             { new: true }
         );
 
         if (!program) return res.status(404).json({ error: 'Program not found.' })
 
-        res.status(200).json({ program });
+        return res.status(200).json({ program });
     }
 
     catch (error) {
         console.error(`ERROR: ${error}`)
-        res.status(500).json({ error: 'Server error' });
+        return res.status(500).json({ error: 'Server error' });
     };
 };
