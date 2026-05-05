@@ -6,11 +6,12 @@ import mongoose from 'mongoose';
 
 import authRouter from './routes/authRoutes.js';
 import programRouter from './routes/programRoutes.js';
+import workoutrRouter from './routes/workoutRoutes.js';
 
 
 const app = express();
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT;
 
 const startServer = async () => {
     try {
@@ -27,6 +28,7 @@ const startServer = async () => {
 
 app.use(express.json());
 app.use('/api/auth', authRouter);
-app.use('/api/program', programRouter)
+app.use('/api/programs', programRouter);
+app.use('/api/programs/:programId/workouts', workoutrRouter)
 
 startServer();

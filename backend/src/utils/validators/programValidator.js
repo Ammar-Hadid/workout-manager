@@ -2,8 +2,10 @@ const validateProgram = ({ name, split, trainingDaysPerWeek }, isUpdate = false)
     const errors = {};
 
     if (!isUpdate || name !== undefined) {
-        if (!name || name.trim().length < 3) {
-            errors.name = 'Program names must be at least 3 characters long.';
+        const trimmedName = typeof name === "string" ? name.trim() : '';
+
+        if (trimmedName.length < 3 || trimmedName.length > 25) {
+            errors.name = 'Program name must be between 3 and 25 characters.';
         }
     }
 
