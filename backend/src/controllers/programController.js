@@ -51,7 +51,7 @@ export const createProgram = async (req, res) => {
     try {
         const program = await Program.create({
             user: req.userId,
-            name,
+            name: name.trim(),
             split,
             trainingDaysPerWeek: days
         })

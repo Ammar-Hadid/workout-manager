@@ -1,5 +1,8 @@
 import mongoose, { mongo } from "mongoose";
 import Workout from "../models/Workout.js";
+import Program from "../models/Program.js";
+
+import workoutValidator from "../utils/validators/workoutValidator.js";
 
 export const getWorkoutById = async (req, res) => {
     const { workoutId, programId } = req.params;
@@ -49,15 +52,28 @@ export const createWorkout = async (req, res) => {
         return res.status(400).json({ error: 'Invalid program id' });
     }
 
+    const errors = workoutValidator(req.body);
+
+    if (Object.keys(errors).length > 0) {
+        return res.status(400).json({ errors });
+    }
+
+    const minutes = Number(duration);
+
     try {
+
+        const program = await Program.findOne({ user: req.userId, _id: programId });
+
+        if (!program) return res.status(404).json({ error: 'Unable to create workout because the parent program was not found.' });
+
         const lastWorkout = await Workout.findOne({ user: req.userId, program: programId }).sort({ order: -1 });
 
         const workout = await Workout.create({
             user: req.userId,
             program: programId,
-            name,
+            name: name.trim(),
             order: lastWorkout ? lastWorkout.order + 1 : 1,
-            duration
+            duration: minutes
         })
 
         return res.status(201).json({ workout });
@@ -65,7 +81,7 @@ export const createWorkout = async (req, res) => {
 
     catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Server error' });
+        return res.status(500).json({ error: 'Server error' });
     }
 };
 
