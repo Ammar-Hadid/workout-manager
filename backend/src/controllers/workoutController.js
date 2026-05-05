@@ -85,5 +85,43 @@ export const createWorkout = async (req, res) => {
     }
 };
 
-// UserId: 69f9dba8a07e4345c0432e94
-// ProgramId: 69f9dc58a07e4345c0432e95
+export const updateWorkout = async (req, res) => {
+    const { programId, workoutId } = req.params;
+    const { name, duration } = req.body;
+
+    if (!mongoose.isValidObjectId(programId)) {
+        return res.status(400).json({ error: 'Invalid program id' });
+    }
+
+    if (!mongoose.isValidObjectId(workoutId)) {
+        return res.status(400).json({ error: 'Invalid workout id' });
+    }
+
+    const errors = workoutValidator(req.body, true);
+
+    if (Object.keys(errors).length > 0) {
+        return res.status(400).json({ errors });
+    }
+
+    const updatedData = {
+        ...(name && { name: name.trim() }),
+        ...(duration && { duration: Number(duration) })
+    }
+
+    try {
+        const workout = await Workout.findOneAndUpdate(
+            { user: req.userId, program: programId, _id: workoutId },
+            updatedData,
+            { new: true }
+        );
+
+        if (!workout) return res.status(404).json({ error: 'Workout not found' });
+
+        return res.status(200).json({ workout });
+    }
+
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
+    }
+}
