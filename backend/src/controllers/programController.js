@@ -12,7 +12,7 @@ export const getAllPrograms = async (req, res) => {
 
     catch (error) {
         console.error(`ERROR: ${error}`);
-        return res.status(500).json({ error: 'Server error' });
+        return res.status(500).json({ error: 'Server error.' });
     }
 };
 
@@ -20,7 +20,7 @@ export const getProgramById = async (req, res) => {
     const { id } = req.params;
 
     if (!mongoose.isValidObjectId(id)) {
-        return res.status(400).json({ error: `Invalid program id: ${id}` });
+        return res.status(400).json({ error: `Invalid program id: ${id}.` });
     }
 
     try {
@@ -33,7 +33,7 @@ export const getProgramById = async (req, res) => {
 
     catch (error) {
         console.error(`ERROR: ${error}`);
-        return res.status(500).json({ error: 'Server error' });
+        return res.status(500).json({ error: 'Server error.' });
     }
 };
 
@@ -61,7 +61,7 @@ export const createProgram = async (req, res) => {
 
     catch (error) {
         console.error(`ERROR: ${error}`);
-        return res.status(500).json({ error: 'Server error' })
+        return res.status(500).json({ error: 'Server error.' })
     }
 };
 
@@ -69,7 +69,7 @@ export const updateProgram = async (req, res) => {
     const { id } = req.params;
 
     if (!mongoose.isValidObjectId(id)) {
-        return res.status(400).json({ error: `Invalid program Id: ${id}` });
+        return res.status(400).json({ error: `Invalid program Id: ${id}.` });
     }
 
     const { name, split, trainingDaysPerWeek } = req.body;
@@ -102,7 +102,7 @@ export const updateProgram = async (req, res) => {
 
     catch (error) {
         console.error(`ERROR: ${error}`)
-        return res.status(500).json({ error: 'Server error' });
+        return res.status(500).json({ error: 'Server error.' });
     };
 };
 
@@ -110,19 +110,19 @@ export const deleteProgram = async (req, res) => {
     const { id } = req.params;
 
     if (!mongoose.isValidObjectId(id)) {
-        return res.status(400).json({ error: 'Invalid program id' })
+        return res.status(400).json({ error: 'Invalid program id.' })
     }
 
     try {
         const program = await Program.findOneAndDelete({ user: req.userId, _id: id });
 
-        if (!program) return res.status(404).json({ error: 'Program not found' });
+        if (!program) return res.status(404).json({ error: 'Program not found.' });
 
-        return res.status(200).json({ program, message: 'Program deleted successfully' })
+        return res.status(200).json({ program, message: 'Program deleted successfully.' })
     }
 
     catch (error) {
         console.error(`ERROR: ${error}`);
-        return res.status(500).json({ error: 'Server error' })
+        return res.status(500).json({ error: 'Server error.' })
     }
 };

@@ -5,7 +5,8 @@ import {
     getWorkoutById,
     getWorkoutsByProgramId,
     createWorkout,
-    updateWorkout
+    updateWorkout,
+    deleteWorkout
 } from "../controllers/workoutController.js";
 
 const router = express.Router({ mergeParams: true })
@@ -21,5 +22,8 @@ router.post('/', requireAuth, createWorkout);
 
 // PATCH workout
 router.patch('/:workoutId', requireAuth, updateWorkout);
+
+// DELETE workout
+router.delete('/:workoutId', requireAuth, deleteWorkout)
 
 export default router;

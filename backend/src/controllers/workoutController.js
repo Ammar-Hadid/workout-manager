@@ -21,7 +21,7 @@ export const getWorkoutById = async (req, res) => {
 
     catch (error) {
         console.error(error);
-        return res.status(500).json({ error: 'Server error' });
+        return res.status(500).json({ error: 'Server error.' });
     }
 };
 
@@ -29,7 +29,7 @@ export const getWorkoutsByProgramId = async (req, res) => {
     const { programId } = req.params;
 
     if (!mongoose.isValidObjectId(programId)) {
-        return res.status(400).json({ error: 'Invalid program id' });
+        return res.status(400).json({ error: 'Invalid program id.' });
     };
 
     try {
@@ -40,7 +40,7 @@ export const getWorkoutsByProgramId = async (req, res) => {
 
     catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Server error' })
+        res.status(500).json({ error: 'Server error.' })
     }
 };
 
@@ -49,7 +49,7 @@ export const createWorkout = async (req, res) => {
     const { name, duration } = req.body;
 
     if (!mongoose.isValidObjectId(programId)) {
-        return res.status(400).json({ error: 'Invalid program id' });
+        return res.status(400).json({ error: 'Invalid program id.' });
     }
 
     const errors = workoutValidator(req.body);
@@ -81,7 +81,7 @@ export const createWorkout = async (req, res) => {
 
     catch (error) {
         console.error(error);
-        return res.status(500).json({ error: 'Server error' });
+        return res.status(500).json({ error: 'Server error.' });
     }
 };
 
@@ -90,11 +90,11 @@ export const updateWorkout = async (req, res) => {
     const { name, duration } = req.body;
 
     if (!mongoose.isValidObjectId(programId)) {
-        return res.status(400).json({ error: 'Invalid program id' });
+        return res.status(400).json({ error: 'Invalid program id.' });
     }
 
     if (!mongoose.isValidObjectId(workoutId)) {
-        return res.status(400).json({ error: 'Invalid workout id' });
+        return res.status(400).json({ error: 'Invalid workout id.' });
     }
 
     const errors = workoutValidator(req.body, true);
@@ -115,13 +115,46 @@ export const updateWorkout = async (req, res) => {
             { new: true }
         );
 
-        if (!workout) return res.status(404).json({ error: 'Workout not found' });
+        if (!workout) return res.status(404).json({ error: 'Workout not found.' });
 
         return res.status(200).json({ workout });
     }
 
     catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Server error' });
+        return res.status(500).json({ error: 'Server error.' });
     }
-}
+};
+
+export const deleteWorkout = async (req, res) => {
+    const { workoutId, programId } = req.params;
+
+    if (!mongoose.isValidObjectId(workoutId)) {
+        return res.status(400).json({ error: 'Invalid workout id.' });
+    };
+
+    if (!mongoose.isValidObjectId(programId)) {
+        return res.status(400).json({ error: 'Invalid program id.' });
+    };
+
+    try {
+        const workout = await Workout.findOneAndDelete(
+            {
+                user: req.userId,
+                program: programId,
+                _id: workoutId
+            }
+        );
+
+        if (!workout) {
+            return res.status(404).json({ error: 'Workout not found.' });
+        }
+
+        return res.status(200).json({ workout, message: 'Workout deleted successfully.' })
+    }
+
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Server error.' })
+    }
+};
