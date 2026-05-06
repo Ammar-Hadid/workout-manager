@@ -11,6 +11,10 @@ export const getWorkoutById = async (req, res) => {
         return res.status(400).json({ error: 'Invalid workout id.' });
     }
 
+    if (!mongoose.isValidObjectId(programId)) {
+        return res.status(400).json({ error: 'Invalid program id.' })
+    };
+
     try {
         const workout = await Workout.findOne({ user: req.userId, _id: workoutId, program: programId });
 

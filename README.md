@@ -1,9 +1,12 @@
 # Roadmap
 - [x] Sprint 1: User can login/register
 - [x] Sprint 2: User Can CRUD programs
-- [ ] Sprint 3: user can CRUD workouts
+- [x] Sprint 3: user can CRUD workouts
 - [ ] Sprint 4: user can CRUD exercises
-- [ ] Sprint 5: Implement workoutSession
+- [ ] Sprint 5: Create minimal frontend
+- [ ] Sprint 6: Implement workoutSession flow
+- [ ] Sprint 7: Implement sets
+- [ ] Sprint 8: show sets history
 
 
 
@@ -152,20 +155,20 @@ User can register and login and receive a JWT.
 - [x] Create workout model
 
 ### Controllers
-- [ ] Create get all workouts controller, only show workouts that match both userId, and programId
-- [ ] create get specific workout controller, it should match the userId
-- [ ] Create a workout validation util that will be used for both POST and PATCH
-- [ ] Create post workout controller, validate with util
-- [ ] Create PATCH workout controller, validate with util, only data that has been sent, leave the rest alone.
-- [ ] Create a delete controller
+- [x] Create get all workouts controller, only show workouts that match both userId, and programId
+- [x] create get specific workout controller, it should match the userId
+- [x] Create a workout validation util that will be used for both POST and PATCH
+- [x] Create post workout controller, validate with util
+- [x] Create PATCH workout controller, validate with util, only data that has been sent, leave the rest alone.
+- [x] Create a delete controller
 
 ### Endpoints
-- [ ] Create GET all workout endpoint, use requireAuth
-- [ ] Create GET one workout endpoint, use requireAuth
-- [ ] Create POST workout endpoint, use requireAuth
-- [ ] Create PATCH workout endpoint, use requireAuth
-- [ ] Create DELETE workout endpoint, use requireAuth
-- [ ] Create an endpoint from server.js to workoutRoutes.js
+- [x] Create GET all workout endpoint, use requireAuth
+- [x] Create GET one workout endpoint, use requireAuth
+- [x] Create POST workout endpoint, use requireAuth
+- [x] Create PATCH workout endpoint, use requireAuth
+- [x] Create DELETE workout endpoint, use requireAuth
+- [x] Create an endpoint from server.js to workoutRoutes.js
 
 ## Definition of done
 - User can CRUD a workout
@@ -175,4 +178,83 @@ User can register and login and receive a JWT.
 - 2026-05-4
 - Reached deadline?
     - [ ] Yes
-    - [ ] No, [ ] too late, because [ ]
+    - [x] No, [1] day too late, because [I had to learn concepts I hadn't tought of before like indexes and B-trees, and mongosh tho I don't understand it fully yet, I know way more than the me before this sprint.]
+
+## reflection
+
+### What went good
+- I went through concepts even tho I had the intense urge of going through the sprint as fast as possible. 
+- I was able to write controllers on my own much quicker.
+- I asked AI less about error handling and tried handling my own errors, 99% of the times I was able to solve it. One time it took me 10 mins, but at the end it was a very stupid bug. So that kinda makes me question whether asking AI would have been better because it was a stupid small bug with no deep meaning. Tho after solbing it I did feel good and I felt knowing my code better.
+- I had already assumed that I will finish this screem tomorrow (a day later than the day I actually finished it) But I locked in, went in flow, and finsihed a lot of work with a solid understanding with almost no AI helo. I thought of an Alex Hormozi quote about most people not knowing that we are capable of achieving much more wokrk in a day than we think, turns out that's true.
+- Finally I feel like this sprint I learned a lot about stuff I didn't know. It is funny tho, cuz one would think that this sprint is so much like sprint 2 (User Can CRUD programs) that I wouldnt learn anything new. But I learned about:
+    - indexes and why we use them and how it works under the hood.
+    - B-trees
+    - mongosh
+    Even tho I dont understand them fully, the fact that I know about them is already pretty good for one sprint. Besides, the more I work with them the better my understanding will get.
+
+### What could have gone better
+- Even tho learning new concepts (index, B-tree, mongosh) was one of the good points in this sprint, I still feel like I spent more time there consuming theory that I actually should have. I kept reading and reading about it and even watched a youtube vid. I don't know whether that was the good approach or not, but what I can tell you is that speaking from past experiences, the best way to learn a new concept is by actually doing it and repeating it over and over again, and when you actually do it you get all kidn of errors and failures and through that I tend to build a sold understanding of concepts that used to be intimidating.
+- Sometimes, after finishing a controller or a function I send it to AI to doublecheck if there are any stupid errors or security holes, now with this I honestly don't know if it is a good or bad thing but I feel like I should first try to run the function myself, see if I encounter errors, if that's the case solve them and when it works send it to AI to check for stupid mistakes/security holes.
+- And of course the fact that I didn't finish the sprint on time, even if it is just one day, it is still late.
+
+## Techincal decisions
+- I chose to keep the workout schema simple and the user has only to enter two fields:
+    - Name
+    - Dutation
+   Even tho I might have missed some features by choosing this path, it undoubtedly enhances the UX and allow the user to get his program asap, and because it is still V1 and I shouldn't make it too complicated. Besides, I can always upgrade this in future versions, tho that might be difficult since we have to keep existing data in mind.
+- I used indexes because it makes the search for specifc fields much more efficient and faster, I honestly can't think of a downside when it comes to indexes, and the only reason why I haven't used it so far is because I simply didn't know about it.
+- I decided to create a separte model for Programs, workouts and exercises because that way it will be way clerer and much more managable when for example I want to loop just over workouts or to get one specific exercise.
+
+# Sprint 4 - user can CRUD exercises
+
+## Goal
+- An exercise is in a specifc workout that belongs to specific program.
+- User can create an exercise
+- User can view one specific exercise
+- User can view all exercises that belong to a specifc workout
+- User can update a workout
+- User can delete a workout
+
+## Tasks
+
+### Data structure
+- [ ] Create an exercise schema
+    - User
+    - Workout
+    - order
+    - name
+    - Enum of target muscle with all the possible muscle groups (exactly 1)
+    - rest time in seconds (min 10 max 600)
+    - sets (min 1 max 20)
+    - min reps (min 1 max 50)
+    - max reps (min 1 max 50)
+- [ ] Create Exercise model
+- [ ] Create muscle group constant
+
+### Controllers
+- [ ] Create a GET all exercises (within a workout) controller
+- [ ] Create a GET one specifc exercise (within a workout) controller
+- [ ] Create a validation util function to validate the submited fields for POST & PATCH
+- [ ] Create a POST exercise controller, use the exercise validation util
+- [ ] Create a PATCH exercise controller, use the exercise validation util
+- [ ] Create a DELETE exercise controller
+
+### Endponts
+- [ ] Create a GET all exercises endpoint, use requireAuth
+- [ ] Create a GET one exercises endpoint, use requireAuth
+- [ ] Create a POST one exercises endpoint, use requireAuth
+- [ ] Create a PATCH one exercises endpoint, use requireAuth
+- [ ] Create a DELETE one exercises endpoint, use requireAuth
+- [ ] Add an endpoint to server.js that reference all '/api/programs/:programId/workouts/:workoutId/exercises' to the exercise router
+- [ ] Create muscle group endpoint
+
+## Definition of done
+- User can CRUD exercises
+- Each exercise belongs to a specific workout
+
+## Deadline
+- 2026-05-8
+- Reached deadline?
+    - [ ] Yes, completed on []
+    - [ ] No, [] day too late, because []
