@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 import Workout from "../models/Workout.js";
 import Program from "../models/Program.js";
 
@@ -44,7 +44,7 @@ export const getWorkoutsByProgramId = async (req, res) => {
 
     catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Server error.' })
+        return res.status(500).json({ error: 'Server error.' })
     }
 };
 

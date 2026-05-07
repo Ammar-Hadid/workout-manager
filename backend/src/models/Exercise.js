@@ -1,5 +1,5 @@
 import mongoose from "mongoose"
-import { MUSCLE_GROUP_IDS } from "../constants/muscleGroups"
+import { MUSCLE_GROUP_IDS } from "../constants/muscleGroups.js"
 
 const exerciseSchema = new mongoose.Schema(
     {
