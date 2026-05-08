@@ -8,6 +8,7 @@ import authRouter from './routes/authRoutes.js';
 import programRouter from './routes/programRoutes.js';
 import workoutrRouter from './routes/workoutRoutes.js';
 import exerciseRouter from './routes/exerciseRoutes.js';
+import muscleGroupsRouter from './routes/muscleGroupsRoutes.js';
 
 
 const app = express();
@@ -30,7 +31,9 @@ const startServer = async () => {
 app.use(express.json());
 app.use('/api/auth', authRouter);
 app.use('/api/programs', programRouter);
-app.use('/api/programs/:programId/workouts', workoutrRouter)
-app.use('/api/programs/:programId/workouts/:workoutId/exercises', exerciseRouter)
+app.use('/api/programs/:programId/workouts', workoutrRouter);
+app.use('/api/programs/:programId/workouts/:workoutId/exercises', exerciseRouter);
+
+app.use('/api/muscle-groups', muscleGroupsRouter)
 
 startServer();

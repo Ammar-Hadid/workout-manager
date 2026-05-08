@@ -219,7 +219,7 @@ User can register and login and receive a JWT.
 ## Tasks
 
 ### Data structure
-- [ ] Create an exercise schema
+- [x] Create an exercise schema
     - User
     - Workout
     - order
@@ -229,24 +229,24 @@ User can register and login and receive a JWT.
     - sets (min 1 max 20)
     - min reps (min 1 max 50)
     - max reps (min 1 max 50)
-- [ ] Create Exercise model
-- [ ] Create muscle group constant
+- [x] Create Exercise model
+- [x] Create muscle group constant
 
 ### Controllers
-- [ ] Create a GET all exercises (within a workout) controller
-- [ ] Create a GET one specifc exercise (within a workout) controller
-- [ ] Create a validation util function to validate the submited fields for POST & PATCH
-- [ ] Create a POST exercise controller, use the exercise validation util
-- [ ] Create a PATCH exercise controller, use the exercise validation util
-- [ ] Create a DELETE exercise controller
+- [x] Create a GET all exercises (within a workout) controller
+- [x] Create a GET one specifc exercise (within a workout) controller
+- [x] Create a validation util function to validate the submited fields for POST & PATCH
+- [x] Create a POST exercise controller, use the exercise validation util
+- [x] Create a PATCH exercise controller, use the exercise validation util
+- [x] Create a DELETE exercise controller
 
 ### Endponts
-- [ ] Create a GET all exercises endpoint, use requireAuth
-- [ ] Create a GET one exercises endpoint, use requireAuth
-- [ ] Create a POST one exercises endpoint, use requireAuth
-- [ ] Create a PATCH one exercises endpoint, use requireAuth
-- [ ] Create a DELETE one exercises endpoint, use requireAuth
-- [ ] Add an endpoint to server.js that reference all '/api/programs/:programId/workouts/:workoutId/exercises' to the exercise router
+- [x] Create a GET all exercises endpoint, use requireAuth
+- [x] Create a GET one exercises endpoint, use requireAuth
+- [x] Create a POST one exercises endpoint, use requireAuth
+- [x] Create a PATCH one exercises endpoint, use requireAuth
+- [x] Create a DELETE one exercises endpoint, use requireAuth
+- [x] Add an endpoint to server.js that reference all '/api/programs/:programId/workouts/:workoutId/exercises' to the exercise router
 - [ ] Create muscle group endpoint
 
 ## Definition of done
