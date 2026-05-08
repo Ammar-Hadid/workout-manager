@@ -82,8 +82,8 @@ export const updateProgram = async (req, res) => {
 
 
     const updatedFields = {
-        ...(name && { name }),
-        ...(split && { split }),
+        ...(name !== undefined && { name }),
+        ...(split !== undefined && { split }),
         ...(trainingDaysPerWeek !== undefined && { trainingDaysPerWeek: Number(trainingDaysPerWeek) })
     }
 

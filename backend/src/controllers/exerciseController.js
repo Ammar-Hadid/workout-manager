@@ -99,3 +99,51 @@ export const createExercise = async (req, res) => {
     }
 };
 
+export const updateExercise = async (req, res) => {
+    const { exerciseId, workoutId } = req.params;
+    const { name, muscleGroup, restTime, sets, minReps, maxReps } = req.body;
+
+    if (!mongoose.isValidObjectId(workoutId)) {
+        return res.status(400).json({ error: 'Invalid workout id' })
+    }
+
+    if (!mongoose.isValidObjectId(exerciseId)) {
+        return res.status(400).json({ error: 'Invalid exercise Id.' });
+    }
+
+
+    const errors = exerciseValidator(req.body, true);
+
+    if (Object.keys(errors).length > 0) {
+        return res.status(400).json({ errors })
+    }
+
+    const updatedData = {
+        ...(name !== undefined && { name: name.trim() }),
+        ...(muscleGroup !== undefined && { muscleGroup }),
+        ...(restTime !== undefined && { restTime: Number(restTime) }),
+        ...(sets !== undefined && { sets: Number(sets) }),
+        ...(minReps !== undefined && { minReps: Number(minReps) }),
+        ...(maxReps !== undefined && { maxReps: Number(maxReps) })
+    }
+
+    try {
+        const exercise = await Exercise.findOneAndUpdate(
+            { user: req.userId, workout: workoutId, _id: exerciseId },
+            updatedData,
+            { new: true }
+        );
+
+        if (!exercise) return res.status(404).json({ error: 'Exercise not found.' });
+
+        return res.status(200).json({ exercise });
+    }
+
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Server error.' })
+    }
+
+
+}
+

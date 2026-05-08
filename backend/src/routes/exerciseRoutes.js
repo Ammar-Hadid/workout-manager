@@ -4,7 +4,8 @@ import requireAuth from "../middleware/requireAuth.js";
 import {
     getExercisesByWorkoutId,
     getExerciseById,
-    createExercise
+    createExercise,
+    updateExercise
 } from "../controllers/exerciseController.js";
 
 const router = express.Router({ mergeParams: true });
@@ -13,6 +14,8 @@ router.get('/', requireAuth, getExercisesByWorkoutId);
 
 router.get('/:exerciseId', requireAuth, getExerciseById);
 
-router.post('/', requireAuth, createExercise)
+router.post('/', requireAuth, createExercise);
+
+router.patch('/:exerciseId', requireAuth, updateExercise);
 
 export default router;

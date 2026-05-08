@@ -108,8 +108,8 @@ export const updateWorkout = async (req, res) => {
     }
 
     const updatedData = {
-        ...(name && { name: name.trim() }),
-        ...(duration && { duration: Number(duration) })
+        ...(name !== undefined && { name: name.trim() }),
+        ...(duration !== undefined && { duration: Number(duration) })
     }
 
     try {
