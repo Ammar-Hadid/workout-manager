@@ -1,8 +1,9 @@
-import { MUSCLE_GROUP_IDS } from "../../constants/muscleGroups";
+import { MUSCLE_GROUP_IDS } from "../../constants/muscleGroups.js";
 
 const exerciseValidator = ({ name, muscleGroup, restTime, sets, minReps, maxReps }, isUpdate = false) => {
     const errors = {};
 
+    // Name validation
     if (!isUpdate || name !== undefined) {
         const trimmedName = typeof name === "string" ? name.trim() : '';
 
@@ -11,12 +12,14 @@ const exerciseValidator = ({ name, muscleGroup, restTime, sets, minReps, maxReps
         }
     };
 
+    // MuscleGroup validation
     if (!isUpdate || muscleGroup !== undefined) {
         if (!MUSCLE_GROUP_IDS.includes(muscleGroup)) {
             errors.muscleGroup = 'Please select a valid muscle group.';
         };
     };
 
+    // restTime validation
     if (!isUpdate || restTime !== undefined) {
         const restTimeNumber = Number(restTime);
 
@@ -34,6 +37,7 @@ const exerciseValidator = ({ name, muscleGroup, restTime, sets, minReps, maxReps
 
     };
 
+    // setsNumber validation
     if (!isUpdate || sets !== undefined) {
         const setsNumber = Number(sets);
 
@@ -50,7 +54,7 @@ const exerciseValidator = ({ name, muscleGroup, restTime, sets, minReps, maxReps
         }
     }
 
-
+    // #region reps validation
     const minRepsNumber = minReps !== undefined ? Number(minReps) : undefined;
     const maxRepsNumber = maxReps !== undefined ? Number(maxReps) : undefined;
 
@@ -95,6 +99,7 @@ const exerciseValidator = ({ name, muscleGroup, restTime, sets, minReps, maxReps
             }
         }
     }
+    // #endregion
 
     return errors
 }

@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import Exercise from "../models/Exercise.js";
 import Workout from "../models/Workout.js";
 
+import exerciseValidator from "../utils/validators/exerciseValidator.js";
+
 export const getExercisesByWorkoutId = async (req, res) => {
     const { workoutId } = req.params;
 
@@ -49,6 +51,51 @@ export const getExerciseById = async (req, res) => {
     catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'Server error' })
+    }
+};
+
+export const createExercise = async (req, res) => {
+    const { workoutId } = req.params;
+
+    const { name, muscleGroup, restTime, sets, minReps, maxReps } = req.body;
+
+    if (!mongoose.isValidObjectId(workoutId)) {
+        return res.status(400).json({ error: 'Invalid workout id.' });
+    }
+
+    const errors = exerciseValidator(req.body);
+
+    if (Object.keys(errors).length > 0) {
+        return res.status(400).json({ errors })
+    }
+
+    try {
+        const workout = await Workout.findOne({ user: req.userId, _id: workoutId });
+
+        if (!workout) return res.status(404).json({ error: 'Unable to create exercise because the parent workout was not found.' });
+
+        const lastExercise = await Exercise.findOne({ user: req.userId, workout: workoutId }).sort({ order: -1 })
+
+        const exercise = await Exercise.create(
+            {
+                user: req.userId,
+                workout: workoutId,
+                order: lastExercise ? lastExercise.order + 1 : 1,
+                name: name.trim(),
+                muscleGroup,
+                restTime: Number(restTime),
+                sets: Number(sets),
+                minReps: Number(minReps),
+                maxReps: Number(maxReps)
+            }
+        );
+
+        return res.status(201).json({ exercise });
+    }
+
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Server error.' })
     }
 };
 
