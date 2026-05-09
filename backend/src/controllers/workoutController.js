@@ -154,6 +154,11 @@ export const deleteWorkout = async (req, res) => {
             return res.status(404).json({ error: 'Workout not found.' });
         }
 
+        await Workout.updateMany(
+            { user: req.userId, program: programId, order: { $gt: workout.order } },
+            { $inc: { order: -1 } }
+        )
+
         return res.status(200).json({ workout, message: 'Workout deleted successfully.' })
     }
 

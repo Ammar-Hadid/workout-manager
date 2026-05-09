@@ -167,7 +167,7 @@ export const deleteExercise = async (req, res) => {
         }
 
         Exercise.updateMany(
-            { workout: workoutId, order: { $gt: exercise.order } },
+            { user: req.userId, workout: workoutId, order: { $gt: exercise.order } },
             { $inc: { order: -1 } }
         )
 

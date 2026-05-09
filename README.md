@@ -247,7 +247,7 @@ User can register and login and receive a JWT.
 - [x] Create a PATCH one exercises endpoint, use requireAuth
 - [x] Create a DELETE one exercises endpoint, use requireAuth
 - [x] Add an endpoint to server.js that reference all '/api/programs/:programId/workouts/:workoutId/exercises' to the exercise router
-- [ ] Create muscle group endpoint
+- [x] Create muscle group endpoint
 
 ## Definition of done
 - User can CRUD exercises
@@ -256,5 +256,9 @@ User can register and login and receive a JWT.
 ## Deadline
 - 2026-05-8
 - Reached deadline?
-    - [ ] Yes, completed on []
+    - [x] Yes, completed on [2026-05-8]
     - [ ] No, [] day too late, because []
+
+## Reflection
+
+### What went good
