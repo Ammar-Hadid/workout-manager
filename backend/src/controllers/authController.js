@@ -2,11 +2,21 @@ import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) throw new Error('JWT_SECRET is undefined');
+
 const generateToken = userId => {
-    const JWT_SECRET = process.env.JWT_SECRET;
-    if (!JWT_SECRET) throw new Error('JWT_SECRET is undefined')
     return jwt.sign({ userId }, JWT_SECRET, { expiresIn: '7d' })
 }
+
+const setAuthCookie = (res, token) => {
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    });
+};
 
 export const register = async (req, res) => {
     const { userName, email, password } = req.body;
@@ -46,10 +56,14 @@ export const register = async (req, res) => {
 
         const token = generateToken(user._id);
 
-        res.status(201).json({
-            user: { userName, email },
+        setAuthCookie(res, token);
 
-            token
+        return res.status(201).json({
+            user: {
+                id: user._id,
+                userName: user.userName,
+                email: user.email
+            },
         })
     }
 
@@ -71,7 +85,7 @@ export const login = async (req, res) => {
         const user = await User.findOne({ userName }).select('+password');
 
         if (!user) {
-            
+
             return res.status(400).json({ error: 'Unable to sign in with these credentials!' })
         };
 
@@ -83,15 +97,19 @@ export const login = async (req, res) => {
 
         const token = generateToken(user._id);
 
-        return res.status(200).json({
-            user: { userName: user.userName, email: user.email },
+        setAuthCookie(res, token);
 
-            token
+        return res.status(200).json({
+            user: {
+                id: user._id,
+                userName: user.userName,
+                email: user.email
+            },
         })
     }
 
     catch (error) {
-        console.error(`ERROR: ${error}`);
+        console.error(error);
         res.status(500).json('Server error')
     }
 };

@@ -13,4 +13,4 @@ build/
 
 .env
 
-.md
+*.md
