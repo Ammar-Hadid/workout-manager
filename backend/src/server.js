@@ -1,10 +1,11 @@
-import dotenv from 'dotenv'
-dotenv.config();
+import 'dotenv/config'
 
 import cors from "cors";
 
 import express from 'express';
 import mongoose from 'mongoose';
+
+import cookieParser from "cookie-parser"
 
 import authRouter from './routes/authRoutes.js';
 import programRouter from './routes/programRoutes.js';
@@ -36,6 +37,7 @@ app.use(cors({
 }))
 
 app.use(express.json());
+app.use(cookieParser());
 app.use('/api/auth', authRouter);
 app.use('/api/programs', programRouter);
 app.use('/api/programs/:programId/workouts', workoutrRouter);
