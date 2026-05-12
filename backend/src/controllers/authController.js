@@ -23,15 +23,15 @@ export const register = async (req, res) => {
 
     try {
         if (!userName || !email || !password) {
-            return res.status(400).json({ error: `All fields are required!` });
+            return res.status(400).json({ error: `All fields are required.` });
         }
 
         if (userName.length < 3) {
-            return res.status(400).json({ error: 'Username must be at least 3 characters long!' })
+            return res.status(400).json({ error: 'Username must be at least 3 characters long.' })
         }
 
         if (password.length < 12) {
-            return res.status(400).json({ error: 'Password must be at least 12 characters long!' });
+            return res.status(400).json({ error: 'Password must be at least 12 characters long.' });
         }
 
         const existingUser = await User.findOne({
@@ -44,7 +44,7 @@ export const register = async (req, res) => {
         if (existingUser) {
 
             if (existingUser.email === email) {
-                return res.status(400).json({ error: 'Unable to register with these credentials!' });
+                return res.status(400).json({ error: 'Unable to register with these credentials.' });
             }
 
             if (existingUser.userName === userName) {
@@ -69,7 +69,7 @@ export const register = async (req, res) => {
 
     catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Server error' })
+        res.status(500).json({ error: 'Server error.' })
     };
 };
 
@@ -79,20 +79,20 @@ export const login = async (req, res) => {
     try {
 
         if (!userName || !password) {
-            return res.status(400).json({ error: 'All fields are required!' })
+            return res.status(400).json({ error: 'All fields are required.' })
         }
 
         const user = await User.findOne({ userName }).select('+password');
 
         if (!user) {
 
-            return res.status(400).json({ error: 'Unable to sign in with these credentials!' })
+            return res.status(400).json({ error: 'Unable to sign in with these credentials.' })
         };
 
         const isValidLogin = await user.comparePasswords(password);
 
         if (!isValidLogin) {
-            return res.status(400).json({ error: 'Unable to sign in with these credentials!' })
+            return res.status(400).json({ error: 'Unable to sign in with these credentials.' })
         };
 
         const token = generateToken(user._id);

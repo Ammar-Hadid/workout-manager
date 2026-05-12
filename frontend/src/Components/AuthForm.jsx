@@ -1,6 +1,8 @@
 import { useState } from "react"
-import { useAuth } from "../context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
+
+import { useAuth } from "../context/AuthContext.jsx";
+import { useToast } from "../context/toastContext.jsx";
 
 const AuthForm = ({ mode, setMode }) => {
 
@@ -13,6 +15,7 @@ const AuthForm = ({ mode, setMode }) => {
     const [form, setForm] = useState(inititalFormData);
     const navigate = useNavigate();
     const { setUser } = useAuth();
+    const { showToast } = useToast();
 
 
     const onInputChange = (e) => {
@@ -51,13 +54,14 @@ const AuthForm = ({ mode, setMode }) => {
         }
 
         catch (error) {
-            console.error(error)
+            console.error(error);
+            showToast(error.message);
         }
 
     }
 
     return (
-        <form className="flex flex-col max-w-[50vw] gap-4 p-7" onSubmit={handleOnSubmit}>
+        <form className="flex flex-col w-[40vw] gap-4" onSubmit={handleOnSubmit}>
             {mode === 'register' && (
                 <input
                     type="email"

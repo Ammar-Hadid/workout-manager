@@ -1,9 +1,12 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import { AuthProvider, useAuth } from "./context/AuthContext.jsx"
+import { ToastProvider, useToast } from "./context/toastContext.jsx";
 
 import AuthPage from "./Pages/AuthPage.jsx"
 import Dashboard from "./Pages/Dashboard.jsx";
+
+import MainLayout from "./Components/MainLayout.jsx";
 
 const ProtectedRoute = ({ children }) => {
   const { user, isAuthLoading } = useAuth();
@@ -22,12 +25,17 @@ const ProtectedRoute = ({ children }) => {
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/login" element={<AuthPage />} />
-        </Routes>
-      </BrowserRouter>
+      <ToastProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
+              <Route path="/" element={<Dashboard />} />
+            </Route>
+
+            <Route path="/login" element={<AuthPage />} />
+          </Routes>
+        </BrowserRouter>
+      </ToastProvider>
     </AuthProvider>
   )
 
