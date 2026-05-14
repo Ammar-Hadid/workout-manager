@@ -24,7 +24,9 @@ const Header = () => {
 
     return (
         <header className="flex justify-between w-screen p-7 bg-black text-white">
-            <p className="font-bold text-1xl">Workout Manager</p>
+            <button className="font-bold text-1xl">
+                <Link to="/">Workout Manager</Link>
+            </button>
 
             <button className="cursor-pointer" ref={refs.setReference} {...getReferenceProps()}>{user?.userName}</button>
             {isMenuOpen &&
