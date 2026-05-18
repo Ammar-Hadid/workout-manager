@@ -1,7 +1,16 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
-import { useFloating, flip, offset, useClick, useDismiss, useInteractions } from "@floating-ui/react"
+import {
+    useFloating,
+    flip,
+    shift,
+    offset,
+    useClick,
+    useDismiss,
+    useInteractions,
+    autoUpdate
+} from "@floating-ui/react"
 
 const Header = () => {
     const { user, setUser } = useAuth();
@@ -10,11 +19,14 @@ const Header = () => {
     const { refs, floatingStyles, context } = useFloating({
         open: isMenuOpen,
         onOpenChange: setIsMenuOpen,
-        placement: "bottom",
+        placement: "bottom-end",
         middleware: [
+            offset(40),
             flip(),
-            offset(20)
-        ]
+            shift({ padding: 8 })
+        ],
+        strategy: "fixed",
+        whileElementsMounted: autoUpdate
     });
 
     const click = useClick(context);
@@ -23,7 +35,7 @@ const Header = () => {
     const { getFloatingProps, getReferenceProps } = useInteractions([click, dismiss])
 
     return (
-        <header className="flex justify-between w-screen p-7 bg-black text-white">
+        <header className="relative z-50 flex justify-between w-full py-8 px-20 bg-black text-white">
             <button className="font-bold text-1xl">
                 <Link to="/">Workout Manager</Link>
             </button>
@@ -31,13 +43,13 @@ const Header = () => {
             <button className="cursor-pointer" ref={refs.setReference} {...getReferenceProps()}>{user?.userName}</button>
             {isMenuOpen &&
                 (<ul
-                    className="list-none p-2 m-0 flex flex-col gap-3 bg-black text-white border border-b-white"
+                    className="z-50 list-none m-0 flex flex-col bg-black text-white divide-y divide-white/50"
                     style={floatingStyles}
                     {...getFloatingProps()}
                     ref={refs.setFloating}>
 
-                    <li><Link className="cursor-pointer" to="/programs">Programs</Link></li>
-                    <li><button className="text-red-600 font-medium cursor-pointer" onClick={() => setUser(null)}>Logout</button></li>
+                    <li className="py-4 px-7 cursor-pointer hover:bg-white/10 transition-colors duration-75 ease-in-out"><Link to="/programs">Programs</Link></li>
+                    <li className="py-4 px-7 cursor-pointer hover:bg-red-200/20 transition-colors duration-75 ease-in-out"><button className="text-red-600 font-medium cursor-pointer" onClick={() => setUser(null)}>Logout</button></li>
                 </ul>)
             }
         </header>
@@ -45,4 +57,3 @@ const Header = () => {
 }
 
 export default Header
-

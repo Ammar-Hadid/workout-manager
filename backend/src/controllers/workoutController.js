@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import Workout from "../models/Workout.js";
 import Program from "../models/Program.js";
+import Exercise from "../models/Exercise.js";
 
 import workoutValidator from "../utils/validators/workoutValidator.js";
 
@@ -141,30 +142,53 @@ export const deleteWorkout = async (req, res) => {
         return res.status(400).json({ error: 'Invalid program id.' });
     };
 
+    const session = await mongoose.startSession();
+
     try {
-        const workout = await Workout.findOneAndDelete(
+        session.startTransaction();
+
+        const workout = await Workout.findOne(
             {
                 user: req.userId,
                 program: programId,
                 _id: workoutId
             }
-        );
+        ).session(session);
 
         if (!workout) {
+            await session.abortTransaction();
             return res.status(404).json({ error: 'Workout not found.' });
         }
+
+        await Exercise.deleteMany({
+            user: req.userId,
+            workout: workout._id
+        }).session(session);
+
+        await Workout.deleteOne({
+            user: req.userId,
+            program: programId,
+            _id: workout._id
+        }).session(session);
 
         await Workout.updateMany(
             { user: req.userId, program: programId, order: { $gt: workout.order } },
             { $inc: { order: -1 } }
-        )
+        ).session(session);
+
+        await session.commitTransaction();
 
         return res.status(200).json({ workout, message: 'Workout deleted successfully.' })
     }
 
     catch (error) {
+        await session.abortTransaction();
         console.error(error);
         return res.status(500).json({ error: 'Server error.' })
+    }
+
+    finally {
+        await session.endSession();
     }
 };
 

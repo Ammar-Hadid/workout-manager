@@ -37,16 +37,6 @@ const programSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-programSchema.pre('save', async function () {
-    if (!this.isModified('isActive') || !this.isActive) return
-
-    await mongoose.model('Program').updateMany(
-        { user: this.user, _id: { $ne: this._id } },
-        { isActive: false }
-    )
-})
-
-
 
 const Program = mongoose.model('Program', programSchema);
 

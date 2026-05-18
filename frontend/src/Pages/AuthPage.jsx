@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 
-import AuthForm from "../Components/AuthForm.jsx";
+import AuthForm from "../components/auth/AuthForm.jsx";
 
 const AuthPage = () => {
     const [mode, setMode] = useState('login');
@@ -9,7 +9,7 @@ const AuthPage = () => {
     return (
         <section className="
         flex justify-center items-center 
-        h-[80vh] w-screen">
+        h-[80vh] w-full">
 
             <div className="
             flex flex-col gap-7
@@ -29,7 +29,6 @@ const AuthPage = () => {
 }
 
 export default AuthPage;
-
 
 
 

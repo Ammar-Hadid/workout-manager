@@ -1,4 +1,4 @@
-import Header from "../Components/Header";
+import Header from "../components/Header";
 import { useAuth } from "../context/AuthContext";
 
 const Dashboard = () => {

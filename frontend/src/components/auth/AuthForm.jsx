@@ -1,8 +1,8 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 
-import { useAuth } from "../context/AuthContext.jsx";
-import { useToast } from "../context/toastContext.jsx";
+import { useAuth } from "../../context/AuthContext.jsx";
+import { useToast } from "../../context/toastContext.jsx";
 
 const AuthForm = ({ mode, setMode }) => {
 

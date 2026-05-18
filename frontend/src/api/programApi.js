@@ -1,4 +1,4 @@
-import { throwApiError } from "../util/errorHelper.js";
+import { throwApiError } from "../utils/errorHelper.js";
 
 const API_URL = `${import.meta.env.VITE_API_URL}/programs`
 

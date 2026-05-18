@@ -1,5 +1,9 @@
-import Program from "../models/Program.js";
 import mongoose from "mongoose";
+
+import Program from "../models/Program.js";
+import Workout from "../models/Workout.js";
+import Exercise from "../models/Exercise.js";
+
 
 import validateProgram from "../utils/validators/programValidator.js";
 
@@ -113,16 +117,53 @@ export const deleteProgram = async (req, res) => {
         return res.status(400).json({ error: 'Invalid program id.' })
     }
 
-    try {
-        const program = await Program.findOneAndDelete({ user: req.userId, _id: id });
+    const session = await mongoose.startSession();
 
-        if (!program) return res.status(404).json({ error: 'Program not found.' });
+    try {
+        session.startTransaction();
+
+        const program = await Program
+            .findOne({ user: req.userId, _id: id })
+            .session(session);
+
+
+        if (!program) {
+            await session.abortTransaction();
+            return res.status(404).json({ error: 'Program not found.' });
+        }
+
+        const workoutIds = await Workout
+            .find({ user: req.userId, program: program._id })
+            .distinct("_id")
+            .session(session);
+
+        await Exercise.deleteMany({
+            user: req.userId,
+            workout: { $in: workoutIds }
+        }).session(session);
+
+        await Workout.deleteMany({
+            user: req.userId,
+            program: program._id
+        }).session(session);
+
+        await Program.deleteOne({
+            user: req.userId,
+            _id: program._id
+        }).session(session);
+
+        await session.commitTransaction();
 
         return res.status(200).json({ program, message: 'Program deleted successfully.' })
     }
 
     catch (error) {
-        console.error(`ERROR: ${error}`);
+        await session.abortTransaction();
+        console.error(error);
         return res.status(500).json({ error: 'Server error.' })
+    }
+
+    finally {
+        await session.endSession();
     }
 };
