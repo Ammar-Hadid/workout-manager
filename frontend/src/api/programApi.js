@@ -78,3 +78,16 @@ export const deleteProgram = async (id) => {
 
     return data.program
 }
+
+export const activateProgram = async (id) => {
+    const res = await fetch(`${API_URL}/${id}/activate`, {
+        method: "PATCH",
+        credentials: "include"
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) throwApiError(data);
+
+    return data.program;
+}

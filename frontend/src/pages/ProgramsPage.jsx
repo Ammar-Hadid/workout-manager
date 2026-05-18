@@ -11,7 +11,8 @@ import {
     getOneProgram,
     createProgram,
     updateProgram,
-    deleteProgram
+    deleteProgram,
+    activateProgram
 } from "../api/programApi.js";
 
 import ProgramForm from "../components/programs/ProgramForm.jsx";
@@ -29,7 +30,7 @@ const ProgramsPage = () => {
     const [modalMode, setModalMode] = useState("create");
     const [selectedProgram, setSelectedProgram] = useState(null);
 
-    // Get all programs
+    // #region GET all programs
     useEffect(() => {
 
         const fetchPrograms = async () => {
@@ -46,8 +47,9 @@ const ProgramsPage = () => {
 
         fetchPrograms();
     }, []);
+    // #endregion
 
-    // Create program
+    // #region POST/PATCH functionality
     const handleSaveProgram = async (formData) => {
         if (modalMode === "create") {
             try {
@@ -88,6 +90,7 @@ const ProgramsPage = () => {
         }
     }
 
+
     const openModal = (mode) => {
         if (mode === "create") {
             setModalMode("create");
@@ -98,7 +101,9 @@ const ProgramsPage = () => {
 
         setIsModalOpen(true)
     }
+    // #endregion 
 
+    // #region DELETE functionality
     const handleOnDelete = async (id) => {
         const isConfirmed = await confirm({
             mode: "danger",
@@ -119,6 +124,32 @@ const ProgramsPage = () => {
             showToast(getErrorMessage(error));
         }
     }
+    // #endregion 
+
+    // #region program activation functionality
+    const handleSetActive = async (id) => {
+        try {
+            const activatedProgram = await activateProgram(id);
+
+            setPrograms(prev => {
+                return prev.map(p => {
+                    if (p._id === activatedProgram._id) {
+                        return activatedProgram
+                    }
+
+                    return {
+                        ...p,
+                        isActive: false
+                    }
+                })
+            })
+        }
+
+        catch (error) {
+            showToast(getErrorMessage(error));
+        }
+    }
+    // #endregion
 
     // #region Tailwind styles
     const programsWrapperClasses =
@@ -126,7 +157,7 @@ const ProgramsPage = () => {
         bg-white text-black overflow-x-hidden
         relative
         pt-6 px-4 pb-4
-        grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5`;
+        grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10`;
     // #endregion
 
 
@@ -141,6 +172,7 @@ const ProgramsPage = () => {
                             key={program._id}
                             program={program}
                             openModal={openModal}
+                            setActive={handleSetActive}
                             setIsModalOpen={setIsModalOpen}
                             setSelectedProgram={setSelectedProgram}
                             onDelete={handleOnDelete}

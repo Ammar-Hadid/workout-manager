@@ -14,7 +14,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical, faStar, faPencil, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
-const EllipsisMenu = ({ program, openModal, setSelectedProgram, onDelete }) => {
+const EllipsisMenu = ({ program, openModal, setActive, setSelectedProgram, onDelete }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const { refs, floatingStyles, context } = useFloating({
@@ -52,7 +52,10 @@ const EllipsisMenu = ({ program, openModal, setSelectedProgram, onDelete }) => {
                 (<ul ref={refs.setFloating} style={floatingStyles} {...getFloatingProps()} className={menuStyles}>
                     {!program.isActive &&
                         (<li className={`${listItemStyles} ${listItemHoverStyle} hover:bg-white/10`}>
-                            <button className={`${buttonStyles} text-white`}>
+                            <button className={`${buttonStyles} text-white`} onClick={() => {
+                                setActive(program._id);
+                                setIsOpen(false);
+                            }}>
                                 <FontAwesomeIcon icon={faStar} />
                                 Set as Active
                             </button>

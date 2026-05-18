@@ -1,11 +1,11 @@
 import EllipsisMenu from "../common/EllipsisMenu.jsx";
 
-const ProgramCard = ({ program, openModal, setSelectedProgram, onDelete }) => {
+const ProgramCard = ({ program, openModal, setActive, setSelectedProgram, onDelete }) => {
 
     const { id, name, trainingDaysPerWeek, isActive } = program
     const activeBadgeClasses =
         `absolute 
-        -top-2 -left-2 p-2
+        -top-5 -left-5 py-2 px-4
         bg-black text-white`;
 
 
@@ -21,6 +21,7 @@ const ProgramCard = ({ program, openModal, setSelectedProgram, onDelete }) => {
                 program={program}
                 openModal={openModal}
                 setSelectedProgram={setSelectedProgram}
+                setActive={setActive}
                 onDelete={onDelete}
             />
             {isActive && <p className={activeBadgeClasses}>Active</p>}
