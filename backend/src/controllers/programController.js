@@ -167,3 +167,46 @@ export const deleteProgram = async (req, res) => {
         await session.endSession();
     }
 };
+
+export const activateProgram = async (req, res) => {
+    const { id } = req.params;
+
+    if (!mongoose.isValidObjectId(id)) {
+        return res.status(400).json({ error: 'Invalid program id.' });
+    }
+
+    const session = await mongoose.startSession();
+
+    try {
+        session.startTransaction();
+
+        const program = await Program.findOneAndUpdate(
+            { user: req.userId, _id: id },
+            { isActive: true },
+            { new: true }
+        ).session(session);
+
+        if (!program) {
+            await session.abortTransaction();
+            return res.status(404).json({ error: 'Program not found.' });
+        }
+
+        await Program.updateMany(
+            { user: req.userId, _id: { $ne: id } },
+            { isActive: false }
+        ).session(session);
+
+        await session.commitTransaction();
+        return res.status(200).json({ program });
+    }
+
+    catch (error) {
+        await session.abortTransaction();
+        console.error(error);
+        return res.status(500).json({ error: 'Server error.' });
+    }
+
+    finally {
+        session.endSession();
+    }
+}

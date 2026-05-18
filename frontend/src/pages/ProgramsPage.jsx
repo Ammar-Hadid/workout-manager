@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import ProgramCard from "../components/ProgramCard.jsx";
+import ProgramCard from "../components/programs/ProgramCard.jsx";
 
 import { getErrorMessage, throwApiError } from "../utils/errorHelper.js";
 
@@ -14,7 +14,7 @@ import {
     deleteProgram
 } from "../api/programApi.js";
 
-import ProgramForm from "../components/ProgramForm.jsx";
+import ProgramForm from "../components/programs/ProgramForm.jsx";
 import DefaultButton from "../components/common/DefaultButton.jsx";
 
 import { useToast } from "../context/toastContext.jsx";

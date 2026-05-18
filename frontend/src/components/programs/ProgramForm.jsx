@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 
-import DefaultButton from "./common/DefaultButton";
+import DefaultButton from "../common/DefaultButton.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { faTimes, faChevronDown } from "@fortawesome/free-solid-svg-icons";

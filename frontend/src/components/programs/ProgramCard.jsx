@@ -1,4 +1,4 @@
-import EllipsisMenu from "./common/EllipsisMenu.jsx";
+import EllipsisMenu from "../common/EllipsisMenu.jsx";
 
 const ProgramCard = ({ program, openModal, setSelectedProgram, onDelete }) => {
 

@@ -8,7 +8,7 @@ import { ConfirmProvider } from "../context/confirmContext.jsx";
 
 import AuthPage from "../pages/AuthPage.jsx"
 
-import MainLayout from "../components/MainLayout.jsx";
+import MainLayout from "../components/layout/MainLayout.jsx";
 import Dashboard from "../pages/Dashboard.jsx";
 import ProgramsPage from "../pages/ProgramsPage.jsx";
 
