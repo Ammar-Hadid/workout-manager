@@ -14,6 +14,8 @@ import {
 
 const Header = () => {
     const { user, setUser } = useAuth();
+
+    // #region menu logic
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const { refs, floatingStyles, context } = useFloating({
@@ -32,8 +34,10 @@ const Header = () => {
     const click = useClick(context);
     const dismiss = useDismiss(context);
 
-    const { getFloatingProps, getReferenceProps } = useInteractions([click, dismiss])
+    const { getFloatingProps, getReferenceProps } = useInteractions([click, dismiss]);
+    // #endregion
 
+    const listItemClassList = `py-4 px-7 cursor-pointer hover:bg-red-200/20 transition-colors duration-75 ease-in-out`
     return (
         <header className="relative z-50 flex justify-between w-full py-8 px-20 bg-black text-white">
             <button className="font-bold text-1xl">
@@ -48,8 +52,17 @@ const Header = () => {
                     {...getFloatingProps()}
                     ref={refs.setFloating}>
 
-                    <li className="py-4 px-7 cursor-pointer hover:bg-white/10 transition-colors duration-75 ease-in-out"><Link to="/programs">Programs</Link></li>
-                    <li className="py-4 px-7 cursor-pointer hover:bg-red-200/20 transition-colors duration-75 ease-in-out"><button className="text-red-600 font-medium cursor-pointer" onClick={() => setUser(null)}>Logout</button></li>
+                    <li className={listItemClassList}>
+                        <Link to="/programs" onClick={() => setIsMenuOpen(false)}>
+                            Programs
+                        </Link>
+                    </li>
+
+                    <li className={listItemClassList}>
+                        <button className="text-red-600 font-medium cursor-pointer" onClick={() => setUser(null)}>
+                            Logout
+                        </button>
+                    </li>
                 </ul>)
             }
         </header>
