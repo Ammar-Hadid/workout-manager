@@ -37,6 +37,7 @@ const Header = () => {
     const { getFloatingProps, getReferenceProps } = useInteractions([click, dismiss]);
     // #endregion
 
+
     const listItemClassList = `py-4 px-7 cursor-pointer hover:bg-red-200/20 transition-colors duration-75 ease-in-out`
     return (
         <header className="relative z-50 flex justify-between w-full py-8 px-20 bg-black text-white">

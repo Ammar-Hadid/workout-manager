@@ -12,17 +12,19 @@ import {
 } from "@floating-ui/react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisVertical, faStar, faPencil, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 
-const EllipsisMenu = ({ program, openModal, setActive, setSelectedProgram, onDelete }) => {
+const EllipsisMenu = ({ actions = [] }) => {
     const [isOpen, setIsOpen] = useState(false);
+
+    const visibleActions = actions.filter(action => !action.hidden);
 
     const { refs, floatingStyles, context } = useFloating({
         open: isOpen,
         onOpenChange: setIsOpen,
         placement: "bottom-end",
         middleware: [
-            offset(40),
+            offset(10),
             flip(),
             shift({ padding: 8 })
         ],
@@ -35,54 +37,49 @@ const EllipsisMenu = ({ program, openModal, setActive, setSelectedProgram, onDel
 
     const { getReferenceProps, getFloatingProps } = useInteractions([click, dismiss]);
 
-    // #region Tailwind styles
     const menuStyles = `z-50 list-none p-0 m-0 bg-black flex flex-col items-start shadow-2xl divide-y divide-white/50`;
     const listItemStyles = `w-full`;
     const listItemHoverStyle = `transition-colors duration-100 ease-in-out`;
-    const buttonStyles = `flex items-center gap-4 py-4 px-6 text-left cursor-pointer`;
-    // #endregion
+    const buttonStyles = `flex w-full items-center gap-4 py-4 px-6 text-left cursor-pointer whitespace-nowrap`;
 
     return (
         <>
-            <button ref={refs.setReference} {...getReferenceProps({ onClick: (e) => e.stopPropagation() },)}>
-                <FontAwesomeIcon icon={faEllipsisVertical} className="text-black font-bold text-[22px] absolute top-5 right-5 cursor-pointer" />
+            <button
+                ref={refs.setReference}
+                type="button"
+                aria-label="Open menu"
+                disabled={visibleActions.length === 0}
+                className="absolute top-5 right-5"
+                {...getReferenceProps({ onClick: (e) => e.stopPropagation() })}
+            >
+                <FontAwesomeIcon icon={faEllipsisVertical} className="text-black font-bold text-[22px] cursor-pointer" />
             </button>
 
-            {isOpen &&
+            {isOpen && visibleActions.length > 0 &&
                 (<ul ref={refs.setFloating} style={floatingStyles} {...getFloatingProps()} className={menuStyles}>
-                    {!program.isActive &&
-                        (<li className={`${listItemStyles} ${listItemHoverStyle} hover:bg-white/10`}>
-                            <button className={`${buttonStyles} text-white`} onClick={() => {
-                                setActive(program._id);
-                                setIsOpen(false);
-                            }}>
-                                <FontAwesomeIcon icon={faStar} />
-                                Set as Active
-                            </button>
-                        </li>)
-                    }
+                    {visibleActions.map(action => {
+                        const isDanger = action.variant === "danger";
 
-                    <li className={`${listItemStyles} ${listItemHoverStyle} hover:bg-white/10`}>
-                        <button className={`${buttonStyles} text-white`} onClick={() => {
-                            openModal("edit");
-                            setIsOpen(false);
-                            setSelectedProgram(program);
-                        }}>
-                            <FontAwesomeIcon icon={faPencil} />
-                            Edit program
-                        </button>
-                    </li>
-
-                    <li className={`${listItemStyles} ${listItemHoverStyle} hover:bg-red-600/10 border-t-red-600`}>
-                        <button className={`${buttonStyles} text-red-600`} onClick={() => {
-                            onDelete(program._id);
-                            setIsOpen(false);
-                        }}>
-                            <FontAwesomeIcon icon={faTrashCan} />
-                            Remove program
-
-                        </button>
-                    </li>
+                        return (
+                            <li
+                                key={action.id}
+                                className={`${listItemStyles} ${listItemHoverStyle} ${isDanger ? "hover:bg-red-600/10 border-t-red-600" : "hover:bg-white/10"}`}
+                            >
+                                <button
+                                    type="button"
+                                    className={`${buttonStyles} ${isDanger ? "text-red-600" : "text-white"}`}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        action.onClick();
+                                        setIsOpen(false);
+                                    }}
+                                >
+                                    {action.icon && <FontAwesomeIcon icon={action.icon} />}
+                                    {action.label}
+                                </button>
+                            </li>
+                        )
+                    })}
                 </ul>)
             }
         </>
@@ -90,4 +87,3 @@ const EllipsisMenu = ({ program, openModal, setActive, setSelectedProgram, onDel
 }
 
 export default EllipsisMenu;
-

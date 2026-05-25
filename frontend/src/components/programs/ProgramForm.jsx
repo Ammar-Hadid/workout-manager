@@ -1,12 +1,21 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 
 import DefaultButton from "../common/DefaultButton.jsx";
+import FormInput from "../common/FormInput.jsx";
+import FormSelect from "../common/FormSelect.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { faTimes, faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
-const ProgramForm = ({ isModalOpen, setIsModalOpen, updatedFormData, onSubmit, mode, selectedProgram }) => {
-    const initialFormData = selectedProgram ?
+const splitOptions = [
+    { value: "full-body", label: "Full body" },
+    { value: "ppl", label: "PPL" },
+    { value: "upper-lower", label: "Upper Lower" },
+    { value: "custom", label: "Custom" },
+];
+
+const getInitialFormData = (selectedProgram) => (
+    selectedProgram ?
         {
             name: selectedProgram.name,
             split: selectedProgram.split,
@@ -16,17 +25,11 @@ const ProgramForm = ({ isModalOpen, setIsModalOpen, updatedFormData, onSubmit, m
             name: '',
             split: '',
             trainingDaysPerWeek: '',
-        };
-    const [formData, setFormData] = useState(initialFormData);
+        }
+);
 
-    useEffect(() => {
-        setFormData(
-            {
-                ...initialFormData,
-                ...updatedFormData,
-            }
-        )
-    }, [isModalOpen, updatedFormData]);
+const ProgramFormContent = ({ isModalOpen, setIsModalOpen, onSubmit, mode, initialFormData }) => {
+    const [formData, setFormData] = useState(initialFormData);
 
     // #region tailwind classes
     const modalClassList = `
@@ -35,9 +38,6 @@ const ProgramForm = ({ isModalOpen, setIsModalOpen, updatedFormData, onSubmit, m
     transition-opacity duration-200 ease-out`;
 
     const stateModalClassList = isModalOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none';
-
-    const inputClassList = `border-2 border-black p-2 focus:outline-0 text-black text-[18px]`
-
     // #endregion
 
     const handleOnChange = (e) => {
@@ -67,37 +67,34 @@ const ProgramForm = ({ isModalOpen, setIsModalOpen, updatedFormData, onSubmit, m
                 <h2 className="text-[2rem]">{mode === "edit" ? 'Edit program' : 'Create program'}</h2>
 
                 <form onSubmit={handleFormSubmit} className="flex flex-col gap-6">
-                    <input
+                    <FormInput
                         type="text"
                         placeholder="Program name"
                         name="name"
                         required
                         value={formData.name}
                         onChange={handleOnChange}
-                        className={inputClassList}
                     />
 
                     {mode === "create" && (
-                        <div className="relative">
-                            <FontAwesomeIcon icon={faChevronDown} className="absolute top-1/2 -translate-y-1/2 right-4" />
-                            <select value={formData.split} name="split" required onChange={handleOnChange} className={`${inputClassList} w-full appearance-none`}>
-                                <option value="" disabled>Select a split</option>
+                        <FormSelect
+                            value={formData.split}
+                            name="split"
+                            required
+                            onChange={handleOnChange}
+                            placeholder="Select a split"
+                            options={splitOptions}
+                        />
+                    )}
 
-                                <option value="full-body">Full body</option>
-                                <option value="ppl">PPL</option>
-                                <option value="upper-lower">Upper Lower</option>
-                                <option value="custom">Custom</option>
-                            </select>
-                        </div>)}
-
-                    <input
+                    <FormInput
                         type="number"
                         placeholder="Training days per week"
                         name="trainingDaysPerWeek"
                         required
                         value={formData.trainingDaysPerWeek}
                         onChange={handleOnChange}
-                        className={`${inputClassList} no-number-spinner`}
+                        className="no-number-spinner"
                     />
 
                     <DefaultButton type="submit" className="uppercase hover:scale-[1.02]">
@@ -106,6 +103,22 @@ const ProgramForm = ({ isModalOpen, setIsModalOpen, updatedFormData, onSubmit, m
                 </form>
             </div>
         </div >
+    )
+}
+
+const ProgramForm = ({ isModalOpen, setIsModalOpen, onSubmit, mode, selectedProgram }) => {
+    const initialFormData = getInitialFormData(selectedProgram);
+    const formKey = `${mode}-${isModalOpen ? "open" : "closed"}-${selectedProgram?._id ?? "new"}`;
+
+    return (
+        <ProgramFormContent
+            key={formKey}
+            isModalOpen={isModalOpen}
+            setIsModalOpen={setIsModalOpen}
+            onSubmit={onSubmit}
+            mode={mode}
+            initialFormData={initialFormData}
+        />
     )
 }
 

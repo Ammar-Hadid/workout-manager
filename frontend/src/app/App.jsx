@@ -10,7 +10,9 @@ import AuthPage from "../pages/AuthPage.jsx"
 
 import MainLayout from "../components/layout/MainLayout.jsx";
 import Dashboard from "../pages/Dashboard.jsx";
+
 import ProgramsPage from "../pages/ProgramsPage.jsx";
+import WorkoutsPage from "../components/workouts/WorkoutsPage.jsx";
 
 
 const ProtectedRoute = ({ children }) => {
@@ -37,6 +39,7 @@ function App() {
               <Route element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/programs" element={<ProgramsPage />} />
+                <Route path="/programs/:programId/workouts" element={< WorkoutsPage />} />
               </Route>
 
               <Route path="/login" element={<AuthPage />} />

@@ -1,7 +1,4 @@
-import { useState, useEffect } from "react"
-import ProgramCard from "../components/programs/ProgramCard.jsx";
-
-import { getErrorMessage, throwApiError } from "../utils/errorHelper.js";
+import { useState, useEffect } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -15,20 +12,24 @@ import {
     activateProgram
 } from "../api/programApi.js";
 
-import ProgramForm from "../components/programs/ProgramForm.jsx";
-import DefaultButton from "../components/common/DefaultButton.jsx";
-
 import { useToast } from "../context/toastContext.jsx";
 import { useConfirm } from "../context/confirmContext.jsx";
 
+import { getErrorMessage, throwApiError } from "../utils/errorHelper.js";
+
+import ProgramCard from "../components/programs/ProgramCard.jsx";
+import ProgramForm from "../components/programs/ProgramForm.jsx";
+import DefaultButton from "../components/common/DefaultButton.jsx";
+
 const ProgramsPage = () => {
     const [programs, setPrograms] = useState([]);
-    const { showToast } = useToast();
-    const { confirm } = useConfirm();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState("create");
     const [selectedProgram, setSelectedProgram] = useState(null);
+
+    const { showToast } = useToast();
+    const { confirm } = useConfirm();
 
     // #region GET all programs
     useEffect(() => {
@@ -46,7 +47,7 @@ const ProgramsPage = () => {
         }
 
         fetchPrograms();
-    }, []);
+    }, [showToast]);
     // #endregion
 
     // #region POST/PATCH functionality
@@ -109,7 +110,7 @@ const ProgramsPage = () => {
             mode: "danger",
             title: 'Are you sure you want to delete this program?',
             text: 'This will permanently delete all workouts and exercises inside it.',
-            confirmText: 'Delete Program'
+            confirmText: 'Delete program'
         });
 
         if (!isConfirmed) return;
@@ -164,9 +165,9 @@ const ProgramsPage = () => {
     return (
         <div className="relative flex flex-col gap-8">
             {/* Programs wrapper */}
-            <h1 className="text-[2.5rem]">Programs</h1>
+            <h1 className="text-3xl">Programs</h1>
             <div className={programsWrapperClasses}>
-                {programs.length < 1 ? <h1 className="text-3xl">No programs found</h1>
+                {programs.length < 1 ? <h2 className="text-2xl">No programs found</h2>
                     : programs.map(program => {
                         return <ProgramCard
                             key={program._id}
