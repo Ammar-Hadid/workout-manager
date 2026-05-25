@@ -5,14 +5,18 @@ import Workout from "../models/Workout.js";
 import exerciseValidator from "../utils/validators/exerciseValidator.js";
 
 export const getExercisesByWorkoutId = async (req, res) => {
-    const { workoutId } = req.params;
+    const { programId, workoutId } = req.params;
+
+    if (!mongoose.isValidObjectId(programId)) {
+        return res.status(400).json({ error: 'Invalid program id.' });
+    }
 
     if (!mongoose.isValidObjectId(workoutId)) {
         return res.status(400).json({ error: 'Invalid workout id.' })
     }
 
     try {
-        const workout = await Workout.findOne({ user: req.userId, _id: workoutId });
+        const workout = await Workout.findOne({ user: req.userId, _id: workoutId, program: programId });
         if (!workout) return res.status(404).json({ error: 'Workout not found.' })
 
         const exercises = await Exercise
@@ -29,17 +33,26 @@ export const getExercisesByWorkoutId = async (req, res) => {
 };
 
 export const getExerciseById = async (req, res) => {
-    const { workoutId, exerciseId } = req.params;
+    const { programId, workoutId, exerciseId } = req.params;
+
+    if (!mongoose.isValidObjectId(programId)) {
+        return res.status(400).json({ error: 'Invalid program id.' });
+    }
 
     if (!mongoose.isValidObjectId(workoutId)) {
-        return res.status(400).json({ error: 'Invalid workout id' });
+        return res.status(400).json({ error: 'Invalid workout id.' });
     }
 
     if (!mongoose.isValidObjectId(exerciseId)) {
-        return res.status(400).json({ error: 'Invalid exercise id' });
+        return res.status(400).json({ error: 'Invalid exercise id.' });
     }
 
     try {
+
+        const workout = await Workout.findOne({ user: req.userId, _id: workoutId, program: programId });
+
+        if (!workout) return res.status(404).json({ error: 'Workout not found.' });
+
         const exercise = await Exercise
             .findOne({ user: req.userId, workout: workoutId, _id: exerciseId });
 
@@ -50,14 +63,18 @@ export const getExerciseById = async (req, res) => {
 
     catch (error) {
         console.error(error);
-        return res.status(500).json({ error: 'Server error' })
+        return res.status(500).json({ error: 'Server error.' })
     }
 };
 
 export const createExercise = async (req, res) => {
-    const { workoutId } = req.params;
+    const { programId, workoutId } = req.params;
 
     const { name, muscleGroup, restTime, sets, minReps, maxReps } = req.body;
+
+    if (!mongoose.isValidObjectId(programId)) {
+        return res.status(400).json({ error: 'Invalid program id.' })
+    }
 
     if (!mongoose.isValidObjectId(workoutId)) {
         return res.status(400).json({ error: 'Invalid workout id.' });
@@ -70,7 +87,7 @@ export const createExercise = async (req, res) => {
     }
 
     try {
-        const workout = await Workout.findOne({ user: req.userId, _id: workoutId });
+        const workout = await Workout.findOne({ user: req.userId, _id: workoutId, program: programId });
 
         if (!workout) return res.status(404).json({ error: 'Unable to create exercise because the parent workout was not found.' });
 
@@ -100,8 +117,12 @@ export const createExercise = async (req, res) => {
 };
 
 export const updateExercise = async (req, res) => {
-    const { exerciseId, workoutId } = req.params;
+    const { programId, workoutId, exerciseId } = req.params;
     const { name, muscleGroup, restTime, sets, minReps, maxReps } = req.body;
+
+    if (!mongoose.isValidObjectId(programId)) {
+        return res.status(400).json({ error: 'Invalid program id' })
+    }
 
     if (!mongoose.isValidObjectId(workoutId)) {
         return res.status(400).json({ error: 'Invalid workout id' })
@@ -128,6 +149,16 @@ export const updateExercise = async (req, res) => {
     }
 
     try {
+        const workout = await Workout.findOne({
+            user: req.userId,
+            _id: workoutId,
+            program: programId
+        });
+
+        if (!workout) {
+            return res.status(404).json({ error: 'Unable to update exercise because the parent workout was not found.' });
+        }
+
         const exercise = await Exercise.findOneAndUpdate(
             { user: req.userId, workout: workoutId, _id: exerciseId },
             updatedData,
@@ -148,7 +179,11 @@ export const updateExercise = async (req, res) => {
 };
 
 export const deleteExercise = async (req, res) => {
-    const { workoutId, exerciseId } = req.params;
+    const { programId, workoutId, exerciseId } = req.params;
+
+    if (!mongoose.isValidObjectId(programId)) {
+        return res.status(400).json({ error: 'Invalid program id.' });
+    }
 
     if (!mongoose.isValidObjectId(workoutId)) {
         return res.status(400).json({ error: 'Invalid workout id.' });
@@ -159,6 +194,13 @@ export const deleteExercise = async (req, res) => {
     }
 
     try {
+
+        const workout = await Workout.findOne({ user: req.userId, _id: workoutId, program: programId });
+
+        if (!workout) {
+            return res.status(404).json({ error: 'Unable to delete exercise because the parent workout was not found.' })
+        }
+
         const exercise = await Exercise
             .findOneAndDelete({ user: req.userId, workout: workoutId, _id: exerciseId })
 
@@ -166,7 +208,7 @@ export const deleteExercise = async (req, res) => {
             return res.status(404).json({ error: 'Exercise not found.' })
         }
 
-        Exercise.updateMany(
+        await Exercise.updateMany(
             { user: req.userId, workout: workoutId, order: { $gt: exercise.order } },
             { $inc: { order: -1 } }
         )

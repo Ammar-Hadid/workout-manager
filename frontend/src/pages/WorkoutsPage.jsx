@@ -9,17 +9,17 @@ import {
     createWorkout,
     editWorkout,
     deleteWorkout,
-} from "../../api/workoutApi.js";
-import { getOneProgram } from "../../api/programApi.js";
+} from "../api/workoutApi.js";
+import { getOneProgram } from "../api/programApi.js";
 
-import { throwApiError, getErrorMessage } from "../../utils/errorHelper.js";
+import { throwApiError, getErrorMessage } from "../utils/errorHelper.js";
 
-import WorkoutCard from "./WorkoutCard.jsx";
-import WorkoutForm from "./WorkoutForm.jsx";
-import DefaultButton from "../common/DefaultButton.jsx";
+import WorkoutCard from "../components/workouts/WorkoutCard.jsx";
+import WorkoutForm from "../components/workouts/WorkoutForm.jsx";
+import DefaultButton from "../components/common/DefaultButton.jsx";
 
-import { useToast } from "../../context/toastContext.jsx";
-import { useConfirm } from "../../context/confirmContext.jsx";
+import { useToast } from "../context/toastContext.jsx";
+import { useConfirm } from "../context/confirmContext.jsx";
 
 
 
