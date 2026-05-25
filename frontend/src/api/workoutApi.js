@@ -1,6 +1,6 @@
 const API_URL = `${import.meta.env.VITE_API_URL}/programs`;
 
-import { throwApiError } from "../utils/errorHelper";
+import { throwApiError } from "../utils/errorHelper.js";
 
 export const getAllWorkouts = async (programId) => {
     const res = await fetch(`${API_URL}/${programId}/workouts`,
