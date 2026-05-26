@@ -12,7 +12,8 @@ import MainLayout from "../components/layout/MainLayout.jsx";
 import Dashboard from "../pages/Dashboard.jsx";
 
 import ProgramsPage from "../pages/ProgramsPage.jsx";
-import WorkoutsPage from "../components/workouts/WorkoutsPage.jsx";
+import WorkoutsPage from "../pages/WorkoutsPage.jsx";
+import ExercisePage from "../pages/ExercisePage.jsx";
 
 
 const ProtectedRoute = ({ children }) => {
@@ -40,6 +41,7 @@ function App() {
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/programs" element={<ProgramsPage />} />
                 <Route path="/programs/:programId/workouts" element={< WorkoutsPage />} />
+                <Route path="/programs/:programId/workouts/:workoutId/exercises" element={<ExercisePage />} />
               </Route>
 
               <Route path="/login" element={<AuthPage />} />
@@ -54,3 +56,5 @@ function App() {
 }
 
 export default App
+
+

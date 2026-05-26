@@ -16,4 +16,4 @@ export const MUSCLE_GROUPS = [
     { id: 'calves', label: 'Calves' }
 ];
 
-export const MUSCLE_GROUP_IDS = MUSCLE_GROUPS.map(m => m.id)
+export const MUSCLE_GROUP_IDS = MUSCLE_GROUPS.map(m => m.id);

@@ -31,15 +31,6 @@ const getInitialFormData = (selectedProgram) => (
 const ProgramFormContent = ({ isModalOpen, setIsModalOpen, onSubmit, mode, initialFormData }) => {
     const [formData, setFormData] = useState(initialFormData);
 
-    // #region tailwind classes
-    const modalClassList = `
-    fixed bg-black/50 inset-0
-    flex items-center justify-center 
-    transition-opacity duration-200 ease-out`;
-
-    const stateModalClassList = isModalOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none';
-    // #endregion
-
     const handleOnChange = (e) => {
         const { name, value } = e.target;
 
@@ -55,6 +46,15 @@ const ProgramFormContent = ({ isModalOpen, setIsModalOpen, onSubmit, mode, initi
         e.preventDefault();
         await onSubmit(formData)
     }
+
+    // #region tailwind classes
+    const modalClassList = `
+    fixed bg-black/50 inset-0
+    flex items-center justify-center 
+    transition-opacity duration-200 ease-out`;
+
+    const stateModalClassList = isModalOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none';
+    // #endregion
 
     return (
         <div className={`${modalClassList} ${stateModalClassList}`}>

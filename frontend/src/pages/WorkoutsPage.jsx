@@ -1,4 +1,4 @@
-import { useState, useEffect, useActionState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -150,9 +150,11 @@ const WorkoutsPage = () => {
         if (!isConfirmed) return
 
         try {
-            const deletedWorkout = await deleteWorkout(programId, workoutId);
+            await deleteWorkout(programId, workoutId);
 
-            setWorkouts(prev => prev.filter(workout => workout._id !== deletedWorkout._id));
+            const updatedWorkouts = await getAllWorkouts(programId);
+
+            setWorkouts(updatedWorkouts);
         }
 
         catch (error) {

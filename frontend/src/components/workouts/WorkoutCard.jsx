@@ -1,6 +1,8 @@
 import EllipsisMenu from "../common/EllipsisMenu.jsx";
 import { faPencil, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
+import { Link } from "react-router-dom";
+
 
 
 export const workoutCard = ({ workout, setSelectedWorkout, openModal, onDelete }) => {
@@ -45,10 +47,12 @@ export const workoutCard = ({ workout, setSelectedWorkout, openModal, onDelete }
         <div className={cardClassList}>
             <EllipsisMenu actions={menuActions} />
 
-            <h2 className="text-2xl">{name}</h2>
-            <ul className="list-none">
-                <li className={listItemClassList}>{duration} min</li>
-            </ul>
+            <Link to={`${workout._id}/exercises`}>
+                <h2 className="text-2xl">{name}</h2>
+                <ul className="list-none">
+                    <li className={listItemClassList}>{duration} min</li>
+                </ul>
+            </Link>
         </div>
     );
 }
