@@ -1,14 +1,18 @@
-import { useState, createContext, useContext } from "react";
+import { useState, createContext, useContext, useRef } from "react";
 
 const ToastContext = createContext(null);
 
 export const ToastProvider = ({ children }) => {
     const [toast, setToast] = useState(null);
 
+    const timeoutRef = useRef(null);
+
     const showToast = (message, variant = "danger") => {
         setToast({ message, variant });
 
-        setTimeout(() => setToast(null), 3000)
+        clearTimeout(timeoutRef.current);
+
+        timeoutRef.current = setTimeout(() => setToast(null), 3000)
     }
 
     const variantsClassList = {
@@ -41,4 +45,7 @@ export const useToast = () => {
 
     return context
 }
+
+
+
 
