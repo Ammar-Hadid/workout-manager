@@ -5,10 +5,16 @@ const ToastContext = createContext(null);
 export const ToastProvider = ({ children }) => {
     const [toast, setToast] = useState(null);
 
-    const showToast = (toastMessage) => {
-        setToast(toastMessage);
+    const showToast = (message, variant = "danger") => {
+        setToast({ message, variant });
 
         setTimeout(() => setToast(null), 3000)
+    }
+
+    const variantsClassList = {
+        success: 'bg-green-700',
+        warning: 'bg-yellow-600',
+        danger: 'bg-red-800',
     }
 
     return (
@@ -18,7 +24,7 @@ export const ToastProvider = ({ children }) => {
             {toast &&
                 (
                     <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 p">
-                        <p className="bg-red-800 text-white p-4 rounded shadow">{toast}</p>
+                        <p className={`${variantsClassList[toast.variant]} text-white p-4 rounded shadow`}>{toast.message}</p>
                     </div>
                 )
             }

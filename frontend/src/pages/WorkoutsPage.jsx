@@ -106,6 +106,7 @@ const WorkoutsPage = () => {
                 ))
 
                 setIsModalOpen(false);
+                showToast('Workout created successfully', "success");
             }
 
             catch (error) {
@@ -129,6 +130,7 @@ const WorkoutsPage = () => {
                 })
 
                 setIsModalOpen(false);
+                showToast('Workout updated successfully.', 'success');
             }
 
             catch (error) {

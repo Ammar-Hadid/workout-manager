@@ -63,7 +63,8 @@ const ProgramsPage = () => {
                     ]
                 ));
 
-                setIsModalOpen(false)
+                setIsModalOpen(false);
+                showToast('Program created successfully.', "success");
             }
 
             catch (error) {
@@ -83,6 +84,7 @@ const ProgramsPage = () => {
                 });
 
                 setIsModalOpen(false)
+                showToast('Program updated successfully.', "success");
             }
 
             catch (error) {

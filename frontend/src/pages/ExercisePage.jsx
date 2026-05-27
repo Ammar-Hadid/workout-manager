@@ -119,6 +119,7 @@ const ExercisePage = () => {
                 ))
 
                 setIsModalOpen(false);
+                showToast('Exercise created successfully', 'success');
             }
             catch (error) {
                 showToast(getErrorMessage(error));
@@ -140,6 +141,7 @@ const ExercisePage = () => {
                 })
 
                 setIsModalOpen(false);
+                showToast('Exercise updated successfully', 'success')
             }
 
             catch (error) {
