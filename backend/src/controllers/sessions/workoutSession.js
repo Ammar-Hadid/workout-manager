@@ -1,0 +1,96 @@
+import mongoose from "mongoose";
+
+import Program from "../../models/Program.js";
+import Workout from "../../models/Workout.js";
+import Exercise from "../../models/Exercise.js";
+
+import WorkoutSession from "../../models/WorkoutSession.js";
+
+import { createExerciseSessionsFromExercises } from "../../services/exerciseSessionServices.js";
+
+export const createWorkoutSession = async (req, res) => {
+    const { workoutId, programId } = req.params;
+
+    if (!mongoose.isValidObjectId(programId)) {
+        return res.status(400).json({ error: 'Invalid program id.' });
+    }
+
+    if (!mongoose.isValidObjectId(workoutId)) {
+        return res.status(400).json({ error: 'Invalid workout id.' });
+    }
+
+    const session = await mongoose.startSession();
+
+    try {
+        const activeWorkoutSession = await WorkoutSession.findOne({
+            user: req.userId,
+            status: 'in-progress'
+        });
+
+        if (activeWorkoutSession) {
+            return res.status(409).json({
+                error: 'You already have an active workout session. Complete or cancel it before starting a new workout.',
+                activeWorkoutSession
+            })
+        }
+
+        const program = await Program.findOne({
+            user: req.userId,
+            _id: programId
+        });
+
+        if (!program) {
+            return res.status(404).json({ error: 'Program not found.' });
+        }
+
+        const workout = await Workout.findOne({
+            user: req.userId,
+            program: programId,
+            _id: workoutId
+        });
+
+        if (!workout) {
+            return res.status(404).json({ error: 'Workout not found.' });
+        }
+        const exercises = await Exercise.find({
+            user: req.userId,
+            workout: workoutId
+        });
+
+        if (exercises.length < 1) {
+            return res.status(400).json({ error: 'Workout contains no exercises.' })
+        }
+
+
+        session.startTransaction();
+
+        const [workoutSession] = await WorkoutSession.create([{
+            user: req.userId,
+            program: programId,
+            workout: workout._id,
+            workoutNameSnapshot: workout.name,
+            workoutOrderSnapshot: workout.order,
+            workoutDurationSnapshot: workout.duration,
+        }], { session });
+
+        const exerciseSessions = await createExerciseSessionsFromExercises({
+            exercises,
+            session,
+            user: req.userId,
+            workoutSession: workoutSession._id,
+        });
+
+        await session.commitTransaction();
+        return res.status(201).json({ workoutSession, exerciseSessions });
+    }
+
+    catch (error) {
+        await session.abortTransaction();
+        console.error(error);
+        return res.status(500).json({ error: 'Server error.' });
+    }
+
+    finally {
+        session.endSession();
+    }
+}
