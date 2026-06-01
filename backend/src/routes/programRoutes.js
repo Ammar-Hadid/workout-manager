@@ -29,6 +29,9 @@ router.patch('/:id', requireAuth, updateProgram)
 // Set program active
 router.patch('/:id/activate', requireAuth, activateProgram)
 
+// get active program
+router.get('/active')
+
 // Delete program
 router.delete('/:id', requireAuth, deleteProgram)
 

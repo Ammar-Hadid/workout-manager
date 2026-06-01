@@ -168,6 +168,7 @@ export const deleteProgram = async (req, res) => {
     }
 };
 
+// Activate program
 export const activateProgram = async (req, res) => {
     const { id } = req.params;
 
@@ -208,5 +209,19 @@ export const activateProgram = async (req, res) => {
 
     finally {
         session.endSession();
+    }
+}
+
+// Get active programs
+export const getActiveProgram = async (req, res) => {
+    try {
+        const activeProgram = await Program.findOne({ user: req.userId, isActive: true });
+
+        return res.status(200).json({ program: activeProgram });
+    }
+
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Server error.' })
     }
 }

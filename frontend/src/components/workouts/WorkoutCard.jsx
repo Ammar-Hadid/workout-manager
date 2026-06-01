@@ -58,3 +58,4 @@ export const workoutCard = ({ workout, setSelectedWorkout, openModal, onDelete }
 }
 
 export default workoutCard;
+w
