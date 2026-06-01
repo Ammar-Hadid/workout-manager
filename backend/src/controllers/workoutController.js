@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import Workout from "../models/Workout.js";
 import Program from "../models/Program.js";
 import Exercise from "../models/Exercise.js";
+import WorkoutSession from "../models/WorkoutSession.js";
 
 import workoutValidator from "../utils/validators/workoutValidator.js";
 
@@ -206,7 +207,7 @@ export const getWorkoutsThisWeek = async (req, res) => {
 
         const workouts = await Workout.find({ user: req.userId, program: programId });
 
-        const completedWorkoutIds = (await WorkoutSessions.distinct(
+        const completedWorkoutIds = (await WorkoutSession.distinct(
             "workout",
             {
                 user: req.userId,
