@@ -31,9 +31,22 @@ const startServer = async () => {
     }
 }
 
+const allowedOrigins = (
+    process.env.CLIENT_URL || 'https://workout-manager.ammarhadid.com'
+)
+    .split(',')
+    .map(origin => origin.trim())
+    .filter(Boolean);
+
 app.use(cors({
-    origin: "http://localhost:5173",
-    credentials: true
+    origin(requestedOrigin, callback) {
+        if (!requestedOrigin || allowedOrigins.includes(requestedOrigin)) {
+            return callback(null, true);
+        }
+
+        return callback(new Error('Not allowed by CORS'), false);
+    },
+    credentials: true,
 }))
 
 app.use(express.json());
