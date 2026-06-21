@@ -116,9 +116,15 @@ export const login = async (req, res) => {
 export const getMe = async (req, res) => {
 
     try {
+        if (!req.userId) {
+            return res.status(200).json({ user: null });
+        }
+
         const user = await User.findById(req.userId).select("userName email");
 
-        if (!user) return res.status(404).json({ error: "User not found." });
+        if (!user) {
+            return res.status(200).json({ user: null });
+        }
 
         return res.status(200).json({ user });
     }
