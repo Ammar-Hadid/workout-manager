@@ -5,6 +5,7 @@ import { useAuth } from "../../context/AuthContext.jsx";
 import { useToast } from "../../context/toastContext.jsx";
 import DefaultButton from "../common/DefaultButton.jsx";
 import FormInput from "../common/FormInput.jsx";
+import { getApiUrl } from "../../config/api.js";
 
 const AuthForm = ({ mode, setMode }) => {
 
@@ -36,7 +37,7 @@ const AuthForm = ({ mode, setMode }) => {
         const action = mode === 'login' ? 'login' : 'register';
 
         try {
-            const res = await fetch(`http://localhost:4000/api/auth/${action}`, {
+            const res = await fetch(getApiUrl(`/auth/${action}`), {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"

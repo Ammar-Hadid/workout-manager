@@ -1,9 +1,10 @@
-const API_URL = `${import.meta.env.VITE_API_URL}/programs`
-
 import { throwApiError } from "../utils/errorHelper.js";
+import { getApiUrl } from "../config/api.js";
+
+const PROGRAMS_URL = getApiUrl("/programs");
 
 export const getAllExercises = async (programId, workoutId) => {
-    const res = await fetch(`${API_URL}/${programId}/workouts/${workoutId}/exercises`, { credentials: "include" });
+    const res = await fetch(`${PROGRAMS_URL}/${programId}/workouts/${workoutId}/exercises`, { credentials: "include" });
 
     const data = await res.json();
 
@@ -13,7 +14,7 @@ export const getAllExercises = async (programId, workoutId) => {
 };
 
 export const createExercise = async (programId, workoutId, formData) => {
-    const res = await fetch(`${API_URL}/${programId}/workouts/${workoutId}/exercises`, {
+    const res = await fetch(`${PROGRAMS_URL}/${programId}/workouts/${workoutId}/exercises`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -30,7 +31,7 @@ export const createExercise = async (programId, workoutId, formData) => {
 };
 
 export const editExercise = async (programId, workoutId, exerciseId, formData) => {
-    const res = await fetch(`${API_URL}/${programId}/workouts/${workoutId}/exercises/${exerciseId}`, {
+    const res = await fetch(`${PROGRAMS_URL}/${programId}/workouts/${workoutId}/exercises/${exerciseId}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json"
@@ -47,7 +48,7 @@ export const editExercise = async (programId, workoutId, exerciseId, formData) =
 };
 
 export const deleteExercise = async (programId, workoutId, exerciseId) => {
-    const res = await fetch(`${API_URL}/${programId}/workouts/${workoutId}/exercises/${exerciseId}`, {
+    const res = await fetch(`${PROGRAMS_URL}/${programId}/workouts/${workoutId}/exercises/${exerciseId}`, {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",

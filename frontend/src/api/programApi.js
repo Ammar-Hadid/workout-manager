@@ -1,9 +1,10 @@
 import { throwApiError } from "../utils/errorHelper.js";
+import { getApiUrl } from "../config/api.js";
 
-const API_URL = `${import.meta.env.VITE_API_URL}/programs`
+const PROGRAMS_URL = getApiUrl("/programs");
 
 export const getAllPrograms = async () => {
-    const res = await fetch(API_URL, { credentials: "include" });
+    const res = await fetch(PROGRAMS_URL, { credentials: "include" });
 
     const data = await res.json();
 
@@ -15,7 +16,7 @@ export const getAllPrograms = async () => {
 }
 
 export const getOneProgram = async (id) => {
-    const res = await fetch(API_URL + '/' + id, { credentials: "include", });
+    const res = await fetch(`${PROGRAMS_URL}/${id}`, { credentials: "include", });
 
     const data = await res.json();
 
@@ -27,7 +28,7 @@ export const getOneProgram = async (id) => {
 }
 
 export const createProgram = async (formData) => {
-    const res = await fetch(API_URL, {
+    const res = await fetch(PROGRAMS_URL, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -46,7 +47,7 @@ export const createProgram = async (formData) => {
 }
 
 export const updateProgram = async (id, formData) => {
-    const res = await fetch(API_URL + '/' + id, {
+    const res = await fetch(`${PROGRAMS_URL}/${id}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json"
@@ -65,7 +66,7 @@ export const updateProgram = async (id, formData) => {
 }
 
 export const deleteProgram = async (id) => {
-    const res = await fetch(API_URL + '/' + id, {
+    const res = await fetch(`${PROGRAMS_URL}/${id}`, {
         method: "DELETE",
         credentials: "include",
     })
@@ -80,7 +81,7 @@ export const deleteProgram = async (id) => {
 }
 
 export const activateProgram = async (id) => {
-    const res = await fetch(`${API_URL}/${id}/activate`, {
+    const res = await fetch(`${PROGRAMS_URL}/${id}/activate`, {
         method: "PATCH",
         credentials: "include"
     });
