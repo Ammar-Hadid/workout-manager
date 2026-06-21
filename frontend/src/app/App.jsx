@@ -9,6 +9,7 @@ import { ConfirmProvider } from "../context/confirmContext.jsx";
 import AuthPage from "../pages/AuthPage.jsx"
 
 import MainLayout from "../components/layout/MainLayout.jsx";
+import DevelopmentPreviewBanner from "../components/layout/DevelopmentPreviewBanner.jsx";
 import Dashboard from "../pages/Dashboard.jsx";
 
 import ProgramsPage from "../pages/ProgramsPage.jsx";
@@ -36,6 +37,8 @@ function App() {
       <ToastProvider>
         <ConfirmProvider>
           <BrowserRouter>
+            <DevelopmentPreviewBanner />
+
             <Routes>
               <Route element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
                 <Route path="/" element={<Dashboard />} />
@@ -56,5 +59,4 @@ function App() {
 }
 
 export default App
-
 
