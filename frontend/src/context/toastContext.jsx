@@ -16,9 +16,9 @@ export const ToastProvider = ({ children }) => {
     }
 
     const variantsClassList = {
-        success: 'bg-green-700',
-        warning: 'bg-yellow-600',
-        danger: 'bg-red-800',
+        success: 'border-success bg-success-200 text-success',
+        warning: 'border-warning bg-warning-200 text-warning',
+        danger: 'border-danger bg-danger-200 text-danger',
     }
 
     return (
@@ -27,8 +27,8 @@ export const ToastProvider = ({ children }) => {
 
             {toast &&
                 (
-                    <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 p">
-                        <p className={`${variantsClassList[toast.variant]} text-white p-4 rounded shadow`}>{toast.message}</p>
+                    <div className="fixed left-1/2 top-lg z-50 w-[min(90vw,32rem)] -translate-x-1/2">
+                        <p className={`${variantsClassList[toast.variant] ?? variantsClassList.danger} rounded-card border p-md text-center text-body-sm font-medium shadow-2xl backdrop-blur-md`}>{toast.message}</p>
                     </div>
                 )
             }
@@ -45,7 +45,6 @@ export const useToast = () => {
 
     return context
 }
-
 
 
 

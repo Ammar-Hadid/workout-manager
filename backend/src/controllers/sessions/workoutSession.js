@@ -58,9 +58,8 @@ export const createWorkoutSession = async (req, res) => {
         });
 
         if (exercises.length < 1) {
-            return res.status(400).json({ error: 'Workout contains no exercises.' })
+            return res.status(404).json({ error: 'Workout contains no exercises.' })
         }
-
 
         session.startTransaction();
 

@@ -21,6 +21,7 @@ import DefaultButton from "../components/common/DefaultButton.jsx";
 import { useToast } from "../context/toastContext.jsx";
 import { useConfirm } from "../context/confirmContext.jsx";
 
+import CardsWrapper from "../components/layout/CardsWrapper.jsx";
 
 
 const WorkoutsPage = () => {
@@ -165,21 +166,12 @@ const WorkoutsPage = () => {
     }
     // #endregion
 
-    // #region Tailwind styles
-    const workoutsWrapperClasses =
-        `
-        bg-white text-black overflow-x-hidden
-        relative
-        pt-6 px-4 pb-4
-        grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10`;
-    // #endregion
-
     return (
-        <div className="flex flex-col gap-10">
-            <h1 className="text-4xl">{`"${parentProgram?.name}" workouts`}</h1>
+        <div className="flex flex-col gap-2xl">
+            <h1 className="text-h2 font-semibold">{`"${parentProgram?.name}" workouts`}</h1>
 
-            <div className={workoutsWrapperClasses}>
-                {workouts.length < 1 ? <h2 className="text-2xl">No workouts found</h2> :
+            <CardsWrapper>
+                {workouts.length < 1 ? <h2 className="text-h5 text-text-secondary">No workouts found</h2> :
                     [...workouts]
                         .sort((a, b) => a.order - b.order)
                         .map(w => {
@@ -194,7 +186,7 @@ const WorkoutsPage = () => {
                             )
                         })
                 }
-            </div>
+            </CardsWrapper>
 
             <WorkoutForm
                 selectedWorkout={selectedWorkout}
@@ -204,8 +196,8 @@ const WorkoutsPage = () => {
                 onSubmit={handleSaveWorkout}
             />
 
-            <DefaultButton className="fixed bottom-7 right-7 rounded-[100px] shadow-[0_12px_30px_rgba(0,0,0,0.45)] hover:scale-105 flex items-center justify-center gap-3 font-medium border border-white" onClick={() => openModal("create")}>
-                <FontAwesomeIcon icon={faPlus} className="text-[22px]" />
+            <DefaultButton className="fixed bottom-lg right-lg gap-sm border cursor-pointer border-text-primary/20 shadow-2xl hover:scale-105 md:bottom-xl md:right-xl" onClick={() => openModal("create")}>
+                <FontAwesomeIcon icon={faPlus} className="text-body-lg" />
                 Add workout
             </DefaultButton>
         </div>

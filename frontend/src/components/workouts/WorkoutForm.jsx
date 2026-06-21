@@ -27,8 +27,8 @@ const WorkoutFormContent = ({ mode, initialFormData, isOpen, setIsOpen, onSubmit
 
     // #region tailwind classes
     const modalClassList = `
-    fixed bg-black/50 inset-0
-    flex items-center justify-center 
+    fixed inset-0 z-50 bg-bg-primary/80 p-md
+    flex items-center justify-center
     transition-opacity duration-200 ease-out`;
 
     const stateModalClassList = isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none';
@@ -53,15 +53,15 @@ const WorkoutFormContent = ({ mode, initialFormData, isOpen, setIsOpen, onSubmit
 
     return (
         <div className={`${modalClassList} ${stateModalClassList}`}>
-            <div className="flex flex-col gap-7 py-4 px-5 bg-white text-blck relative min-w-[30dvw]">
+            <div className="relative flex w-full max-w-form flex-col gap-xl rounded-card border border-text-secondary/20 bg-bg-surface-elevated p-xl text-text-primary shadow-2xl md:p-2xl">
 
-                <button onClick={() => setIsOpen(false)}>
-                    <FontAwesomeIcon icon={faTimes} className="absolute top-5 right-5 text-black hover:text-red-500 cursor-pointer" />
+                <button aria-label="Close form" className="absolute right-lg top-lg rounded-pill w-lg h-lg cursor-pointer text-text-secondary transition hover:bg-danger-200 hover:text-danger" onClick={() => setIsOpen(false)}>
+                    <FontAwesomeIcon icon={faTimes} />
                 </button>
 
-                <h2 className="text-[2rem]">{mode === "edit" ? 'Edit workout' : 'Create workout'}</h2>
+                <h2 className="pr-2xl text-h3 font-semibold">{mode === "edit" ? 'Edit workout' : 'Create workout'}</h2>
 
-                <form onSubmit={handleFormSubmit} className="flex flex-col gap-6">
+                <form onSubmit={handleFormSubmit} className="flex flex-col gap-lg">
                     <FormInput
                         type="text"
                         placeholder="Workout name"

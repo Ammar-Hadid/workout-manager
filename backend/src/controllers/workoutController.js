@@ -6,7 +6,7 @@ import WorkoutSession from "../models/WorkoutSession.js";
 
 import workoutValidator from "../utils/validators/workoutValidator.js";
 
-import { getCurrentWeekRange } from "../utils/validators/date/getCurrentWeekRange.js";
+import { getCurrentWeekRange } from "../utils/date/getCurrentWeekRange.js";
 
 export const getWorkoutById = async (req, res) => {
     const { workoutId, programId } = req.params;

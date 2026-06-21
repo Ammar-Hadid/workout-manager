@@ -6,7 +6,8 @@ import {
     getProgramById,
     updateProgram,
     deleteProgram,
-    activateProgram
+    activateProgram,
+    getActiveProgram
 } from '../controllers/programController.js';
 
 import requireAuth from '../middleware/requireAuth.js';
@@ -30,7 +31,7 @@ router.patch('/:id', requireAuth, updateProgram)
 router.patch('/:id/activate', requireAuth, activateProgram)
 
 // get active program
-router.get('/active')
+router.get('/active', getActiveProgram)
 
 // Delete program
 router.delete('/:id', requireAuth, deleteProgram)

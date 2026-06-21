@@ -21,6 +21,8 @@ import ProgramCard from "../components/programs/ProgramCard.jsx";
 import ProgramForm from "../components/programs/ProgramForm.jsx";
 import DefaultButton from "../components/common/DefaultButton.jsx";
 
+import CardsWrapper from "../components/layout/CardsWrapper.jsx";
+
 const ProgramsPage = () => {
     const [programs, setPrograms] = useState([]);
 
@@ -154,22 +156,12 @@ const ProgramsPage = () => {
     }
     // #endregion
 
-    // #region Tailwind styles
-    const programsWrapperClasses =
-        `
-        bg-white text-black overflow-x-hidden
-        relative
-        pt-6 px-4 pb-4
-        grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10`;
-    // #endregion
-
-
     return (
-        <div className="relative flex flex-col gap-8">
+        <div className="relative flex flex-col gap-2xl">
             {/* Programs wrapper */}
-            <h1 className="text-3xl">Programs</h1>
-            <div className={programsWrapperClasses}>
-                {programs.length < 1 ? <h2 className="text-2xl">No programs found</h2>
+            <h1 className="text-h2 font-semibold">Programs</h1>
+            <CardsWrapper>
+                {programs.length < 1 ? <h2 className="text-h5 text-text-secondary">No programs found</h2>
                     : programs.map(program => {
                         return <ProgramCard
                             key={program._id}
@@ -181,10 +173,10 @@ const ProgramsPage = () => {
                             onDelete={handleOnDelete}
                         />
                     })}
-            </div>
+            </CardsWrapper>
 
-            <DefaultButton className="fixed bottom-7 right-7 rounded-[100px] shadow-[0_12px_30px_rgba(0,0,0,0.45)] hover:scale-105 flex items-center justify-center gap-3 font-medium border border-white" onClick={() => openModal("create")}>
-                <FontAwesomeIcon icon={faPlus} className="text-[22px]" />
+            <DefaultButton className="fixed bottom-lg right-lg gap-sm border border-text-primary/20 shadow-2xl cursor-pointer hover:scale-105 md:bottom-xl md:right-xl" onClick={() => openModal("create")}>
+                <FontAwesomeIcon icon={faPlus} className="text-body-lg" />
                 Add program
             </DefaultButton>
 

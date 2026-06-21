@@ -5,7 +5,7 @@ const MainLayout = () => {
     return (
         <>
             <Header />
-            <main className="p-11">
+            <main className="px-md py-section md:px-2xl lg:px-5xl">
                 <Outlet />
             </main>
         </>

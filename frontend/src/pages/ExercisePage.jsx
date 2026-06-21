@@ -22,6 +22,8 @@ import { useToast } from "../context/toastContext.jsx";
 import { useConfirm } from "../context/confirmContext.jsx";
 
 import DefaultButton from "../components/common/DefaultButton.jsx";
+import CardsWrapper from "../components/layout/CardsWrapper.jsx";
+
 
 
 const ExercisePage = () => {
@@ -176,18 +178,17 @@ const ExercisePage = () => {
     }
     // #region Tailwind styles
     const exercisesWrapperClasses =
-        `bg-white text-black overflow-x-hidden
-        relative
-        pt-6 px-4 pb-4
-        grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10`;
+        `relative grid grid-cols-1 gap-xl overflow-x-hidden
+        rounded-card bg-bg-surface p-lg text-text-primary
+        md:grid-cols-2 md:p-xl xl:grid-cols-3 xl:gap-3xl`;
     // #endregion
 
     return (
-        <div className="flex flex-col gap-10">
-            <h1 className="text-4xl">{`"${parentWorkout?.name}" exercises`}</h1>
+        <div className="flex flex-col gap-2xl">
+            <h1 className="text-h2 font-semibold">{`"${parentWorkout?.name}" exercises`}</h1>
 
-            <div className={exercisesWrapperClasses}>
-                {exercises.length < 1 ? <h2 className="text-2xl">No exercises found</h2> :
+            <CardsWrapper>
+                {exercises.length < 1 ? <h2 className="text-h5 text-text-secondary">No exercises found</h2> :
                     [...exercises]
                         .sort((a, b) => a.order - b.order)
                         .map(exercise => {
@@ -202,7 +203,7 @@ const ExercisePage = () => {
                             )
                         })
                 }
-            </div>
+            </CardsWrapper>
 
             <ExerciseForm
                 selectedExercise={selectedExercise}
@@ -213,8 +214,8 @@ const ExercisePage = () => {
                 onSubmit={handleSaveExercise}
             />
 
-            <DefaultButton className="fixed bottom-7 right-7 rounded-[100px] shadow-[0_12px_30px_rgba(0,0,0,0.45)] hover:scale-105 flex items-center justify-center gap-3 font-medium border border-white" onClick={() => openModal("create")}>
-                <FontAwesomeIcon icon={faPlus} className="text-[22px]" />
+            <DefaultButton className="fixed bottom-lg right-lg gap-sm border cursor-pointer border-text-primary/20 shadow-2xl hover:scale-105 md:bottom-xl md:right-xl" onClick={() => openModal("create")}>
+                <FontAwesomeIcon icon={faPlus} className="text-body-lg" />
                 Add exercise
             </DefaultButton>
         </div>
@@ -222,4 +223,3 @@ const ExercisePage = () => {
 };
 
 export default ExercisePage
-

@@ -37,29 +37,31 @@ const ProgramCard = ({ program, openModal, setActive, setSelectedProgram, onDele
     // #region Tailwind classList
     const activeBadgeClassList =
         `absolute 
-        -top-5 -left-5 py-2 px-4
-        bg-black text-white`;
+        left-lg top-lg rounded-pill
+        bg-success-200 px-md py-xs
+        text-body-sm font-semibold text-success`;
 
 
     const listItemClassList =
-        `flex items-center gap-2
-        before:content-[''] before:w-4
-        before:h-1 before:bg-black`;
+        `flex items-center gap-sm text-body-sm text-text-secondary
+        before:h-2xs before:w-md before:rounded-pill
+        before:bg-primary before:content-['']`;
 
     const cardClassList =
-        `py-4 px-5 border-4 border-black
-        bg-white relative 
-        cursor-pointer min-w-0`;
+        `relative min-w-0 cursor-pointer rounded-card
+        border border-text-secondary/20 bg-bg-surface-elevated
+        p-lg text-text-primary transition
+        hover:border-primary/60 hover:shadow-2xl`;
     // #endregion
 
     return (
         <div className={cardClassList}>
             <EllipsisMenu actions={menuActions} />
 
-            <Link to={`/programs/${program._id}/workouts`} className="flex flex-col gap-4">
+            <Link to={`/programs/${program._id}/workouts`} className={`flex flex-col gap-lg ${isActive ? "pt-2xl" : ""}`}>
                 {isActive && <p className={activeBadgeClassList}>Active</p>}
 
-                <h2 className="text-2xl">{name}</h2>
+                <h2 className="pr-2xl text-h5 font-semibold">{name}</h2>
                 <ul className="list-none">
                     <li className={listItemClassList}><p><strong>Training days per week: </strong>{trainingDaysPerWeek}</p></li>
                 </ul>

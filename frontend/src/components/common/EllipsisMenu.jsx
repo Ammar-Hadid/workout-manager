@@ -37,10 +37,10 @@ const EllipsisMenu = ({ actions = [] }) => {
 
     const { getReferenceProps, getFloatingProps } = useInteractions([click, dismiss]);
 
-    const menuStyles = `z-50 list-none p-0 m-0 bg-black flex flex-col items-start shadow-2xl divide-y divide-white/50`;
+    const menuStyles = `z-50 m-0 flex list-none flex-col items-start divide-y divide-text-secondary/20 overflow-hidden rounded-card border border-text-secondary/20 bg-bg-surface-elevated overflow-hidden shadow-2xl`;
     const listItemStyles = `w-full`;
     const listItemHoverStyle = `transition-colors duration-100 ease-in-out`;
-    const buttonStyles = `flex w-full items-center gap-4 py-4 px-6 text-left cursor-pointer whitespace-nowrap`;
+    const buttonStyles = `flex w-full cursor-pointer items-center gap-md whitespace-nowrap px-lg py-md text-left text-body-sm`;
 
     return (
         <>
@@ -49,10 +49,10 @@ const EllipsisMenu = ({ actions = [] }) => {
                 type="button"
                 aria-label="Open menu"
                 disabled={visibleActions.length === 0}
-                className="absolute top-5 right-5"
+                className="absolute right-lg top-lg rounded-pill p-sm text-text-secondary transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
                 {...getReferenceProps({ onClick: (e) => e.stopPropagation() })}
             >
-                <FontAwesomeIcon icon={faEllipsisVertical} className="text-black font-bold text-[22px] cursor-pointer" />
+                <FontAwesomeIcon icon={faEllipsisVertical} className="cursor-pointer text-body-lg font-bold" />
             </button>
 
             {isOpen && visibleActions.length > 0 &&
@@ -63,11 +63,11 @@ const EllipsisMenu = ({ actions = [] }) => {
                         return (
                             <li
                                 key={action.id}
-                                className={`${listItemStyles} ${listItemHoverStyle} ${isDanger ? "hover:bg-red-600/10 border-t-red-600" : "hover:bg-white/10"}`}
+                                className={`${listItemStyles} ${listItemHoverStyle}`}
                             >
                                 <button
                                     type="button"
-                                    className={`${buttonStyles} ${isDanger ? "text-red-600" : "text-white"}`}
+                                    className={`${buttonStyles} ${isDanger ? "text-danger hover:bg-danger-200" : "text-text-primary hover:bg-primary/10"}`}
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         action.onClick();

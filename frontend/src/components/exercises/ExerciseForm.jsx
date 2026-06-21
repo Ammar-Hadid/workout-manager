@@ -63,8 +63,8 @@ const FormContent = ({ initialData, muscleGroups, mode, isModalOpen, setIsModalO
 
     // #region tailwind classes
     const modalClassList = `
-    fixed bg-black/50 inset-0
-    flex items-center justify-center 
+    fixed inset-0 z-50 bg-bg-primary/80 p-md
+    flex items-center justify-center
     transition-opacity duration-200 ease-out`;
 
     const stateModalClassList = isModalOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none';
@@ -72,14 +72,14 @@ const FormContent = ({ initialData, muscleGroups, mode, isModalOpen, setIsModalO
 
     return (
         <div className={`${modalClassList} ${stateModalClassList}`}>
-            <div className="flex flex-col gap-7 py-4 px-5 bg-white text-blck relative min-w-[30dvw]">
+            <div className="relative flex max-h-[90dvh] w-full max-w-form flex-col gap-xl overflow-y-auto rounded-card border border-text-secondary/20 bg-bg-surface-elevated p-xl text-text-primary shadow-2xl md:p-2xl">
 
-                <button onClick={() => setIsModalOpen(false)}>
-                    <FontAwesomeIcon icon={faTimes} className="absolute top-5 right-5 text-black hover:text-red-500 cursor-pointer" />
+                <button aria-label="Close form" className="absolute right-lg top-lg rounded-pill w-lg h-lg cursor-pointer text-text-secondary transition hover:bg-danger-200 hover:text-danger" onClick={() => setIsModalOpen(false)}>
+                    <FontAwesomeIcon icon={faTimes} />
                 </button>
 
-                <h2 className="text-[2rem]">{mode === "edit" ? 'Edit exercise' : 'Create exercise'}</h2>
-                <form onSubmit={handleFormSubmit} className="flex flex-col gap-6">
+                <h2 className="pr-2xl text-h3 font-semibold">{mode === "edit" ? 'Edit exercise' : 'Create exercise'}</h2>
+                <form onSubmit={handleFormSubmit} className="flex flex-col gap-lg">
                     <FormInput
                         type="text"
                         name="name"
@@ -99,7 +99,7 @@ const FormContent = ({ initialData, muscleGroups, mode, isModalOpen, setIsModalO
                     />
 
                     {/* Row */}
-                    <div className="flex w-full gap-7">
+                    <div className="flex w-full flex-col gap-md sm:flex-row">
                         <FormInput
                             type="number"
                             name="restTime"
@@ -122,7 +122,7 @@ const FormContent = ({ initialData, muscleGroups, mode, isModalOpen, setIsModalO
                     </div>
 
                     {/* Row */}
-                    <div className="flex w-full gap-7">
+                    <div className="flex w-full flex-col gap-md sm:flex-row">
                         <FormInput
                             type="number"
                             name="minReps"

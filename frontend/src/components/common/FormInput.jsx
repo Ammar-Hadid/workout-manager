@@ -1,5 +1,5 @@
 const FormInput = ({ className = "", ...props }) => {
-    const inputClassList = `border-2 border-black p-2 focus:outline-0 text-black text-[18px]`;
+    const inputClassList = `w-full rounded-pill border border-text-secondary/30 bg-bg-primary px-md py-sm text-body text-text-primary placeholder:text-text-secondary focus:border-primary focus:outline-none focus:ring-4 focus:ring-primary/20`;
 
     return (
         <input

@@ -1,5 +1,115 @@
 @import "tailwindcss";
 
+@theme {
+    /* ===== Colors ===== */
+
+    /* Brand */
+    --color-primary: #0073F7;
+
+    /* Backgrounds */
+    --color-bg-primary: #061322;
+    --color-bg-surface: #0C1826;
+    --color-bg-surface-elevated: #101F2E;
+
+    /* Text */
+    --color-text-primary: #ffffff;
+    --color-text-secondary: #94A3B8;
+
+    /* states */
+    --color-success: #10B981;
+    --color-success-200: rgba(16, 185, 129, .2);
+
+    --color-danger: #F43F5E;
+    --color-danger-200: rgba(244, 63, 94, .2);
+
+    --color-warning: #F59E0B;
+    --color-warning-200: rgba(245, 158, 11, .2);
+
+
+    /* ===== Typography ===== */
+    --font-display: "Poppins", sans-serif;
+    --font-body: "Inter", sans-serif;
+
+    --text-hero: clamp(3rem, 8vw, 6rem);
+    --text-h1: clamp(2.5rem, 6vw, 4rem);
+    --text-h2: clamp(2rem, 4vw, 3rem);
+    --text-h3: clamp(1.5rem, 3vw, 2.25rem);
+    --text-h4: clamp(1.25rem, 2vw, 1.75rem);
+    --text-h5: clamp(1.125rem, 1.5vw, 1.5rem);
+
+    --text-body-sm: clamp(0.875rem, 1vw, 1rem);
+    --text-body: clamp(1rem, 1.5vw, 1.125rem);
+    --text-body-lg: clamp(1.125rem, 2vw, 1.375rem);
+
+
+    /* ===== Spacing ===== */
+    --spacing-2xs: 0.125rem;
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+    --spacing-3xl: 4rem;
+    --spacing-4xl: 5rem;
+    --spacing-5xl: 6rem;
+
+    --spacing-section: clamp(3rem, 5vh, 6rem);
+    --spacing-section-l: clamp(6rem, 10vh, 12rem);
+
+    /* ===== Layout ===== */
+    --max-width-form: clamp(20rem, 90vw, 32rem);
+    --max-width-modal: clamp(18rem, 70vw, 28rem);
+
+
+    /* ===== Radius ===== */
+    --radius-card: 1.5rem;
+    --radius-pill: 999px;
+}
+
+@layer base {
+    * {
+        box-sizing: border-box;
+    }
+
+    html {
+        min-height: 100%;
+        background-color: var(--color-bg-primary);
+        color: var(--color-text-primary);
+        font-family: var(--font-body);
+        font-size: var(--text-body);
+    }
+
+    body,
+    #root {
+        min-height: 100vh;
+    }
+
+    body {
+        margin: 0;
+        background-color: var(--color-bg-primary);
+    }
+
+    button,
+    input,
+    select {
+        font: inherit;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+        font-family: var(--font-display);
+    }
+
+    ::selection {
+        background-color: var(--color-primary);
+        color: var(--color-text-primary);
+    }
+}
+
 @layer utilities {
 
     .no-number-spinner::-webkit-outer-spin-button,

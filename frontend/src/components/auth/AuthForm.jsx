@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useToast } from "../../context/toastContext.jsx";
+import DefaultButton from "../common/DefaultButton.jsx";
+import FormInput from "../common/FormInput.jsx";
 
 const AuthForm = ({ mode, setMode }) => {
 
@@ -61,50 +63,42 @@ const AuthForm = ({ mode, setMode }) => {
     }
 
     return (
-        <form className="flex flex-col w-[40vw] gap-4" onSubmit={handleOnSubmit}>
+        <form className="flex w-full flex-col gap-lg" onSubmit={handleOnSubmit}>
             {mode === 'register' && (
-                <input
+                <FormInput
                     type="email"
                     placeholder="Email"
                     name="email"
                     required
                     value={form.email}
                     onChange={onInputChange}
-
-                    className="border border-black p-2 focus:outline-0"
                 />
             )}
 
-            <input
+            <FormInput
                 type="text"
                 placeholder="Username"
                 name="userName"
                 required
                 value={form.userName}
                 onChange={onInputChange}
-
-                className="border border-black p-2 focus:outline-0"
-
             />
 
-            <input
+            <FormInput
                 type="password"
                 placeholder="Password"
                 name="password"
                 required
                 value={form.password}
                 onChange={onInputChange}
-
-                className="border border-black p-2 focus:outline-0"
-
             />
 
-            {mode === 'login' && <p className="cursor-pointer underline" onClick={() => setMode('register')}>Don’t have an account? Sign up</p>}
-            {mode === 'register' && <p className="cursor-pointer underline" onClick={() => setMode('login')}>Already have an account? Sign in</p>}
+            {mode === 'login' && <button type="button" className="cursor-pointer text-left text-body-sm text-text-secondary underline decoration-primary underline-offset-4 transition hover:text-text-primary" onClick={() => setMode('register')}>Don’t have an account? Sign up</button>}
+            {mode === 'register' && <button type="button" className="cursor-pointer text-left text-body-sm text-text-secondary underline decoration-primary underline-offset-4 transition hover:text-text-primary" onClick={() => setMode('login')}>Already have an account? Sign in</button>}
 
-            <button className="bg-black text-white p-2 cursor-pointer transition">
+            <DefaultButton type="submit">
                 {mode === "login" ? "Login" : "Register"}
-            </button>
+            </DefaultButton>
         </form>
     )
 }
