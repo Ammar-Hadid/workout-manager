@@ -13,7 +13,7 @@ import {
 } from "../api/exerciseApi.js";
 import { getAllMuscleGroups } from "../api/muscleGroups.js";
 
-import ExerciseCard from "../components/exercises/ExerciseCard.jsx";
+import ExerciseCard from "../components/exercises/exerciseCard.jsx";
 import ExerciseForm from "../components/exercises/ExerciseForm.jsx";
 
 import { getErrorMessage } from "../utils/errorHelper.js";
