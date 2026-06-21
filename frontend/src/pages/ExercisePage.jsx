@@ -4,19 +4,19 @@ import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
-import { getOneWorkout } from "../api/workoutApi";
+import { getOneWorkout } from "../api/workoutApi.js";
 import {
     getAllExercises,
     createExercise,
     editExercise,
     deleteExercise
-} from "../api/exerciseApi";
+} from "../api/exerciseApi.js";
 import { getAllMuscleGroups } from "../api/muscleGroups.js";
 
 import ExerciseCard from "../components/exercises/ExerciseCard.jsx";
 import ExerciseForm from "../components/exercises/ExerciseForm.jsx";
 
-import { getErrorMessage } from "../utils/errorHelper";
+import { getErrorMessage } from "../utils/errorHelper.js";
 
 import { useToast } from "../context/toastContext.jsx";
 import { useConfirm } from "../context/confirmContext.jsx";
