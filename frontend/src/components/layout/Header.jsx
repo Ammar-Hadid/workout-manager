@@ -45,27 +45,33 @@ const Header = () => {
                 <Link to="/">Workout Manager</Link>
             </button>
 
-            <button className="cursor-pointer rounded-pill border border-text-secondary/30 px-lg py-sm text-body-sm text-text-secondary transition hover:border-primary hover:text-text-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/20" ref={refs.setReference} {...getReferenceProps()}>{user?.userName}</button>
-            {isMenuOpen &&
-                (<ul
-                    className="z-50 m-0 flex list-none flex-col gap-2xs rounded-card border overflow-hidden border-text-secondary/20 bg-bg-surface-elevated text-text-primary shadow-2xl"
-                    style={floatingStyles}
-                    {...getFloatingProps()}
-                    ref={refs.setFloating}>
+            <button className="cursor-pointer rounded-pill border border-text-secondary/30 px-lg py-sm text-body-sm text-text-secondary transition hover:border-primary hover:text-text-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/20" ref={(node) => {
+                refs.setReference(node);
+            }} {...getReferenceProps()}>{user?.userName}</button>
+            {isMenuOpen && (
+                <>
+                    <ul
+                        className="z-50 m-0 flex list-none flex-col gap-2xs rounded-card border overflow-hidden border-text-secondary/20 bg-bg-surface-elevated text-text-primary shadow-2xl"
+                        style={floatingStyles}
+                        {...getFloatingProps()}
+                        ref={(node) => {
+                            refs.setFloating(node);
+                        }}>
 
-                    <li className={listItemClassList}>
-                        <Link to="/programs" onClick={() => setIsMenuOpen(false)}>
-                            Programs
-                        </Link>
-                    </li>
+                        <li className={listItemClassList}>
+                            <Link to="/programs" onClick={() => setIsMenuOpen(false)}>
+                                Programs
+                            </Link>
+                        </li>
 
-                    <li className={listItemClassList}>
-                        <button className="cursor-pointer font-medium text-danger" onClick={() => setUser(null)}>
-                            Logout
-                        </button>
-                    </li>
-                </ul>)
-            }
+                        <li className={listItemClassList}>
+                            <button className="cursor-pointer font-medium text-danger" onClick={() => setUser(null)}>
+                                Logout
+                            </button>
+                        </li>
+                    </ul>
+                </>
+            )}
         </header>
     )
 }

@@ -45,7 +45,9 @@ const EllipsisMenu = ({ actions = [] }) => {
     return (
         <>
             <button
-                ref={refs.setReference}
+                ref={(node) => {
+                    refs.setReference(node);
+                }}
                 type="button"
                 aria-label="Open menu"
                 disabled={visibleActions.length === 0}
@@ -55,33 +57,42 @@ const EllipsisMenu = ({ actions = [] }) => {
                 <FontAwesomeIcon icon={faEllipsisVertical} className="cursor-pointer text-body-lg font-bold" />
             </button>
 
-            {isOpen && visibleActions.length > 0 &&
-                (<ul ref={refs.setFloating} style={floatingStyles} {...getFloatingProps()} className={menuStyles}>
-                    {visibleActions.map(action => {
-                        const isDanger = action.variant === "danger";
+            {isOpen && visibleActions.length > 0 && (
+                <>
+                    <ul
+                        ref={(node) => {
+                            refs.setFloating(node);
+                        }}
+                        style={floatingStyles}
+                        {...getFloatingProps()}
+                        className={menuStyles}
+                    >
+                        {visibleActions.map(action => {
+                            const isDanger = action.variant === "danger";
 
-                        return (
-                            <li
-                                key={action.id}
-                                className={`${listItemStyles} ${listItemHoverStyle}`}
-                            >
-                                <button
-                                    type="button"
-                                    className={`${buttonStyles} ${isDanger ? "text-danger hover:bg-danger-200" : "text-text-primary hover:bg-primary/10"}`}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        action.onClick();
-                                        setIsOpen(false);
-                                    }}
+                            return (
+                                <li
+                                    key={action.id}
+                                    className={`${listItemStyles} ${listItemHoverStyle}`}
                                 >
-                                    {action.icon && <FontAwesomeIcon icon={action.icon} />}
-                                    {action.label}
-                                </button>
-                            </li>
-                        )
-                    })}
-                </ul>)
-            }
+                                    <button
+                                        type="button"
+                                        className={`${buttonStyles} ${isDanger ? "text-danger hover:bg-danger-200" : "text-text-primary hover:bg-primary/10"}`}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            action.onClick();
+                                            setIsOpen(false);
+                                        }}
+                                    >
+                                        {action.icon && <FontAwesomeIcon icon={action.icon} />}
+                                        {action.label}
+                                    </button>
+                                </li>
+                            )
+                        })}
+                    </ul>
+                </>
+            )}
         </>
     )
 }

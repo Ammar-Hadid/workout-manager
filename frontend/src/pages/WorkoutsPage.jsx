@@ -55,7 +55,7 @@ const WorkoutsPage = () => {
 
         getParentProgram();
 
-    }, [programId])
+    }, [programId, showToast])
     // #endregion
 
     // #region GET all workouts
@@ -75,7 +75,7 @@ const WorkoutsPage = () => {
         };
 
         fetchWorkouts();
-    }, [programId]);
+    }, [programId, showToast]);
     // #endregion
 
     // #region POST/PATCH

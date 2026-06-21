@@ -5,7 +5,6 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 import {
     getAllPrograms,
-    getOneProgram,
     createProgram,
     updateProgram,
     deleteProgram,
@@ -15,7 +14,7 @@ import {
 import { useToast } from "../context/toastContext.jsx";
 import { useConfirm } from "../context/confirmContext.jsx";
 
-import { getErrorMessage, throwApiError } from "../utils/errorHelper.js";
+import { getErrorMessage } from "../utils/errorHelper.js";
 
 import ProgramCard from "../components/programs/ProgramCard.jsx";
 import ProgramForm from "../components/programs/ProgramForm.jsx";
