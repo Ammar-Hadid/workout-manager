@@ -55,7 +55,7 @@ const ExercisePage = () => {
         }
 
         fetchParentWorkout();
-    }, [programId, workoutId]);
+    }, [programId, workoutId, showToast]);
     // #endregion
 
     // #region GET all exercises
@@ -73,7 +73,7 @@ const ExercisePage = () => {
         }
 
         fetchAllExercises();
-    }, [programId, workoutId]);
+    }, [programId, workoutId, showToast]);
     // #endregion
 
     // #region Get all muscle groups
@@ -91,7 +91,7 @@ const ExercisePage = () => {
         }
 
         getMuscleGroups();
-    }, []);
+    }, [showToast]);
     // #endregion
 
     // #region POST/PATCH exercises
@@ -176,13 +176,6 @@ const ExercisePage = () => {
             showToast(getErrorMessage(error))
         }
     }
-    // #region Tailwind styles
-    const exercisesWrapperClasses =
-        `relative grid grid-cols-1 gap-xl overflow-x-hidden
-        rounded-card bg-bg-surface p-lg text-text-primary
-        md:grid-cols-2 md:p-xl xl:grid-cols-3 xl:gap-3xl`;
-    // #endregion
-
     return (
         <div className="flex flex-col gap-2xl">
             <h1 className="text-h2 font-semibold">{`"${parentWorkout?.name}" exercises`}</h1>
