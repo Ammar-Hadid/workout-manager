@@ -2,6 +2,8 @@ import { useState, useEffect, createContext, useContext } from "react"
 
 const AuthContext = createContext();
 
+const API_URL = `${import.meta.env.VITE_API_URL}/muscle-groups/auth/me`
+
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [isAuthLoading, setIsAuthLoading] = useState(true);
@@ -9,7 +11,7 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const res = await fetch('http://localhost:4000/api/auth/me', { credentials: "include" });
+                const res = await fetch(API_URL, { credentials: "include" });
 
                 const data = await res.json();
 
