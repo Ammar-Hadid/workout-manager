@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 
-import Program from "../../models/Program.js";
-import Workout from "../../models/Workout.js";
-import Exercise from "../../models/Exercise.js";
+import Program from "../../programs/Program.model.js";
+import Workout from "../../workouts/Workout.model.js";
+import Exercise from "../../exercises/Exercise.model.js";
 
-import WorkoutSession from "../../models/WorkoutSession.js";
+import WorkoutSession from "./WorkoutSession.model.js";
 
-import { createExerciseSessionsFromExercises } from "../../services/exerciseSessionServices.js";
+import { createExerciseSessionsFromExercises } from "../exerciseSessions/exerciseSession.service.js";
 
 export const createWorkoutSession = async (req, res) => {
     const { workoutId, programId } = req.params;

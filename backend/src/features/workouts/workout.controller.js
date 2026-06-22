@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
-import Workout from "../models/Workout.js";
-import Program from "../models/Program.js";
-import Exercise from "../models/Exercise.js";
-import WorkoutSession from "../models/WorkoutSession.js";
+import Workout from "./Workout.model.js";
+import Program from "../programs/Program.model.js";
+import Exercise from "../exercises/Exercise.model.js";
+import WorkoutSession from "../sessions/workoutSessions/WorkoutSession.model.js";
 
-import workoutValidator from "../utils/validators/workoutValidator.js";
+import workoutValidator from "./workout.validation.js";
 
-import { getCurrentWeekRange } from "../utils/date/getCurrentWeekRange.js";
+import { getCurrentWeekRange } from "../../utils/date/getCurrentWeekRange.js";
 
 export const getWorkoutById = async (req, res) => {
     const { workoutId, programId } = req.params;

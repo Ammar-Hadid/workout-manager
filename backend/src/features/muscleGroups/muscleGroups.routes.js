@@ -1,6 +1,6 @@
 import express from "express";
 
-import { getMuscleGroups } from "../controllers/muscleGroupsController.js";
+import { getMuscleGroups } from "./muscleGroups.controller.js";
 
 const router = express.Router();
 

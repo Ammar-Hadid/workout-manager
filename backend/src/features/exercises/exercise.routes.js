@@ -1,13 +1,13 @@
 import express from "express";
 
-import requireAuth from "../middleware/requireAuth.js";
+import requireAuth from "../../middleware/requireAuth.js";
 import {
     getExercisesByWorkoutId,
     getExerciseById,
     createExercise,
     updateExercise,
     deleteExercise
-} from "../controllers/exerciseController.js";
+} from "./exercise.controller.js";
 
 const router = express.Router({ mergeParams: true });
 

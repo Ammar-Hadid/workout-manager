@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
-import Program from "../models/Program.js";
-import Workout from "../models/Workout.js";
-import Exercise from "../models/Exercise.js";
+import Program from "./Program.model.js";
+import Workout from "../workouts/Workout.model.js";
+import Exercise from "../exercises/Exercise.model.js";
 
 
-import validateProgram from "../utils/validators/programValidator.js";
+import validateProgram from "./program.validation.js";
 
 export const getAllPrograms = async (req, res) => {
     try {

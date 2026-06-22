@@ -1,4 +1,4 @@
-import ExerciseSession from "../models/ExerciseSession.js"
+import ExerciseSession from "./ExerciseSession.model.js"
 
 export const createExerciseSessionsFromExercises = async ({ exercises, session, user, workoutSession }) => {
     const exerciseSessions = exercises.map(exercise => {

@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
-import Exercise from "../models/Exercise.js";
-import Workout from "../models/Workout.js";
+import Exercise from "./Exercise.model.js";
+import Workout from "../workouts/Workout.model.js";
 
-import exerciseValidator from "../utils/validators/exerciseValidator.js";
+import exerciseValidator from "./exercise.validation.js";
 
 export const getExercisesByWorkoutId = async (req, res) => {
     const { programId, workoutId } = req.params;

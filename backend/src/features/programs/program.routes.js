@@ -8,9 +8,9 @@ import {
     deleteProgram,
     activateProgram,
     getActiveProgram
-} from '../controllers/programController.js';
+} from './program.controller.js';
 
-import requireAuth from '../middleware/requireAuth.js';
+import requireAuth from '../../middleware/requireAuth.js';
 
 const router = express.Router();
 
