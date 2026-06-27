@@ -1,22 +1,10 @@
 import 'dotenv/config'
 
-import cors from "cors";
+import app from "./app.js";
 
-import express from 'express';
 import mongoose from 'mongoose';
 
-import cookieParser from "cookie-parser"
-
-import authRouter from './routes/authRoutes.js';
-import programRouter from './routes/programRoutes.js';
-import workoutrRouter from './routes/workoutRoutes.js';
-import exerciseRouter from './routes/exerciseRoutes.js';
-import muscleGroupsRouter from './routes/muscleGroupsRoutes.js';
-
-
-const app = express();
-
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 40001;
 
 const startServer = async () => {
     try {
@@ -27,35 +15,9 @@ const startServer = async () => {
     }
 
     catch (error) {
-        console.error(error)
+        console.error(error);
+        process.exit(1);
     }
 }
-
-const allowedOrigins = (
-    process.env.CLIENT_URL || 'https://workout-manager.ammarhadid.com'
-)
-    .split(',')
-    .map(origin => origin.trim())
-    .filter(Boolean);
-
-app.use(cors({
-    origin(requestedOrigin, callback) {
-        if (!requestedOrigin || allowedOrigins.includes(requestedOrigin)) {
-            return callback(null, true);
-        }
-
-        return callback(new Error('Not allowed by CORS'), false);
-    },
-    credentials: true,
-}))
-
-app.use(express.json());
-app.use(cookieParser());
-app.use('/api/auth', authRouter);
-app.use('/api/programs', programRouter);
-app.use('/api/programs/:programId/workouts', workoutrRouter);
-app.use('/api/programs/:programId/workouts/:workoutId/exercises', exerciseRouter);
-
-app.use('/api/muscle-groups', muscleGroupsRouter)
 
 startServer();
