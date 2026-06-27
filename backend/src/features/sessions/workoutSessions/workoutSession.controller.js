@@ -5,6 +5,7 @@ import Workout from "../../workouts/Workout.model.js";
 import Exercise from "../../exercises/Exercise.model.js";
 
 import WorkoutSession from "./WorkoutSession.model.js";
+import ExerciseSession from "../../exercises/Exercise.model.js";
 
 import { createExerciseSessionsFromExercises } from "../exerciseSessions/exerciseSession.service.js";
 
@@ -91,5 +92,36 @@ export const createWorkoutSession = async (req, res) => {
 
     finally {
         session.endSession();
+    }
+}
+
+export const getActiveWorkoutSession = async (req, res) => {
+    try {
+        const workoutSession = await WorkoutSession.findOne({
+            user: req.userId,
+            status: 'in-progress',
+        });
+
+        if (!workoutSession) {
+            return res.status(200).json({
+                workoutSession: null,
+                exerciseSessions: []
+            });
+        }
+
+        const exerciseSessions = await ExerciseSession.find({
+            user: req.userId,
+            workoutSession: workoutSession._id,
+        }).sort({ orderSnapshot: 1 });
+
+        return res.status(200).json({
+            workoutSession,
+            exerciseSessions,
+        });
+    }
+
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Server error.' })
     }
 }

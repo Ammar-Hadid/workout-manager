@@ -19,17 +19,17 @@ const exerciseSessionSchema = new mongoose.Schema({
         required: true,
     },
 
-    exerciseNameSnapshot: {
+    nameSnapshot: {
         type: String,
         required: true,
     },
 
-    exerciseMuscleGroupSnapshot: {
+    muscleGroupSnapshot: {
         type: String,
         required: true,
     },
 
-    exerciseOrderSnapshot: {
+    orderSnapshot: {
         type: Number,
         required: true,
     },
