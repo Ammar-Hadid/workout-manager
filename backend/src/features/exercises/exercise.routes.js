@@ -19,5 +19,5 @@ router.post('/', requireAuth, createExercise);
 
 router.patch('/:exerciseId', requireAuth, updateExercise);
 
-router.delete('/:exerciseId', requireAuth, deleteExercise)
+router.delete('/:exerciseId', requireAuth, deleteExercise);
 export default router;

@@ -1,20 +1,20 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 
-import { AuthProvider, useAuth } from "../context/AuthContext.jsx"
-import { ToastProvider } from "../context/toastContext.jsx";
-import { ConfirmProvider } from "../context/confirmContext.jsx";
+import { AuthProvider, useAuth } from "../features/auth/context/AuthContext.jsx"
+import { ToastProvider } from "../shared/context/toastContext.jsx";
+import { ConfirmProvider } from "../shared/context/confirmContext.jsx";
 
 
-import AuthPage from "../pages/AuthPage.jsx"
+import AuthPage from "../features/auth/pages/AuthPage.jsx"
 
-import MainLayout from "../components/layout/MainLayout.jsx";
-import DevelopmentPreviewBanner from "../components/layout/DevelopmentPreviewBanner.jsx";
-import Dashboard from "../pages/Dashboard.jsx";
+import MainLayout from "../shared/layout/MainLayout.jsx";
+import DevelopmentPreviewBanner from "../shared/layout/DevelopmentPreviewBanner.jsx";
+import Dashboard from "../features/dashboard/pages/Dashboard.jsx";
 
-import ProgramsPage from "../pages/ProgramsPage.jsx";
-import WorkoutsPage from "../pages/WorkoutsPage.jsx";
-import ExercisePage from "../pages/ExercisePage.jsx";
+import ProgramsPage from "../features/programs/pages/ProgramsPage.jsx";
+import WorkoutsPage from "../features/workouts/pages/WorkoutsPage.jsx";
+import ExercisePage from "../features/exercises/pages/ExercisePage.jsx";
 
 
 const ProtectedRoute = ({ children }) => {
@@ -59,4 +59,3 @@ function App() {
 }
 
 export default App
-
