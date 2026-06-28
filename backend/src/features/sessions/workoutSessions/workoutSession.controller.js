@@ -159,3 +159,42 @@ export const getWorkoutSessionById = async (req, res) => {
         return res.status(500).json({ error: 'Server error.' })
     }
 }
+
+export const completeWorkoutSession = async (req, res) => {
+    const { workoutSessionId } = req.params;
+
+    if (!mongoose.isValidObjectId(workoutSessionId)) {
+        return res.status(400).json({ error: 'Invalid workout session id.' });
+    }
+
+    try {
+        const workoutSession = await WorkoutSession.findOneAndUpdate(
+            {
+                user: req.userId,
+                _id: workoutSessionId,
+                status: 'in-progress',
+            },
+
+            {
+                status: 'completed',
+                completedAt: new Date(),
+            },
+
+            {
+                new: true,
+                runValidators: true,
+            }
+        );
+
+        if (!workoutSession) {
+            return res.status(404).json({ error: 'Active workout session not found.' });
+        }
+
+        return res.status(200).json({ workoutSession });
+    }
+
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Server error.' });
+    }
+}
