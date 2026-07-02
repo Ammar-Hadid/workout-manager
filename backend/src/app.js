@@ -5,6 +5,7 @@ import express from 'express';
 import cookieParser from "cookie-parser"
 
 import authRouter from './features/auth/auth.routes.js';
+import dashboardRouter from "./features/dashboard/dashboard.routes.js";
 import programRouter from './features/programs/program.routes.js';
 import workoutRouter from './features/workouts/workout.routes.js';
 import exerciseRouter from './features/exercises/exercise.routes.js';
@@ -32,11 +33,18 @@ app.use(cors({
 
 app.use(express.json());
 app.use(cookieParser());
+
 app.use('/api/auth', authRouter);
+
+app.use('/api/dashboard', dashboardRouter)
+
 app.use('/api/programs', programRouter);
+
 app.use('/api/programs/:programId/workouts', workoutRouter);
+
 app.use('/api/programs/:programId/workouts/:workoutId/exercises', exerciseRouter);
 
 app.use('/api/muscle-groups', muscleGroupsRouter);
+
 
 export default app;

@@ -31,6 +31,8 @@ export const startExerciseSession = async (req, res) => {
                         startedAt: {
                             $ifNull: ['$startedAt', '$$NOW'],
                         },
+
+                        skippedAt: null,
                     }
                 },
             ],
@@ -97,3 +99,50 @@ export const completeExerciseSession = async (req, res) => {
         return res.status(500).json({ error: 'Server error.' })
     }
 }
+
+export const skipExerciseSession = async (req, res) => {
+    const { workoutSessionId, exerciseSessionId } = req.params;
+
+    if (!mongoose.isValidObjectId(workoutSessionId)) {
+        return res.status(400).json('Invalid workout session id.');
+    }
+
+    if (!mongoose.isValidObjectId(exerciseSessionId)) {
+        return res.status(400).json('Invalid exercise session id.');
+    }
+
+    try {
+        const exerciseSession = await ExerciseSession.findOneAndUpdate(
+            {
+                user: req.userId,
+                workoutSession: workoutSessionId,
+                _id: exerciseSessionId,
+                status: {
+                    $in: ['not-started', 'in-progress'],
+                },
+            },
+
+            {
+                status: 'skipped',
+                skippedAt: new Date(),
+            },
+
+            {
+                new: true,
+                runValidators: true,
+            },
+        );
+
+        if (!exerciseSession) {
+            return res.status(404).json({ error: 'Exercise session not found.' });
+        }
+
+        return res.status(200).json({ exerciseSession });
+    }
+
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Server error.' });
+    }
+}
+
