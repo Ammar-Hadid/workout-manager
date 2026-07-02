@@ -18,13 +18,22 @@ export const startExerciseSession = async (req, res) => {
                 user: req.userId,
                 _id: exerciseSessionId,
                 workoutSession: workoutSessionId,
-                status: 'not-started'
+                status: {
+                    $in: ['not-started', 'skipped'],
+                },
             },
 
-            {
-                status: 'in-progress',
-                startedAt: new Date(),
-            },
+            [
+                {
+                    $set: {
+                        status: 'in-progress',
+
+                        startedAt: {
+                            $ifNull: ['$startedAt', '$$NOW'],
+                        },
+                    }
+                },
+            ],
 
             {
                 new: true,
@@ -62,6 +71,7 @@ export const completeExerciseSession = async (req, res) => {
                 user: req.userId,
                 workoutSession: workoutSessionId,
                 _id: exerciseSessionId,
+                status: 'in-progress'
             },
 
             {
