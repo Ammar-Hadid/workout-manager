@@ -10,11 +10,7 @@ import ExerciseSession from "../exerciseSessions/ExerciseSession.model.js";
 import { createExerciseSessionsFromExercises } from "../exerciseSessions/exerciseSession.service.js";
 
 export const createWorkoutSession = async (req, res) => {
-    const { workoutId, programId } = req.params;
-
-    if (!mongoose.isValidObjectId(programId)) {
-        return res.status(400).json({ error: 'Invalid program id.' });
-    }
+    const { workoutId } = req.body;
 
     if (!mongoose.isValidObjectId(workoutId)) {
         return res.status(400).json({ error: 'Invalid workout id.' });
@@ -35,24 +31,15 @@ export const createWorkoutSession = async (req, res) => {
             })
         }
 
-        const program = await Program.findOne({
-            user: req.userId,
-            _id: programId
-        });
-
-        if (!program) {
-            return res.status(404).json({ error: 'Program not found.' });
-        }
-
         const workout = await Workout.findOne({
             user: req.userId,
-            program: programId,
             _id: workoutId
         });
 
         if (!workout) {
             return res.status(404).json({ error: 'Workout not found.' });
         }
+
         const exercises = await Exercise.find({
             user: req.userId,
             workout: workoutId
@@ -66,7 +53,7 @@ export const createWorkoutSession = async (req, res) => {
 
         const [workoutSession] = await WorkoutSession.create([{
             user: req.userId,
-            program: programId,
+            program: workout.program,
             workout: workout._id,
             workoutNameSnapshot: workout.name,
             workoutOrderSnapshot: workout.order,

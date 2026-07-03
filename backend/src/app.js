@@ -10,6 +10,7 @@ import programRouter from './features/programs/program.routes.js';
 import workoutRouter from './features/workouts/workout.routes.js';
 import exerciseRouter from './features/exercises/exercise.routes.js';
 import muscleGroupsRouter from './features/muscleGroups/muscleGroups.routes.js';
+import workoutSessionsRouter from "./features/sessions/workoutSessions/workoutSession.routes.js";
 
 const app = express();
 
@@ -45,6 +46,9 @@ app.use('/api/programs/:programId/workouts', workoutRouter);
 app.use('/api/programs/:programId/workouts/:workoutId/exercises', exerciseRouter);
 
 app.use('/api/muscle-groups', muscleGroupsRouter);
+
+app.use('/api/workout-sessions', workoutSessionsRouter);
+
 
 
 export default app;
