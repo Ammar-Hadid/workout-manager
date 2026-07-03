@@ -157,7 +157,6 @@ const ProgramsPage = () => {
 
     return (
         <div className="relative flex flex-col gap-2xl">
-            {/* Programs wrapper */}
             <h1 className="text-h2 font-semibold">Programs</h1>
             <CardsWrapper>
                 {programs.length < 1 ? <h2 className="text-h5 text-text-secondary">No programs found</h2>

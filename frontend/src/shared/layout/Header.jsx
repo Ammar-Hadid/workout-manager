@@ -40,7 +40,7 @@ const Header = () => {
 
     const listItemClassList = `cursor-pointer px-lg py-md text-body-sm transition-colors duration-75 ease-in-out hover:bg-primary/10`
     return (
-        <header className="relative z-50 flex w-full items-center justify-between border-b border-text-secondary/20 bg-bg-surface px-lg py-lg text-text-primary md:px-4xl lg:px-5xl">
+        <header className="relative z-50 flex w-full items-center justify-between py-lg text-text-primary">
             <button className="font-display text-h5 font-bold">
                 <Link to="/">Workout Manager</Link>
             </button>
@@ -57,12 +57,6 @@ const Header = () => {
                         ref={(node) => {
                             refs.setFloating(node);
                         }}>
-
-                        <li className={listItemClassList}>
-                            <Link to="/programs" onClick={() => setIsMenuOpen(false)}>
-                                Programs
-                            </Link>
-                        </li>
 
                         <li className={listItemClassList}>
                             <button className="cursor-pointer font-medium text-danger" onClick={() => setUser(null)}>
