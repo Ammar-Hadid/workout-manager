@@ -18,8 +18,13 @@ const router = express.Router();
 // Get all programs
 router.get('/', requireAuth, getAllPrograms);
 
+
+// get active program
+router.get('/active', requireAuth, getActiveProgram);
+
 // Get program by id
-router.get('/:id', requireAuth, getProgramById)
+router.get('/:id', requireAuth, getProgramById);
+
 
 // Post program
 router.post('/', requireAuth, createProgram);
@@ -29,9 +34,6 @@ router.patch('/:id', requireAuth, updateProgram)
 
 // Set program active
 router.patch('/:id/activate', requireAuth, activateProgram)
-
-// get active program
-router.get('/active', getActiveProgram)
 
 // Delete program
 router.delete('/:id', requireAuth, deleteProgram)

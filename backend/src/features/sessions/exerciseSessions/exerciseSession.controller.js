@@ -2,11 +2,8 @@ import mongoose from "mongoose";
 import ExerciseSession from "./ExerciseSession.model.js";
 
 export const startExerciseSession = async (req, res) => {
-    const { workoutSessionId, exerciseSessionId } = req.params;
+    const { exerciseSessionId } = req.params;
 
-    if (!mongoose.isValidObjectId(workoutSessionId)) {
-        return res.status(400).json({ error: 'Invalid workout session id.' })
-    }
 
     if (!mongoose.isValidObjectId(exerciseSessionId)) {
         return res.status(400).json({ error: 'Invalid exercise session id.' })
@@ -17,7 +14,6 @@ export const startExerciseSession = async (req, res) => {
             {
                 user: req.userId,
                 _id: exerciseSessionId,
-                workoutSession: workoutSessionId,
                 status: {
                     $in: ['not-started', 'skipped'],
                 },
@@ -57,11 +53,7 @@ export const startExerciseSession = async (req, res) => {
 }
 
 export const completeExerciseSession = async (req, res) => {
-    const { workoutSessionId, exerciseSessionId } = req.params;
-
-    if (!mongoose.isValidObjectId(workoutSessionId)) {
-        return res.status(400).json({ error: 'Invalid workout session id.' });
-    }
+    const { exerciseSessionId } = req.params;
 
     if (!mongoose.isValidObjectId(exerciseSessionId)) {
         return res.status(400).json({ error: 'Invalid exercise session id.' });
@@ -71,7 +63,6 @@ export const completeExerciseSession = async (req, res) => {
         const exerciseSession = await ExerciseSession.findOneAndUpdate(
             {
                 user: req.userId,
-                workoutSession: workoutSessionId,
                 _id: exerciseSessionId,
                 status: 'in-progress'
             },
@@ -101,11 +92,7 @@ export const completeExerciseSession = async (req, res) => {
 }
 
 export const skipExerciseSession = async (req, res) => {
-    const { workoutSessionId, exerciseSessionId } = req.params;
-
-    if (!mongoose.isValidObjectId(workoutSessionId)) {
-        return res.status(400).json('Invalid workout session id.');
-    }
+    const { exerciseSessionId } = req.params;
 
     if (!mongoose.isValidObjectId(exerciseSessionId)) {
         return res.status(400).json('Invalid exercise session id.');
@@ -115,7 +102,6 @@ export const skipExerciseSession = async (req, res) => {
         const exerciseSession = await ExerciseSession.findOneAndUpdate(
             {
                 user: req.userId,
-                workoutSession: workoutSessionId,
                 _id: exerciseSessionId,
                 status: {
                     $in: ['not-started', 'in-progress'],
