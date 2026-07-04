@@ -42,7 +42,7 @@ const Header = () => {
     return (
         <header className="relative z-50 flex w-full items-center justify-between py-lg text-text-primary">
             <button className="font-display text-h5 font-bold">
-                <Link to="/">Workout Manager</Link>
+                <Link to="/"></Link>
             </button>
 
             <button className="cursor-pointer rounded-pill border border-text-secondary/30 px-lg py-sm text-body-sm text-text-secondary transition hover:border-primary hover:text-text-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/20" ref={(node) => {

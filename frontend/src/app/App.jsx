@@ -37,7 +37,7 @@ function App() {
       <ToastProvider>
         <ConfirmProvider>
           <BrowserRouter>
-            <DevelopmentPreviewBanner />
+            {/* <DevelopmentPreviewBanner /> */}
 
             <Routes>
               <Route element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>

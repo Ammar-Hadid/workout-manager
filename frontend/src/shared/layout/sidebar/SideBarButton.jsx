@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom"
 
-const SideBarButton = ({ icon: Icon, label, to = '' }) => {
+const SideBarButton = ({ icon: Icon, label, to = '', isOpen }) => {
     return (
         <NavLink
             to={to}
@@ -15,7 +15,7 @@ const SideBarButton = ({ icon: Icon, label, to = '' }) => {
             }
         >
             <Icon />
-            <span>{label}</span>
+            {isOpen && <span>{label}</span>}
         </NavLink>
     )
 }
