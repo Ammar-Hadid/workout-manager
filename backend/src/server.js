@@ -4,7 +4,7 @@ import app from "./app.js";
 
 import mongoose from 'mongoose';
 
-const PORT = process.env.PORT || 40001;
+const PORT = process.env.PORT || 4000;
 
 const startServer = async () => {
     try {

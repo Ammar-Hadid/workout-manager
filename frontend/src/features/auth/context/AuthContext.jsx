@@ -1,9 +1,8 @@
 import { useState, useEffect, createContext, useContext } from "react"
-import { getApiUrl } from "../../../config/api.js";
+
+import { getCurrentUser } from "../api/auth.api";
 
 const AuthContext = createContext();
-
-const AUTH_ME_URL = getApiUrl("/auth/me");
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -12,17 +11,11 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const res = await fetch(AUTH_ME_URL, { credentials: "include" });
+                const user = await getCurrentUser();
 
-                const data = await res.json();
-
-                if (!res.ok) throw new Error(data.error);
-
-                setUser(data.user);
-                setIsAuthLoading(false)
+                setUser(user);
             }
             catch (error) {
-                console.error(error);
                 setUser(null);
             }
             finally {

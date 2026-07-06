@@ -8,14 +8,19 @@ const generateToken = userId => {
     return jwt.sign({ userId }, JWT_SECRET, { expiresIn: '7d' })
 }
 
+const authCookieOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+};
+
 const setAuthCookie = (res, token) => {
     res.cookie("token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
-        maxAge: 1000 * 60 * 60 * 24 * 7
+        ...authCookieOptions,
+        maxAge: 1000 * 60 * 60 * 24 * 7,
     });
 };
+
 
 export const register = async (req, res) => {
     const { userName, email, password } = req.body;
@@ -113,17 +118,21 @@ export const login = async (req, res) => {
     }
 };
 
+export const logout = (req, res) => {
+    res.clearCookie("token", authCookieOptions);
+
+    return res.sendStatus(204);
+}
+
 export const getMe = async (req, res) => {
 
     try {
-        if (!req.userId) {
-            return res.status(200).json({ user: null });
-        }
+        res.set('Cache-Control', 'no-store');
 
         const user = await User.findById(req.userId).select("userName email");
 
         if (!user) {
-            return res.status(200).json({ user: null });
+            return res.status(401).json({ error: 'Unauthorized.' });
         }
 
         return res.status(200).json({ user });
@@ -133,4 +142,4 @@ export const getMe = async (req, res) => {
         console.error(error);
         return res.status(500).json({ error: 'Server error.' })
     }
-}
+};

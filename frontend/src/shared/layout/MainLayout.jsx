@@ -26,10 +26,10 @@ const MainLayout = () => {
                 onToggle={() => setIsSidebarOpen(prev => !prev)}
             />
 
-            <div className="flex flex-col gap-2xl pr-3xl">
+            <div className="flex flex-col gap-2xl pr-lg lg:pr-3xl">
                 <Header />
 
-                <main className="flex-1">
+                <main className="flex-1 pl-xl lg:pl-0">
                     <Outlet />
                 </main>
             </div>
