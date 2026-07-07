@@ -1,11 +1,15 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 
-import { useAuth } from "../context/AuthContext.jsx";
 import { useToast } from "../../../shared/context/toastContext.jsx";
 import DefaultButton from "../../../shared/components/DefaultButton.jsx";
 import FormInput from "../../../shared/components/FormInput.jsx";
-import { getApiUrl } from "../../../config/api.js";
+
+import { login, register } from "../api/auth.api.js";
+
+import { getErrorMessage } from "../../../shared/utils/errorHelper.js";
+
+
 
 const AuthForm = ({ mode, setMode }) => {
 
@@ -17,7 +21,6 @@ const AuthForm = ({ mode, setMode }) => {
 
     const [form, setForm] = useState(inititalFormData);
     const navigate = useNavigate();
-    const { setUser } = useAuth();
     const { showToast } = useToast();
 
 
@@ -34,31 +37,21 @@ const AuthForm = ({ mode, setMode }) => {
 
     const handleOnSubmit = async (e) => {
         e.preventDefault();
-        const action = mode === 'login' ? 'login' : 'register';
 
         try {
-            const res = await fetch(getApiUrl(`/auth/${action}`), {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                credentials: "include",
-                body: JSON.stringify(form)
-            });
-
-            const data = await res.json();
-
-            if (!res.ok) {
-                throw new Error(data.error)
+            if (mode === 'login') {
+                await login(form);
             }
 
-            setUser(data.user);
+            else if (mode === 'register') {
+                await register(form)
+            }
+
             navigate('/', { replace: true });
         }
 
         catch (error) {
-            console.error(error);
-            showToast(error.message);
+            showToast(getErrorMessage(error));
         }
 
     }

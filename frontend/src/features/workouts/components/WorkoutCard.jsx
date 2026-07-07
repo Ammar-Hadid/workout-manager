@@ -48,7 +48,7 @@ export const workoutCard = ({ workout, setSelectedWorkout, openModal, onDelete }
             <EllipsisMenu actions={menuActions} />
 
             <Link to={`${workout._id}/exercises`} className="flex flex-col gap-md">
-                <h2 className="pr-2xl text-h5 font-semibold">{name}</h2>
+                <h2 className="pr-2xl text-body font-semibold">{name}</h2>
                 <ul className="list-none">
                     <li className={listItemClassList}>{duration} min</li>
                 </ul>

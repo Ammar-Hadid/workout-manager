@@ -58,10 +58,10 @@ const ProgramCard = ({ program, openModal, setActive, setSelectedProgram, onDele
         <div className={cardClassList}>
             <EllipsisMenu actions={menuActions} />
 
-            <Link to={`/programs/${program._id}/workouts`} className={`flex flex-col gap-lg ${isActive ? "pt-2xl" : ""}`}>
+            <Link to={`/programs/${program._id}/workouts`} className={`flex flex-col gap-md ${isActive ? "pt-2xl" : ""}`}>
                 {isActive && <p className={activeBadgeClassList}>Active</p>}
 
-                <h2 className="pr-2xl text-h5 font-semibold">{name}</h2>
+                <h2 className="pr-2xl text-body font-semibold">{name}</h2>
                 <ul className="list-none">
                     <li className={listItemClassList}><p><strong>Training days per week: </strong>{trainingDaysPerWeek}</p></li>
                 </ul>

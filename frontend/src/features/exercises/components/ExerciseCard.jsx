@@ -32,7 +32,7 @@ const ExerciseCard = ({ exercise, setSelectedExercise, openModal, onDelete }) =>
         before:bg-primary before:content-['']`;
 
     const cardClassList =
-        `relative flex min-w-0 flex-col gap-lg
+        `relative flex min-w-0 flex-col gap-md
         rounded-card border border-text-secondary/20
         bg-bg-surface-elevated p-lg text-text-primary transition
         hover:border-primary/60 hover:shadow-2xl`;
@@ -42,7 +42,7 @@ const ExerciseCard = ({ exercise, setSelectedExercise, openModal, onDelete }) =>
         <div className={cardClassList}>
             <EllipsisMenu actions={menuActions} />
 
-            <h2 className="pr-2xl text-h5 font-semibold">{name}</h2>
+            <h2 className="pr-2xl text-body font-semibold">{name}</h2>
             <ul className="flex list-none flex-col gap-sm">
                 <li className={listItemClassList}><strong>Muscle group:</strong>{muscleGroup}</li>
                 <li className={listItemClassList}><strong>Rest: </strong>{restTime}sec</li>

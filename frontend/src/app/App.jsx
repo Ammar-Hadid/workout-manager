@@ -1,7 +1,5 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Navigate, redirect } from "react-router-dom";
 
-
-import { AuthProvider, useAuth } from "../features/auth/context/AuthContext.jsx"
 import { ToastProvider } from "../shared/context/toastContext.jsx";
 import { ConfirmProvider } from "../shared/context/confirmContext.jsx";
 
@@ -10,49 +8,74 @@ import AuthPage from "../features/auth/pages/AuthPage.jsx"
 
 import MainLayout from "../shared/layout/MainLayout.jsx";
 import DevelopmentPreviewBanner from "../shared/layout/DevelopmentPreviewBanner.jsx";
-import Dashboard from "../features/dashboard/pages/Dashboard.jsx";
+import Dashboard from "../features/dashboard/pages/Dashboard.page.jsx";
 
-import ProgramsPage from "../features/programs/pages/ProgramsPage.jsx";
-import WorkoutsPage from "../features/workouts/pages/WorkoutsPage.jsx";
-import ExercisePage from "../features/exercises/pages/ExercisePage.jsx";
+import ProgramsPage from "../features/programs/pages/Programs.page.jsx";
+import WorkoutsPage from "../features/workouts/pages/workouts.page.jsx";
+import ExercisePage from "../features/exercises/pages/Exercises.page.jsx";
 
+import { requireUser } from "../features/auth/loaders/requireUser.loader.js";
+import { redirectIfAuthenticated } from "../features/auth/loaders/redirectIfAuthenticated.loader.js";
 
-const ProtectedRoute = ({ children }) => {
-  const { user, isAuthLoading } = useAuth();
+const router = createBrowserRouter([
 
-  if (isAuthLoading) {
-    return <p>Loading...</p>
-  }
+  {
+    id: 'root',
+    element: <MainLayout />,
+    loader: requireUser,
 
-  if (!user) {
-    return <Navigate to="/login" replace />
-  }
+    children: [
+      {
+        path: '/',
+        element: <Dashboard />,
+        handle: {
+          getTitle: (user) => `Welcome back ${user.userName}`,
+        },
+      },
 
-  return children
-}
+      {
+        path: '/programs',
+        element: <ProgramsPage />,
+        handle: {
+          title: 'Programs',
+        },
+      },
+
+      {
+        path: '/programs/:programId/workouts',
+        element: <WorkoutsPage />,
+        handle: {
+          title: 'Workouts',
+        },
+      },
+
+      {
+        path: '/programs/:programId/workouts/:workoutId/exercises',
+        element: <ExercisePage />,
+        handle: {
+          title: 'Exercises',
+        },
+      },
+    ]
+  },
+
+  {
+    path: '/login',
+    element: <AuthPage />,
+    loader: redirectIfAuthenticated,
+  },
+
+])
+
 
 function App() {
+
   return (
-    <AuthProvider>
-      <ToastProvider>
-        <ConfirmProvider>
-          <BrowserRouter>
-            <DevelopmentPreviewBanner />
-
-            <Routes>
-              <Route element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/programs" element={<ProgramsPage />} />
-                <Route path="/programs/:programId/workouts" element={< WorkoutsPage />} />
-                <Route path="/programs/:programId/workouts/:workoutId/exercises" element={<ExercisePage />} />
-              </Route>
-
-              <Route path="/login" element={<AuthPage />} />
-            </Routes>
-          </BrowserRouter>
-        </ConfirmProvider>
-      </ToastProvider>
-    </AuthProvider>
+    <ToastProvider>
+      <ConfirmProvider>
+        <RouterProvider router={router} />
+      </ConfirmProvider>
+    </ToastProvider>
   )
 
 

@@ -2,11 +2,9 @@ import mongoose from "mongoose";
 import Workout from "./Workout.model.js";
 import Program from "../programs/Program.model.js";
 import Exercise from "../exercises/Exercise.model.js";
-import WorkoutSession from "../sessions/workoutSessions/WorkoutSession.model.js";
 
 import workoutValidator from "./workout.validation.js";
 
-import { getCurrentWeekRange } from "../../utils/date/getCurrentWeekRange.js";
 
 export const getWorkoutById = async (req, res) => {
     const { workoutId, programId } = req.params;
@@ -194,47 +192,3 @@ export const deleteWorkout = async (req, res) => {
         await session.endSession();
     }
 };
-
-
-export const getWorkoutsThisWeek = async (req, res) => {
-    const { programId } = req.params;
-    const { startOfWeek, endOfWeek } = getCurrentWeekRange();
-
-    try {
-        const program = await Program.findOne({ user: req.userId, _id: programId });
-
-        if (!program) return res.status(404).json({ error: 'Program not foud.' });
-
-        const workouts = await Workout.find({ user: req.userId, program: programId });
-
-        const completedWorkoutIds = (await WorkoutSession.distinct(
-            "workout",
-            {
-                user: req.userId,
-                program: programId,
-                status: "completed",
-                completedAt: {
-                    $gte: startOfWeek,
-                    $lte: endOfWeek
-                }
-            })).map(id => id.toString());
-
-
-        const completedWorkoutsThisWeek = workouts.filter(workout => {
-            return completedWorkoutIds.includes(workout._id.toString());
-        })
-
-        const notCompletedWorkoutsThisWeek = workouts.filter(workout => {
-            return !completedWorkoutIds.includes(workout._id.toString())
-        });
-
-        res.status(200).json({ completedWorkoutsThisWeek, notCompletedWorkoutsThisWeek });
-
-    }
-
-    catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: 'Server error.' });
-    }
-
-}

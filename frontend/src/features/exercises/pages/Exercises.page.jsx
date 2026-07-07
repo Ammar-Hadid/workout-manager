@@ -29,7 +29,6 @@ import CardsWrapper from "../../../shared/layout/CardsWrapper.jsx";
 const ExercisePage = () => {
     const { programId, workoutId } = useParams();
 
-    const [parentWorkout, setParentWorkout] = useState({});
     const [exercises, setExercises] = useState([]);
 
     const [muscleGroups, setMuscleGroups] = useState([]);
@@ -40,23 +39,6 @@ const ExercisePage = () => {
 
     const { showToast } = useToast();
     const { confirm } = useConfirm();
-
-
-    // #region get parent workout
-    useEffect(() => {
-        const fetchParentWorkout = async () => {
-            try {
-                const parentWorkout = await getOneWorkout(programId, workoutId);
-                setParentWorkout(parentWorkout);
-            }
-            catch (error) {
-                showToast(getErrorMessage(error));
-            }
-        }
-
-        fetchParentWorkout();
-    }, [programId, workoutId, showToast]);
-    // #endregion
 
     // #region GET all exercises
     useEffect(() => {
@@ -178,8 +160,6 @@ const ExercisePage = () => {
     }
     return (
         <div className="flex flex-col gap-2xl">
-            <h1 className="text-h2 font-semibold">{`"${parentWorkout?.name}" exercises`}</h1>
-
             <CardsWrapper>
                 {exercises.length < 1 ? <h2 className="text-h5 text-text-secondary">No exercises found</h2> :
                     [...exercises]
