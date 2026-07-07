@@ -11,7 +11,7 @@ import DevelopmentPreviewBanner from "../shared/layout/DevelopmentPreviewBanner.
 import Dashboard from "../features/dashboard/pages/Dashboard.page.jsx";
 
 import ProgramsPage from "../features/programs/pages/Programs.page.jsx";
-import WorkoutsPage from "../features/workouts/pages/workouts.page.jsx";
+import WorkoutsPage from "../features/workouts/pages/Workouts.page.jsx";
 import ExercisePage from "../features/exercises/pages/Exercises.page.jsx";
 
 import { requireUser } from "../features/auth/loaders/requireUser.loader.js";
