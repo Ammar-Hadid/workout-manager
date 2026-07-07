@@ -1,6 +1,5 @@
 import { createBrowserRouter, RouterProvider, Navigate, redirect } from "react-router-dom";
 
-import { AuthProvider, useAuth } from "../features/auth/context/AuthContext.jsx"
 import { ToastProvider } from "../shared/context/toastContext.jsx";
 import { ConfirmProvider } from "../shared/context/confirmContext.jsx";
 
@@ -11,9 +10,9 @@ import MainLayout from "../shared/layout/MainLayout.jsx";
 import DevelopmentPreviewBanner from "../shared/layout/DevelopmentPreviewBanner.jsx";
 import Dashboard from "../features/dashboard/pages/Dashboard.page.jsx";
 
-import ProgramsPage from "../features/programs/pages/ProgramsPage.jsx";
-import WorkoutsPage from "../features/workouts/pages/WorkoutsPage.jsx";
-import ExercisePage from "../features/exercises/pages/ExercisePage.jsx";
+import ProgramsPage from "../features/programs/pages/Programs.page.jsx";
+import WorkoutsPage from "../features/workouts/pages/workouts.page.jsx";
+import ExercisePage from "../features/exercises/pages/Exercises.page.jsx";
 
 import { requireUser } from "../features/auth/loaders/requireUser.loader.js";
 import { redirectIfAuthenticated } from "../features/auth/loaders/redirectIfAuthenticated.loader.js";
@@ -21,6 +20,7 @@ import { redirectIfAuthenticated } from "../features/auth/loaders/redirectIfAuth
 const router = createBrowserRouter([
 
   {
+    id: 'root',
     element: <MainLayout />,
     loader: requireUser,
 
@@ -28,21 +28,33 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <Dashboard />,
+        handle: {
+          getTitle: (user) => `Welcome back ${user.userName}`,
+        },
       },
 
       {
         path: '/programs',
         element: <ProgramsPage />,
+        handle: {
+          title: 'Programs',
+        },
       },
 
       {
         path: '/programs/:programId/workouts',
         element: <WorkoutsPage />,
+        handle: {
+          title: 'Workouts',
+        },
       },
 
       {
         path: '/programs/:programId/workouts/:workoutId/exercises',
-        element: <ExercisePage />
+        element: <ExercisePage />,
+        handle: {
+          title: 'Exercises',
+        },
       },
     ]
   },
@@ -59,13 +71,11 @@ const router = createBrowserRouter([
 function App() {
 
   return (
-    <AuthProvider>
-      <ToastProvider>
-        <ConfirmProvider>
-          <RouterProvider router={router} />
-        </ConfirmProvider>
-      </ToastProvider>
-    </AuthProvider>
+    <ToastProvider>
+      <ConfirmProvider>
+        <RouterProvider router={router} />
+      </ConfirmProvider>
+    </ToastProvider>
   )
 
 

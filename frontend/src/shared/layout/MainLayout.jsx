@@ -13,7 +13,7 @@ const MainLayout = () => {
 
         <div
             className={`
-            grid min-h-screen lg:gap-3xl
+            grid min-h-screen lg:gap-3xl pt-3xl lg:pt-0
             ${isSidebarOpen
                     ? "lg:grid-cols-[280px_1fr]"
                     : "lg:grid-cols-[95px_1fr]"
@@ -26,7 +26,7 @@ const MainLayout = () => {
                 onToggle={() => setIsSidebarOpen(prev => !prev)}
             />
 
-            <div className="flex flex-col gap-2xl pr-lg lg:pr-3xl">
+            <div className="flex flex-col gap-md pr-lg lg:pr-3xl">
                 <Header />
 
                 <main className="flex-1 pl-xl lg:pl-0">

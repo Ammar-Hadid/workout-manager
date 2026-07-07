@@ -42,14 +42,14 @@ const Sidebar = ({ isOpen, onToggle }) => {
             lg:relative lg:w-auto lg:translate-x-0
         `}>
             <button
-                className="lg:hidden flex items-center justify-center absolute top-xl right-0 translate-x-full bg-primary w-3xl h-3xl rounded-r-3xl cursor-pointer"
+                className="lg:hidden flex items-center justify-center absolute top-sm right-0 translate-x-full bg-primary w-3xl h-3xl rounded-r-3xl cursor-pointer"
                 onClick={onToggle}
             >
                 <PanelLeft strokeWidth={2.5} className="w-lg h-lg" />
             </button>
 
             <div className={`flex items-center ${isOpen ? 'justify-between' : 'justify-center'} w-full`}>
-                {isOpen && <button className="font-display text-body font-bold">
+                {isOpen && <button className="font-display text-body-sm font-medium">
                     <Link to="/">Workout Manager</Link>
                 </button>}
 
