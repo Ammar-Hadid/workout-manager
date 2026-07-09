@@ -11,6 +11,11 @@
     --color-bg-surface: #0C1826;
     --color-bg-surface-elevated: #101F2E;
 
+    --background-image-gradient-surface: linear-gradient(315deg,
+            #0C1826 0%,
+            #0E1C2D 40%,
+            #12263D 100%);
+
     /* Text */
     --color-text-primary: #ffffff;
     --color-text-secondary: #94A3B8;

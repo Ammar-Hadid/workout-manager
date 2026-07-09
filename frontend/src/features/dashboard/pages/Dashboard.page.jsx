@@ -1,8 +1,13 @@
+import { useLoaderData } from "react-router-dom";
+
+import ActiveProgramContainer from "../components/ActiveProgram.component";
+
 const Dashboard = () => {
+    const { activeProgram, workoutsThisWeek } = useLoaderData();
 
     return (
-        <div className="rounded-card bg-bg-surface p-xl md:p-2xl">
-            <p className="mb-sm text-body-sm uppercase tracking-widest text-primary">Dashboard</p>
+        <div className="">
+            <ActiveProgramContainer activeProgram={activeProgram} />
         </div>
     )
 }

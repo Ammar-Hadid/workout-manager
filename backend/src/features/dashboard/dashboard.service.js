@@ -4,7 +4,7 @@ import Workout from "../workouts/Workout.model.js";
 import WorkoutSession from "../sessions/workoutSessions/WorkoutSession.model.js";
 import { getCurrentWeekRange } from "../../utils/date/getCurrentWeekRange.js";
 
-export const getWorkoutsThisWeek = async (user, programId) => {
+const getWorkoutsThisWeek = async (user, programId) => {
     const { startOfWeek, endOfWeek } = getCurrentWeekRange();
 
     const [workouts, completedWorkoutIds] = await Promise.all([
@@ -41,3 +41,26 @@ export const getWorkoutsThisWeek = async (user, programId) => {
     return { completedWorkoutsThisWeek, notCompletedWorkoutsThisWeek };
 }
 
+const getActiveProgram = async (user) => {
+
+    const activeProgram = await Program.findOne({
+        user,
+        isActive: true,
+    });
+
+    if (!activeProgram) return null;
+
+    return activeProgram
+}
+
+
+export const buildDashboard = async (user) => {
+
+    const activeProgram = await getActiveProgram(user);
+    const workoutsThisWeek = await getWorkoutsThisWeek(user, activeProgram?._id);
+
+    return {
+        activeProgram,
+        workoutsThisWeek
+    }
+}

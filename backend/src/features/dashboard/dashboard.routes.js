@@ -2,11 +2,11 @@ import express from "express";
 import requireAuth from "../../middleware/requireAuth.js";
 
 import {
-    getWorkoutsThisWeek
+    getDashboard
 } from "./dashboard.controller.js";
 
 const router = express.Router();
 
-router.get('/workouts/this-week', requireAuth, getWorkoutsThisWeek);
+router.get('/', requireAuth, getDashboard);
 
 export default router;

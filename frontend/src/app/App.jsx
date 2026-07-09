@@ -17,6 +17,8 @@ import ExercisePage from "../features/exercises/pages/Exercises.page.jsx";
 import { requireUser } from "../features/auth/loaders/requireUser.loader.js";
 import { redirectIfAuthenticated } from "../features/auth/loaders/redirectIfAuthenticated.loader.js";
 
+import { dashboardLoader } from "../features/dashboard/loaders/getDashboard.loader.js";
+
 const router = createBrowserRouter([
 
   {
@@ -28,6 +30,7 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <Dashboard />,
+        loader: dashboardLoader,
         handle: {
           getTitle: (user) => `Welcome back ${user.userName}`,
         },
