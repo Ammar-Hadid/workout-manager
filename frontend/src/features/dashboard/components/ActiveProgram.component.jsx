@@ -14,6 +14,8 @@ const ActiveProgramItem = ({ label, value, className = "" }) => {
 
 const ActiveProgramContainer = ({ activeProgram }) => {
 
+    if (!activeProgram) return null;
+
     const { _id, name, split, trainingDaysPerWeek } = activeProgram;
 
     if (!_id || !name || !split || !trainingDaysPerWeek) return null;
@@ -21,7 +23,7 @@ const ActiveProgramContainer = ({ activeProgram }) => {
     return (
         <div className="flex flex-col md:flex-row gap-lg justify-between md:items-center rounded-card bg-gradient-surface p-xl md:p-2xl border border-text-primary/15">
             <div className="flex flex-col md:flex-row items-start md:items-center gap-xl md:gap-2xl lg:gap-3xl w-full">
-                <div className="bg-primary/25 p-xl rounded-xl border border-primary/50">
+                <div className="bg-bg-accent-surface p-xl rounded-xl border border-primary/50">
                     <Dumbbell className="text-text-primary/75 w-3xl h-3xl" strokeWidth={1} />
                 </div>
 

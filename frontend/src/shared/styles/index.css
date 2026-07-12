@@ -8,6 +8,8 @@
 
     /* Backgrounds */
     --color-bg-primary: #061322;
+    --color-bg-accent-surface: rgba(0, 115, 247, .25);
+
     --color-bg-surface: #0C1826;
     --color-bg-surface-elevated: #101F2E;
 
