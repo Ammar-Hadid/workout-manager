@@ -76,6 +76,16 @@ const exerciseSessionSchema = new mongoose.Schema({
     },
 }, { timestamps: true });
 
+exerciseSessionSchema.index(
+    { user: 1 },
+    {
+        unique: true,
+        partialFilterExpression: {
+            status: 'in-progress',
+        },
+    },
+)
+
 const ExerciseSession = mongoose.model('ExerciseSession', exerciseSessionSchema);
 
 export default ExerciseSession
