@@ -1,8 +1,11 @@
 import { Circle } from "lucide-react";
 import { useLoaderData } from "react-router-dom";
-import CurrentExercise from "../../exerciseSession/components/CurrentExercise.component.jsx";
 
 import { getFeaturedExerciseSession } from "../selectors/workoutsession.selectors.js";
+
+import CurrentExercise from "../../exerciseSession/components/CurrentExercise.component.jsx";
+
+import ExercisesQueue from "../components/ExercisesQueue.component.jsx";
 
 const WorkoutSession = () => {
     const { workoutSession, exerciseSessions } = useLoaderData();
@@ -20,11 +23,13 @@ const WorkoutSession = () => {
                 <span>In Progress</span>
             </div>
 
-            {featuredExerciseSession && (
-                <div>
-                    <CurrentExercise featuredExercise={featuredExerciseSession} />
-                </div>
-            )}
+
+
+            <div className="flex min-w-0 flex-col gap-lg lg:flex-row">
+                <CurrentExercise featuredExercise={featuredExerciseSession} />
+
+                <ExercisesQueue exercises={exerciseSessions} />
+            </div>
         </div>
     );
 }

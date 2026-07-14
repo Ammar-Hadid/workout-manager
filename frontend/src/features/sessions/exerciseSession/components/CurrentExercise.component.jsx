@@ -2,6 +2,9 @@ import Card from "../../../../shared/layout/Card.jsx";
 import MuscleDiagram from "../../../muscleGroups/components/MuscleDiagram/MuscleDiagram.jsx";
 import StepIndicator from "../../shared/StepIndicator.component.jsx";
 import DefaultButton from "../../../../shared/components/DefaultButton.jsx";
+import StatusBadge from "../../shared/StatusBadge.component.jsx";
+
+import NoActiveExercise from "./NoActiveExercise.component.jsx";
 
 const formatMuscleName = (muscle) => (
     muscle
@@ -11,6 +14,8 @@ const formatMuscleName = (muscle) => (
 );
 
 const CurrentExercise = ({ featuredExercise }) => {
+    if (!featuredExercise) return <NoActiveExercise />
+
     const {
         nameSnapshot,
         muscleGroupSnapshot,
@@ -21,9 +26,10 @@ const CurrentExercise = ({ featuredExercise }) => {
         maxRepsSnapshot,
     } = featuredExercise;
 
+
     return (
-        <Card heading="Current exercise">
-            <div className="flex flex-col gap-lg mt-md rounded-card border border-text-secondary/15 bg-gradient-surface p-lg shadow-2xl">
+        <Card heading="Current exercise" className="flex-1">
+            <div className="flex flex-col gap-lg mt-md">
                 <div className="flex flex-wrap items-center justify-between gap-md">
                     <div className="flex items-center gap-md">
                         <StepIndicator variant="featured" step={orderSnapshot} />
@@ -38,9 +44,7 @@ const CurrentExercise = ({ featuredExercise }) => {
                         </div>
                     </div>
 
-                    <span className="rounded-lg bg-primary/10 px-md py-sm text-body-sm font-medium text-primary">
-                        In Progress
-                    </span>
+                    <StatusBadge status='in-progress' />
                 </div>
 
                 <div className="grid items-stretch gap-lg md:grid-cols-[minmax(0,1.35fr)_minmax(11rem,0.65fr)]">
@@ -66,7 +70,7 @@ const CurrentExercise = ({ featuredExercise }) => {
                     </dl>
                 </div>
 
-                <div className="flex gap-md">
+                <div className="flex flex-col lg:flex-row gap-md">
                     <DefaultButton>Complete exercise</DefaultButton>
                     <DefaultButton variant="secondary">Skip exercise</DefaultButton>
                 </div>
