@@ -7,14 +7,22 @@ import CurrentExercise from "../../exerciseSession/components/CurrentExercise.co
 
 import ExercisesQueue from "../components/ExercisesQueue.component.jsx";
 
+import { useWorkoutSessionActions } from "../hooks/useWorkoutSessionActions.hook.js";
+
 const WorkoutSession = () => {
     const { workoutSession, exerciseSessions } = useLoaderData();
+
+    const {
+        startExercise,
+        completeExercise,
+        skipExercise,
+        pendingAction,
+        isPending
+    } = useWorkoutSessionActions({ exerciseSessions });
 
     if (!workoutSession || !exerciseSessions) return null;
 
     const featuredExerciseSession = getFeaturedExerciseSession(exerciseSessions);
-
-
 
     return (
         <div className="flex flex-col gap-xl pb-3xl">
@@ -26,9 +34,13 @@ const WorkoutSession = () => {
 
 
             <div className="flex min-w-0 flex-col gap-lg lg:flex-row">
-                <CurrentExercise featuredExercise={featuredExerciseSession} />
+                <CurrentExercise
+                    featuredExercise={featuredExerciseSession}
+                    completeExercise={completeExercise}
+                    skipExercise={skipExercise}
+                />
 
-                <ExercisesQueue exercises={exerciseSessions} />
+                <ExercisesQueue exercises={exerciseSessions} startExercise={startExercise} />
             </div>
         </div>
     );

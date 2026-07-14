@@ -1,7 +1,9 @@
+import { useId } from "react";
 import FrontBody from "./FrontBody.jsx";
 import BackBody from "./BackBody.jsx";
 import {
     DEFAULT_MUSCLE_DIAGRAM_CONFIG,
+    FULL_BODY_VIEWBOX,
     MUSCLE_DIAGRAM_CONFIG,
 } from "../../config/muscleDiagram.config.js";
 
@@ -18,8 +20,18 @@ const MuscleDiagram = ({
     const selectedConfig = MUSCLE_DIAGRAM_CONFIG[primaryMuscle]
         ?? DEFAULT_MUSCLE_DIAGRAM_CONFIG;
     const config = showFullBody
-        ? { ...selectedConfig, viewBox: DEFAULT_MUSCLE_DIAGRAM_CONFIG.viewBox }
+        ? { ...selectedConfig, viewBox: FULL_BODY_VIEWBOX[selectedConfig.view] }
         : selectedConfig;
+    const idPrefix = useId().replaceAll(":", "");
+    const paintIds = {
+        muscle: `${idPrefix}-muscle`,
+        primary: `${idPrefix}-primary`,
+        secondary: `${idPrefix}-secondary`,
+        fibers: `${idPrefix}-fibers`,
+        glow: `${idPrefix}-glow`,
+        glowSoft: `${idPrefix}-glow-soft`,
+        bodyShadow: `${idPrefix}-body-shadow`,
+    };
 
     const secondary = normalizeMuscles(secondaryMuscles);
     const getMuscleState = (muscle) => {
@@ -38,11 +50,6 @@ const MuscleDiagram = ({
             className={`relative isolate overflow-hidden bg-bg-accent-surface ${className}`}
             data-muscle-diagram={primaryMuscle || "none"}
         >
-            <div
-                aria-hidden="true"
-                className="absolute inset-x-[18%] top-1/2 h-1/2 -translate-y-1/2 rounded-full bg-primary/10 blur-3xl"
-            />
-
             <svg
                 className="relative h-full w-full"
                 viewBox={config.viewBox}
@@ -51,43 +58,55 @@ const MuscleDiagram = ({
                 aria-label={label}
             >
                 <defs>
-                    <linearGradient id="body-muscle" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0" stopColor="#19334b" />
-                        <stop offset="0.48" stopColor="#10273c" />
-                        <stop offset="1" stopColor="#0a1c2d" />
+                    <linearGradient id={paintIds.muscle} x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0" stopColor="#1a354c" />
+                        <stop offset="0.44" stopColor="#10283c" />
+                        <stop offset="1" stopColor="#091a2a" />
                     </linearGradient>
-                    <linearGradient id="body-muscle-shadow" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0" stopColor="#152d43" />
-                        <stop offset="1" stopColor="#081827" />
+                    <linearGradient id={paintIds.primary} x1="0.12" y1="0" x2="0.88" y2="1">
+                        <stop offset="0" stopColor="#2b95ff" />
+                        <stop offset="0.38" stopColor="var(--color-primary)" />
+                        <stop offset="0.76" stopColor="#075ec9" />
+                        <stop offset="1" stopColor="#03418f" />
                     </linearGradient>
-                    <linearGradient id="primary-muscle" x1="0" y1="0" x2="0.9" y2="1">
-                        <stop offset="0" stopColor="#1688ff" />
-                        <stop offset="0.5" stopColor="var(--color-primary)" />
-                        <stop offset="1" stopColor="#004fb8" />
+                    <linearGradient id={paintIds.secondary} x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0" stopColor="#68b7ff" />
+                        <stop offset="0.55" stopColor="#2589e8" />
+                        <stop offset="1" stopColor="#0c579f" />
                     </linearGradient>
-                    <linearGradient id="secondary-muscle" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0" stopColor="#4aa5ff" />
-                        <stop offset="1" stopColor="#0b69cf" />
-                    </linearGradient>
-                    <radialGradient id="body-core" cx="50%" cy="35%" r="70%">
-                        <stop offset="0" stopColor="#18334d" />
-                        <stop offset="1" stopColor="#071725" />
-                    </radialGradient>
-                    <filter id="muscle-glow" x="-40%" y="-40%" width="180%" height="180%">
-                        <feGaussianBlur stdDeviation="5" result="blur" />
-                        <feFlood floodColor="var(--color-primary)" floodOpacity="0.5" result="color" />
+                    <pattern
+                        id={paintIds.fibers}
+                        width="24"
+                        height="24"
+                        patternUnits="userSpaceOnUse"
+                        patternTransform="rotate(-14)"
+                    >
+                        <path d="M0 7 H24" stroke="#c7e4ff" strokeWidth="0.85" opacity="0.62" />
+                    </pattern>
+                    <filter id={paintIds.glow} x="-25%" y="-25%" width="150%" height="150%">
+                        <feGaussianBlur stdDeviation="3.2" result="blur" />
+                        <feFlood floodColor="var(--color-primary)" floodOpacity="0.42" result="color" />
                         <feComposite in="color" in2="blur" operator="in" result="glow" />
                         <feMerge>
                             <feMergeNode in="glow" />
                             <feMergeNode in="SourceGraphic" />
                         </feMerge>
                     </filter>
-                    <filter id="body-shadow" x="-30%" y="-20%" width="160%" height="160%">
-                        <feDropShadow dx="0" dy="8" stdDeviation="10" floodColor="#020a12" floodOpacity="0.75" />
+                    <filter id={paintIds.glowSoft} x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur stdDeviation="2" result="blur" />
+                        <feFlood floodColor="#3e9ff5" floodOpacity="0.25" result="color" />
+                        <feComposite in="color" in2="blur" operator="in" result="glow" />
+                        <feMerge>
+                            <feMergeNode in="glow" />
+                            <feMergeNode in="SourceGraphic" />
+                        </feMerge>
+                    </filter>
+                    <filter id={paintIds.bodyShadow} x="-18%" y="-12%" width="136%" height="130%">
+                        <feDropShadow dx="0" dy="7" stdDeviation="8" floodColor="#020a12" floodOpacity="0.68" />
                     </filter>
                 </defs>
 
-                <Body getMuscleState={getMuscleState} />
+                <Body getMuscleState={getMuscleState} paintIds={paintIds} />
             </svg>
         </div>
     );

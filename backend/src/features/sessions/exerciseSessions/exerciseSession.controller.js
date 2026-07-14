@@ -52,6 +52,7 @@ export const startExerciseSession = async (req, res) => {
             {
                 new: true,
                 runValidators: true,
+                updatePipeline: true,   
                 session,
             }
         );

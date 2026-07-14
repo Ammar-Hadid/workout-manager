@@ -1,50 +1,68 @@
-const REGION_STYLES = {
-    inactive: {
-        fill: "url(#body-muscle)",
-        stroke: "#294963",
-        color: "#42647e",
-        opacity: 0.72,
-    },
-    secondary: {
-        fill: "url(#secondary-muscle)",
-        stroke: "#5bb0ff",
-        color: "#8bc8ff",
-        opacity: 0.88,
-        filter: "url(#muscle-glow)",
-    },
-    primary: {
-        fill: "url(#primary-muscle)",
-        stroke: "#1688ff",
-        color: "#79bdff",
-        opacity: 1,
-        filter: "url(#muscle-glow)",
-    },
+const getRegionStyle = (state, paintIds) => {
+    if (state === "primary") {
+        return {
+            fill: `url(#${paintIds.primary})`,
+            stroke: "var(--color-primary)",
+            filter: `url(#${paintIds.glow})`,
+            opacity: 1,
+        };
+    }
+
+    if (state === "secondary") {
+        return {
+            fill: `url(#${paintIds.secondary})`,
+            stroke: "#65b5ff",
+            filter: `url(#${paintIds.glowSoft})`,
+            opacity: 0.9,
+        };
+    }
+
+    return {
+        fill: `url(#${paintIds.muscle})`,
+        stroke: "#294a64",
+        opacity: 0.8,
+    };
 };
 
-const MuscleRegion = ({ id, state = "inactive", children }) => (
+const MuscleRegion = ({ id, state = "inactive", paintIds, children }) => {
+    const isActive = state !== "inactive";
+
+    return (
+        <g
+            id={`muscle-${id}`}
+            data-muscle={id}
+            data-state={state}
+            className="transition-[opacity,filter] duration-300"
+        >
+            <g
+                style={getRegionStyle(state, paintIds)}
+                strokeWidth={isActive ? 1.65 : 0.9}
+                strokeLinejoin="round"
+            >
+                {children}
+            </g>
+
+            <g
+                fill={`url(#${paintIds.fibers})`}
+                stroke="none"
+                opacity={isActive ? 0.12 : 0.035}
+                pointerEvents="none"
+            >
+                {children}
+            </g>
+        </g>
+    );
+};
+
+export const AnatomyRegion = ({ paintIds, variant = "muscle", children }) => (
     <g
-        id={`muscle-${id}`}
-        data-muscle={id}
-        data-state={state}
-        style={REGION_STYLES[state] ?? REGION_STYLES.inactive}
-        strokeWidth="1.5"
+        fill={variant === "hair" ? "#071421" : `url(#${paintIds.muscle})`}
+        stroke={variant === "hair" ? "#1c3448" : "#294a64"}
+        strokeWidth="0.85"
         strokeLinejoin="round"
-        className="transition-[opacity,filter] duration-300"
+        opacity={variant === "hair" ? 0.94 : 0.78}
     >
         {children}
-    </g>
-);
-
-export const MuscleFibers = ({ paths }) => (
-    <g
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="0.9"
-        strokeLinecap="round"
-        opacity="0.52"
-        pointerEvents="none"
-    >
-        {paths.map((path, index) => <path key={index} d={path} />)}
     </g>
 );
 

@@ -1,124 +1,50 @@
-import MuscleRegion, { MuscleFibers } from "./MuscleRegion.jsx";
+import MuscleRegion, { AnatomyRegion } from "./MuscleRegion.jsx";
+import BodyPaths from "./BodyPaths.jsx";
+import { collectPaths, createPartLookup } from "./bodyPath.utils.js";
+import { MALE_BACK_PARTS } from "./maleBodyPaths.js";
 
-const BackBody = ({ getMuscleState }) => (
-    <g filter="url(#body-shadow)">
-        <g fill="url(#body-muscle-shadow)" stroke="#294963" strokeWidth="1.5" opacity="0.8">
-            <path d="M169 31 C176 13 224 13 231 31 L227 70 C224 86 213 96 200 99 C187 96 176 86 173 70 Z" />
-            <path d="M180 82 C181 104 173 114 157 121 L176 145 L200 132 L224 145 L243 121 C227 114 219 104 220 82 C211 94 189 94 180 82 Z" />
-            <path d="M181 40 C193 34 207 34 219 40 M177 58 C190 64 210 64 223 58 M186 78 C195 84 205 84 214 78" fill="none" opacity="0.62" />
-            <path d="M181 95 C187 111 193 120 200 132 C207 120 213 111 219 95" fill="none" />
-        </g>
+const BACK_MUSCLE_GROUPS = {
+    back: ["trapezius", "upperBack"],
+    shoulders: ["deltoids"],
+    triceps: ["triceps"],
+    forearms: ["forearm"],
+    "lower-back": ["lowerBack"],
+    glutes: ["gluteal"],
+    hamstrings: ["hamstring"],
+    calves: ["calves"],
+};
 
-        <path
-            d="M157 117 C128 119 94 125 71 144 C52 162 47 193 42 229 L25 344 C22 365 34 381 49 380 C61 379 67 367 70 351 L88 255 L101 210 L111 338 C113 360 123 381 133 399 L127 465 L111 581 L103 747 C103 770 119 783 136 778 C149 774 154 762 156 744 L174 582 L200 488 L226 582 L244 744 C246 762 251 774 264 778 C281 783 297 770 297 747 L289 581 L273 465 L267 399 C277 381 287 360 289 338 L299 210 L312 255 L330 351 C333 367 339 379 351 380 C366 381 378 365 375 344 L358 229 C353 193 348 162 329 144 C306 125 272 119 243 117 L224 143 L200 132 L176 143 Z"
-            fill="url(#body-core)"
-            stroke="#203e58"
-            strokeWidth="2"
-            opacity="0.72"
-        />
+const partLookup = createPartLookup(MALE_BACK_PARTS);
+const selectableSlugs = new Set(Object.values(BACK_MUSCLE_GROUPS).flat());
+const contextParts = MALE_BACK_PARTS.filter(({ slug }) => (
+    !selectableSlugs.has(slug) && slug !== "hair"
+));
 
-        <MuscleRegion id="shoulders" state={getMuscleState("shoulders")}>
-            <path d="M157 119 C129 120 101 127 82 141 C70 151 69 170 77 184 C84 194 97 193 109 184 L136 155 L169 145 Z" />
-            <path d="M243 119 C271 120 299 127 318 141 C330 151 331 170 323 184 C316 194 303 193 291 184 L264 155 L231 145 Z" />
-            <path d="M90 145 C104 138 122 133 146 131 M310 145 C296 138 278 133 254 131" fill="none" stroke="currentColor" />
-            <MuscleFibers paths={[
-                "M157 128 C131 132 109 142 87 158", "M164 139 C137 145 113 157 92 180",
-                "M243 128 C269 132 291 142 313 158", "M236 139 C263 145 287 157 308 180",
-            ]} />
-        </MuscleRegion>
+const BackBody = ({ getMuscleState, paintIds }) => (
+    <g filter={`url(#${paintIds.bodyShadow})`}>
+        <AnatomyRegion paintIds={paintIds}>
+            {contextParts.map(({ slug, paths }) => (
+                <BodyPaths key={slug} name={`back-${slug}`} paths={paths} />
+            ))}
+        </AnatomyRegion>
 
-        <MuscleRegion id="back" state={getMuscleState("back")}>
-            {/* Trapezius */}
-            <path d="M176 114 C181 133 187 150 200 168 L200 255 C181 237 165 218 151 194 L143 153 Z" />
-            <path d="M224 114 C219 133 213 150 200 168 L200 255 C219 237 235 218 249 194 L257 153 Z" />
-            {/* Latissimus dorsi */}
-            <path d="M143 157 C122 169 108 190 105 219 L115 288 C123 326 143 350 172 366 L190 323 L184 264 C163 244 151 216 143 157 Z" />
-            <path d="M257 157 C278 169 292 190 295 219 L285 288 C277 326 257 350 228 366 L210 323 L216 264 C237 244 249 216 257 157 Z" />
-            {/* Rhomboids and spinal erectors */}
-            <path d="M151 194 L185 171 L196 245 L184 264 C165 244 157 220 151 194 Z" opacity="0.82" />
-            <path d="M249 194 L215 171 L204 245 L216 264 C235 244 243 220 249 194 Z" opacity="0.82" />
-            <MuscleFibers paths={[
-                "M180 125 L198 168", "M164 145 L197 181", "M151 167 L195 197", "M154 193 L192 216",
-                "M220 125 L202 168", "M236 145 L203 181", "M249 167 L205 197", "M246 193 L208 216",
-                "M139 174 C143 231 155 291 178 347", "M124 194 C132 256 147 313 169 350", "M112 222 C123 279 141 326 165 352",
-                "M261 174 C257 231 245 291 222 347", "M276 194 C268 256 253 313 231 350", "M288 222 C277 279 259 326 235 352",
-            ]} />
-        </MuscleRegion>
+        {Object.entries(BACK_MUSCLE_GROUPS).map(([muscle, slugs]) => (
+            <MuscleRegion
+                key={muscle}
+                id={muscle}
+                state={getMuscleState(muscle)}
+                paintIds={paintIds}
+            >
+                <BodyPaths
+                    name={`back-${muscle}`}
+                    paths={collectPaths(partLookup, slugs)}
+                />
+            </MuscleRegion>
+        ))}
 
-        <MuscleRegion id="triceps" state={getMuscleState("triceps")}>
-            <path d="M78 181 C63 197 58 222 58 254 C61 275 70 289 82 283 C94 274 98 249 96 217 C94 197 88 185 78 181 Z" />
-            <path d="M322 181 C337 197 342 222 342 254 C339 275 330 289 318 283 C306 274 302 249 304 217 C306 197 312 185 322 181 Z" />
-            <path d="M76 194 C84 212 86 245 80 276 M324 194 C316 212 314 245 320 276" fill="none" stroke="currentColor" />
-            <MuscleFibers paths={[
-                "M68 198 C66 226 70 253 80 276", "M87 198 C91 225 88 254 81 276",
-                "M332 198 C334 226 330 253 320 276", "M313 198 C309 225 312 254 319 276",
-            ]} />
-        </MuscleRegion>
-
-        <MuscleRegion id="forearms" state={getMuscleState("forearms")}>
-            <path d="M58 256 C48 278 42 310 35 348 C32 366 38 377 48 377 C58 376 63 365 66 349 L84 283 C73 285 64 276 58 256 Z" />
-            <path d="M342 256 C352 278 358 310 365 348 C368 366 362 377 352 377 C342 376 337 365 334 349 L316 283 C327 285 336 276 342 256 Z" />
-            <path d="M48 377 C39 379 35 387 39 393 L48 401 L54 394 L58 402 L64 395 L60 376 Z" opacity="0.75" />
-            <path d="M352 377 C361 379 365 387 361 393 L352 401 L346 394 L342 402 L336 395 L340 376 Z" opacity="0.75" />
-            <MuscleFibers paths={[
-                "M59 272 L43 355", "M68 280 L51 365", "M77 287 L58 348",
-                "M341 272 L357 355", "M332 280 L349 365", "M323 287 L342 348",
-            ]} />
-        </MuscleRegion>
-
-        <MuscleRegion id="lower-back" state={getMuscleState("lower-back")}>
-            <path d="M173 278 C181 292 189 304 197 312 L197 400 C178 397 160 387 147 370 L159 330 Z" />
-            <path d="M227 278 C219 292 211 304 203 312 L203 400 C222 397 240 387 253 370 L241 330 Z" />
-            <path d="M180 300 C183 337 187 369 197 393 M220 300 C217 337 213 369 203 393" fill="none" stroke="currentColor" />
-            <MuscleFibers paths={[
-                "M168 308 C169 346 178 376 194 396", "M158 336 C166 366 177 385 193 397",
-                "M232 308 C231 346 222 376 206 396", "M242 336 C234 366 223 385 207 397",
-            ]} />
-        </MuscleRegion>
-
-        <g fill="url(#body-muscle-shadow)" stroke="#294963" strokeWidth="1.5" opacity="0.74">
-            <path d="M147 371 C164 390 181 399 200 400 C219 399 236 390 253 371 L264 411 L255 458 L200 481 L145 458 L136 411 Z" />
-            <path d="M147 388 C163 405 181 414 200 416 C219 414 237 405 253 388 M145 447 C164 454 182 458 200 459 C218 458 236 454 255 447" fill="none" />
-        </g>
-
-        <MuscleRegion id="glutes" state={getMuscleState("glutes")}>
-            <path d="M139 397 C156 386 179 390 197 407 L197 477 C181 488 154 482 137 462 C128 443 128 418 139 397 Z" />
-            <path d="M261 397 C244 386 221 390 203 407 L203 477 C219 488 246 482 263 462 C272 443 272 418 261 397 Z" />
-            <path d="M143 414 C159 402 178 404 194 417 M257 414 C241 402 222 404 206 417" fill="none" stroke="currentColor" />
-            <MuscleFibers paths={[
-                "M137 430 C155 418 176 418 195 430", "M136 449 C155 439 176 439 195 448", "M145 467 C162 459 180 460 195 466",
-                "M263 430 C245 418 224 418 205 430", "M264 449 C245 439 224 439 205 448", "M255 467 C238 459 220 460 205 466",
-            ]} />
-        </MuscleRegion>
-
-        <MuscleRegion id="hamstrings" state={getMuscleState("hamstrings")}>
-            <path d="M137 468 C152 480 169 486 187 482 L184 550 C176 585 164 613 146 627 C130 614 125 578 128 540 Z" />
-            <path d="M187 482 C193 477 197 477 200 482 L198 594 C190 606 181 607 174 598 C185 556 189 516 187 482 Z" opacity="0.82" />
-            <path d="M263 468 C248 480 231 486 213 482 L216 550 C224 585 236 613 254 627 C270 614 275 578 272 540 Z" />
-            <path d="M213 482 C207 477 203 477 200 482 L202 594 C210 606 219 607 226 598 C215 556 211 516 213 482 Z" opacity="0.82" />
-            <MuscleFibers paths={[
-                "M145 482 C141 530 142 575 148 614", "M164 487 C164 536 158 581 150 616", "M182 491 C181 535 169 583 153 614",
-                "M255 482 C259 530 258 575 252 614", "M236 487 C236 536 242 581 250 616", "M218 491 C219 535 231 583 247 614",
-            ]} />
-        </MuscleRegion>
-
-        <MuscleRegion id="calves" state={getMuscleState("calves")}>
-            <path d="M128 591 C139 607 151 619 163 621 C176 642 172 681 157 713 L148 739 C141 751 128 749 124 736 L113 672 Z" />
-            <path d="M168 621 C176 648 169 685 157 713 L149 773 L118 780 L109 767 L124 736 C134 700 138 658 128 591 Z" opacity="0.82" />
-            <path d="M272 591 C261 607 249 619 237 621 C224 642 228 681 243 713 L252 739 C259 751 272 749 276 736 L287 672 Z" />
-            <path d="M232 621 C224 648 231 685 243 713 L251 773 L282 780 L291 767 L276 736 C266 700 262 658 272 591 Z" opacity="0.82" />
-            <MuscleFibers paths={[
-                "M132 610 C143 636 149 674 151 714", "M159 628 C166 658 162 687 153 713", "M139 625 C135 662 138 700 147 732",
-                "M268 610 C257 636 251 674 249 714", "M241 628 C234 658 238 687 247 713", "M261 625 C265 662 262 700 253 732",
-            ]} />
-        </MuscleRegion>
-
-        <g fill="none" stroke="#385a73" strokeWidth="1.2" opacity="0.66" pointerEvents="none">
-            <path d="M200 132 L200 400 M105 157 C96 187 98 219 104 251 M295 157 C304 187 302 219 296 251" />
-            <path d="M128 540 C145 532 161 536 177 551 M272 540 C255 532 239 536 223 551" />
-            <path d="M146 627 C154 635 162 635 168 621 M254 627 C246 635 238 635 232 621" />
-            <path d="M125 741 L148 744 M275 741 L252 744" />
-        </g>
+        <AnatomyRegion paintIds={paintIds} variant="hair">
+            <BodyPaths name="back-hair" paths={partLookup.get("hair") ?? []} />
+        </AnatomyRegion>
     </g>
 );
 

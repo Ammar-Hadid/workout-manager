@@ -11,7 +11,7 @@ import { useConfirm } from "../../../../shared/context/confirmContext";
 import { useToast } from "../../../../shared/context/toastContext";
 import { getErrorMessage } from "../../../../shared/utils/errorHelper";
 
-const useWorkoutSessionActions = ({ exerciseSessions }) => {
+export const useWorkoutSessionActions = ({ exerciseSessions }) => {
     const { confirm } = useConfirm();
     const { showToast } = useToast();
     const revalidate = useRevalidator();
@@ -30,7 +30,7 @@ const useWorkoutSessionActions = ({ exerciseSessions }) => {
 
             await revalidate.revalidate();
 
-            showToast(successMessage);
+            showToast(successMessage, 'success');
 
             return result;
         }

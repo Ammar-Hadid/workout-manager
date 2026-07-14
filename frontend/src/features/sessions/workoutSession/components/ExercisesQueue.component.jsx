@@ -18,10 +18,11 @@ const ExerciseDataItem = ({ label, value }) => {
     )
 }
 
-const ExerciseItem = ({ exercise }) => {
+const ExerciseItem = ({ exercise, startExercise }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const {
+        _id,
         orderSnapshot,
         nameSnapshot,
         status,
@@ -33,6 +34,7 @@ const ExerciseItem = ({ exercise }) => {
     } = exercise;
 
     if (
+        !_id,
         !orderSnapshot ||
         !nameSnapshot ||
         !status ||
@@ -43,10 +45,10 @@ const ExerciseItem = ({ exercise }) => {
         !restTimeSnapshot) return null;
 
     const chevronStateStyles = isOpen ? 'rotate-180' : 'rotate-0';
-    const dataWrapperStateStyles = isOpen ? 'max-h-1000 translate-y-0 opacity-100 p-lg' : 'max-h-0 translate-y-2 opacity-0'
+    const dataWrapperStateStyles = isOpen ? 'max-h-1000 translate-y-0 opacity-100 p-lg pointer-events-auto' : 'max-h-0 translate-y-2 opacity-0 pointer-events-none'
 
     return (
-        <div className={`border text-body border-text-primary/25 flex flex-col gap-sm rounded-xl ${status === 'in-progress' ? 'border border-primary/25' : ''}`}>
+        <div className={`border text-body flex flex-col gap-sm rounded-xl ${status === 'in-progress' ? 'border-primary/75' : 'border-text-primary/25'}`}>
             <button onClick={() => setIsOpen(prev => !prev)} className="flex flex-col md:flex-row justify-between md:items-center pt-md md:pt-lg px-md md:px-lg pb-sm gap-lg">
                 <div className="flex items-center gap-md text-start">
                     <StepIndicator step={orderSnapshot} />
@@ -72,20 +74,25 @@ const ExerciseItem = ({ exercise }) => {
                     <ExerciseDataItem label="Rest Time" value={`${restTimeSnapshot}s`} />
                 </div>
 
-                <DefaultButton disabled={status === 'in-progress'}>Start Exercise</DefaultButton>
+                <DefaultButton
+                    disabled={status === 'in-progress' || status === 'completed'}
+                    onClick={() => startExercise(_id)}
+                >
+                    Start Exercise
+                </DefaultButton>
             </div>
 
         </div>
     )
 }
 
-const ExercisesQueue = ({ exercises }) => {
+const ExercisesQueue = ({ exercises, startExercise }) => {
     if (!exercises?.length) return null;
 
     return (
         <Card heading="up next" className="flex-1">
             {exercises?.map(exercise => {
-                return <ExerciseItem key={exercise._id} exercise={exercise} />
+                return <ExerciseItem key={exercise._id} exercise={exercise} startExercise={startExercise} />
             })}
         </Card>
     )

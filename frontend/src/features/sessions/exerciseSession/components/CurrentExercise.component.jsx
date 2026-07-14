@@ -13,10 +13,11 @@ const formatMuscleName = (muscle) => (
         .join(" ")
 );
 
-const CurrentExercise = ({ featuredExercise }) => {
+const CurrentExercise = ({ featuredExercise, completeExercise, skipExercise }) => {
     if (!featuredExercise) return <NoActiveExercise />
 
     const {
+        _id,
         nameSnapshot,
         muscleGroupSnapshot,
         orderSnapshot,
@@ -71,8 +72,18 @@ const CurrentExercise = ({ featuredExercise }) => {
                 </div>
 
                 <div className="flex flex-col lg:flex-row gap-md">
-                    <DefaultButton>Complete exercise</DefaultButton>
-                    <DefaultButton variant="secondary">Skip exercise</DefaultButton>
+                    <DefaultButton
+                        onClick={() => completeExercise(_id)}
+                    >
+                        Complete exercise
+                    </DefaultButton>
+
+                    <DefaultButton
+                        onClick={() => skipExercise(_id)}
+                        variant="secondary"
+                    >
+                        Skip exercise
+                    </DefaultButton>
                 </div>
             </div>
         </Card>
