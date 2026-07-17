@@ -6,6 +6,7 @@ import StatusBadge from "../../shared/StatusBadge.component";
 import DefaultButton from "../../../../shared/components/DefaultButton";
 
 import Card from "../../../../shared/layout/Card";
+import formatMuscleGroup from "../../../muscleGroups/utils/formatMuscleGroup.js";
 
 const ExerciseDataItem = ({ label, value }) => {
     if (!label || !value) return null;
@@ -34,7 +35,7 @@ const ExerciseItem = ({ exercise, startExercise }) => {
     } = exercise;
 
     if (
-        !_id,
+        !_id ||
         !orderSnapshot ||
         !nameSnapshot ||
         !status ||
@@ -69,7 +70,7 @@ const ExerciseItem = ({ exercise, startExercise }) => {
 
                     <ExerciseDataItem label="Sets" value={`${setsSnapshot} x ${minRepsSnapshot}-${maxRepsSnapshot}`} />
 
-                    <ExerciseDataItem label="Primary Muscle" value={muscleGroupSnapshot} />
+                    <ExerciseDataItem label="Primary Muscle" value={formatMuscleGroup(muscleGroupSnapshot)} />
 
                     <ExerciseDataItem label="Rest Time" value={`${restTimeSnapshot}s`} />
                 </div>
@@ -90,10 +91,16 @@ const ExercisesQueue = ({ exercises, startExercise }) => {
     if (!exercises?.length) return null;
 
     return (
-        <Card heading="up next" className="flex-1">
-            {exercises?.map(exercise => {
-                return <ExerciseItem key={exercise._id} exercise={exercise} startExercise={startExercise} />
-            })}
+        <Card heading="up next" className="flex-1 min-h-0 lg:max-h-[60dvh]">
+
+            <div
+                className="min-h-0 flex-1 lg:overflow-y-auto lg:overflow-x-hidden
+                lg:overscroll-contain flex flex-col gap-lg pr-xs"
+            >
+                {exercises?.map(exercise => {
+                    return <ExerciseItem key={exercise._id} exercise={exercise} startExercise={startExercise} />
+                })}
+            </div>
         </Card>
     )
 }

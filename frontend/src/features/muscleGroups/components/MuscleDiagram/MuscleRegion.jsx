@@ -24,7 +24,7 @@ const getRegionStyle = (state, paintIds) => {
     };
 };
 
-const MuscleRegion = ({ id, state = "inactive", paintIds, children }) => {
+const MuscleRegion = ({ id, state = "inactive", paintIds, clipPath, children }) => {
     const isActive = state !== "inactive";
 
     return (
@@ -33,6 +33,7 @@ const MuscleRegion = ({ id, state = "inactive", paintIds, children }) => {
             data-muscle={id}
             data-state={state}
             className="transition-[opacity,filter] duration-300"
+            clipPath={clipPath ? `url(#${clipPath})` : undefined}
         >
             <g
                 style={getRegionStyle(state, paintIds)}

@@ -12,7 +12,7 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 const getmuscleGroupOptions = (muscleGroups) => {
     return muscleGroups?.map(m => {
-        return { value: m?.id, label: m?.label };
+        return { value: m?.id, label: m?.label, group: m?.category };
     })
 }
 

@@ -4,11 +4,17 @@ import BackBody from "./BackBody.jsx";
 import {
     DEFAULT_MUSCLE_DIAGRAM_CONFIG,
     FULL_BODY_VIEWBOX,
+    LEGACY_MUSCLE_ALIASES,
     MUSCLE_DIAGRAM_CONFIG,
 } from "../../config/muscleDiagram.config.js";
 
 const normalizeMuscles = (muscles) => (
     Array.isArray(muscles) ? muscles.filter(Boolean) : []
+);
+
+const matchesMuscle = (selectedMuscle, diagramRegion) => (
+    selectedMuscle === diagramRegion
+    || LEGACY_MUSCLE_ALIASES[selectedMuscle]?.includes(diagramRegion)
 );
 
 const MuscleDiagram = ({
@@ -31,12 +37,17 @@ const MuscleDiagram = ({
         glow: `${idPrefix}-glow`,
         glowSoft: `${idPrefix}-glow-soft`,
         bodyShadow: `${idPrefix}-body-shadow`,
+        upperChestClip: `${idPrefix}-upper-chest-clip`,
+        midChestClip: `${idPrefix}-mid-chest-clip`,
+        lowerChestClip: `${idPrefix}-lower-chest-clip`,
+        frontDeltsClip: `${idPrefix}-front-delts-clip`,
+        sideDeltsClip: `${idPrefix}-side-delts-clip`,
     };
 
     const secondary = normalizeMuscles(secondaryMuscles);
     const getMuscleState = (muscle) => {
-        if (muscle === primaryMuscle) return "primary";
-        if (secondary.includes(muscle)) return "secondary";
+        if (matchesMuscle(primaryMuscle, muscle)) return "primary";
+        if (secondary.some(item => matchesMuscle(item, muscle))) return "secondary";
         return "inactive";
     };
 
@@ -47,7 +58,7 @@ const MuscleDiagram = ({
 
     return (
         <div
-            className={`relative isolate overflow-hidden bg-bg-accent-surface ${className}`}
+            className={`relative isolate overflow-hidden bg-bg-primary ${className}`}
             data-muscle-diagram={primaryMuscle || "none"}
         >
             <svg
@@ -58,6 +69,23 @@ const MuscleDiagram = ({
                 aria-label={label}
             >
                 <defs>
+                    <clipPath id={paintIds.upperChestClip} clipPathUnits="userSpaceOnUse">
+                        <rect x="245" y="310" width="240" height="61" />
+                    </clipPath>
+                    <clipPath id={paintIds.midChestClip} clipPathUnits="userSpaceOnUse">
+                        <rect x="245" y="369" width="240" height="40" />
+                    </clipPath>
+                    <clipPath id={paintIds.lowerChestClip} clipPathUnits="userSpaceOnUse">
+                        <rect x="245" y="407" width="240" height="34" />
+                    </clipPath>
+
+                    <clipPath id={paintIds.frontDeltsClip} clipPathUnits="userSpaceOnUse">
+                        <path d="M240 292H290V405H230Z M437 292H487L497 405H437Z" />
+                    </clipPath>
+                    <clipPath id={paintIds.sideDeltsClip} clipPathUnits="userSpaceOnUse">
+                        <path d="M180 285H250L235 410H180Z M477 285H547V410H492Z" />
+                    </clipPath>
+
                     <linearGradient id={paintIds.muscle} x1="0" y1="0" x2="1" y2="1">
                         <stop offset="0" stopColor="#1a354c" />
                         <stop offset="0.44" stopColor="#10283c" />

@@ -1,24 +1,49 @@
 import MuscleRegion, { AnatomyRegion } from "./MuscleRegion.jsx";
 import BodyPaths from "./BodyPaths.jsx";
-import { collectPaths, createPartLookup } from "./bodyPath.utils.js";
+import {
+    collectPaths,
+    createPartLookup,
+    selectPaths,
+} from "./bodyPath.utils.js";
 import { MALE_BACK_PARTS } from "./maleBodyPaths.js";
 
-const BACK_MUSCLE_GROUPS = {
-    back: ["trapezius", "upperBack"],
-    shoulders: ["deltoids"],
-    triceps: ["triceps"],
-    forearms: ["forearm"],
-    "lower-back": ["lowerBack"],
-    glutes: ["gluteal"],
-    hamstrings: ["hamstring"],
-    calves: ["calves"],
+const BACK_MUSCLE_REGIONS = [
+    { id: "traps", slugs: ["trapezius"] },
+    { id: "rear-delts", slugs: ["deltoids"] },
+    { id: "upper-back", slug: "upperBack", pathIndices: [0, 2, 3, 4] },
+    { id: "lats", slug: "upperBack", pathIndices: [1, 5] },
+    { id: "triceps", slugs: ["triceps"] },
+    { id: "forearms", slugs: ["forearm"] },
+    { id: "lower-back", slugs: ["lowerBack"] },
+    { id: "glutes", slugs: ["gluteal"] },
+    { id: "hamstrings", slugs: ["hamstring"] },
+    { id: "calves", slugs: ["calves"] },
+];
+
+const BACK_MUSCLE_TRANSFORMS = {
+    triceps: [
+        "translate(930 0) scale(1.12 1) translate(-930 0)",
+        "translate(930 0) scale(1.12 1) translate(-930 0)",
+        "translate(930 0) scale(1.12 1) translate(-930 0)",
+        "translate(1238 0) scale(1.12 1) translate(-1238 0)",
+        "translate(1238 0) scale(1.12 1) translate(-1238 0)",
+        "translate(1238 0) scale(1.12 1) translate(-1238 0)",
+    ],
 };
 
 const partLookup = createPartLookup(MALE_BACK_PARTS);
-const selectableSlugs = new Set(Object.values(BACK_MUSCLE_GROUPS).flat());
+const selectableSlugs = new Set(BACK_MUSCLE_REGIONS.flatMap(region => (
+    region.slugs ?? [region.slug]
+)));
 const contextParts = MALE_BACK_PARTS.filter(({ slug }) => (
     !selectableSlugs.has(slug) && slug !== "hair"
 ));
+
+const getRegionPaths = (region) => (
+    region.pathIndices
+        ? selectPaths(partLookup, region.slug, region.pathIndices)
+        : collectPaths(partLookup, region.slugs)
+);
 
 const BackBody = ({ getMuscleState, paintIds }) => (
     <g filter={`url(#${paintIds.bodyShadow})`}>
@@ -28,16 +53,17 @@ const BackBody = ({ getMuscleState, paintIds }) => (
             ))}
         </AnatomyRegion>
 
-        {Object.entries(BACK_MUSCLE_GROUPS).map(([muscle, slugs]) => (
+        {BACK_MUSCLE_REGIONS.map(region => (
             <MuscleRegion
-                key={muscle}
-                id={muscle}
-                state={getMuscleState(muscle)}
+                key={region.id}
+                id={region.id}
+                state={getMuscleState(region.id)}
                 paintIds={paintIds}
             >
                 <BodyPaths
-                    name={`back-${muscle}`}
-                    paths={collectPaths(partLookup, slugs)}
+                    name={`back-${region.id}`}
+                    paths={getRegionPaths(region)}
+                    pathTransforms={BACK_MUSCLE_TRANSFORMS[region.id]}
                 />
             </MuscleRegion>
         ))}

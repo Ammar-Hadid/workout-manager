@@ -1,5 +1,5 @@
 import mongoose from "mongoose"
-import { MUSCLE_GROUP_IDS } from "../../constants/muscleGroups.js"
+import { VALID_MUSCLE_GROUP_IDS } from "../../constants/muscleGroups.js"
 
 const exerciseSchema = new mongoose.Schema(
     {
@@ -31,7 +31,7 @@ const exerciseSchema = new mongoose.Schema(
 
         muscleGroup: {
             type: String,
-            enum: MUSCLE_GROUP_IDS,
+            enum: VALID_MUSCLE_GROUP_IDS,
             required: true
         },
 

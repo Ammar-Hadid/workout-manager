@@ -1,7 +1,8 @@
-import { Dumbbell } from "lucide-react";
+import { Dumbbell, Icon } from "lucide-react";
 import DefaultButton from "../../../shared/components/DefaultButton";
 
 import { SectionHeading } from "./SectionHeading.component";
+import IconBadge from "../../../shared/components/IconBadge.component";
 
 const ActiveProgramItem = ({ label, value, className = "" }) => {
     return (
@@ -23,9 +24,9 @@ const ActiveProgramContainer = ({ activeProgram }) => {
     return (
         <div className="flex flex-col md:flex-row gap-lg justify-between md:items-center rounded-card bg-gradient-surface p-xl md:p-2xl border border-text-primary/15">
             <div className="flex flex-col md:flex-row items-start md:items-center gap-xl md:gap-2xl lg:gap-3xl w-full">
-                <div className="bg-bg-accent-surface p-xl rounded-xl border border-primary/50">
-                    <Dumbbell className="text-text-primary/75 w-3xl h-3xl" strokeWidth={1} />
-                </div>
+
+                <IconBadge icon={Dumbbell} className="p-xl" iconClassName="size-3xl text-text-primary/75" />
+
 
                 <div className="flex flex-col  gap-lg">
                     <div>

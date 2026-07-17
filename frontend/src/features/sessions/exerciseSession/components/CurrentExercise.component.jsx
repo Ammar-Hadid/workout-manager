@@ -3,15 +3,9 @@ import MuscleDiagram from "../../../muscleGroups/components/MuscleDiagram/Muscle
 import StepIndicator from "../../shared/StepIndicator.component.jsx";
 import DefaultButton from "../../../../shared/components/DefaultButton.jsx";
 import StatusBadge from "../../shared/StatusBadge.component.jsx";
+import formatMuscleGroup from "../../../muscleGroups/utils/formatMuscleGroup.js";
 
 import NoActiveExercise from "./NoActiveExercise.component.jsx";
-
-const formatMuscleName = (muscle) => (
-    muscle
-        ?.split("-")
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(" ")
-);
 
 const CurrentExercise = ({ featuredExercise, completeExercise, skipExercise }) => {
     if (!featuredExercise) return <NoActiveExercise />
@@ -58,7 +52,7 @@ const CurrentExercise = ({ featuredExercise, completeExercise, skipExercise }) =
                         <div>
                             <dt className="text-body-sm text-text-secondary">Primary muscle</dt>
                             <dd className="m-0 mt-xs font-semibold text-primary">
-                                {formatMuscleName(muscleGroupSnapshot)}
+                                {formatMuscleGroup(muscleGroupSnapshot)}
                             </dd>
                         </div>
 

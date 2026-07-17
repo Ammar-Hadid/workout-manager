@@ -1,4 +1,5 @@
 import EllipsisMenu from "../../../shared/components/EllipsisMenu.jsx";
+import formatMuscleGroup from "../../muscleGroups/utils/formatMuscleGroup.js";
 import { faPencil, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
 const ExerciseCard = ({ exercise, setSelectedExercise, openModal, onDelete }) => {
@@ -44,7 +45,7 @@ const ExerciseCard = ({ exercise, setSelectedExercise, openModal, onDelete }) =>
 
             <h2 className="pr-2xl text-body font-semibold">{name}</h2>
             <ul className="flex list-none flex-col gap-sm">
-                <li className={listItemClassList}><strong>Muscle group:</strong>{muscleGroup}</li>
+                <li className={listItemClassList}><strong>Muscle group:</strong>{formatMuscleGroup(muscleGroup)}</li>
                 <li className={listItemClassList}><strong>Rest: </strong>{restTime}sec</li>
                 <li className={listItemClassList}>{`${sets} x ${minReps} - ${maxReps}`}</li>
             </ul>
