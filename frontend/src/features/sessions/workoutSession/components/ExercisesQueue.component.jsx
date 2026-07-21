@@ -19,7 +19,7 @@ const ExerciseDataItem = ({ label, value }) => {
     )
 }
 
-const ExerciseItem = ({ exercise, startExercise }) => {
+const ExerciseItem = ({ exercise, startExercise, isPending }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const {
@@ -76,10 +76,10 @@ const ExerciseItem = ({ exercise, startExercise }) => {
                 </div>
 
                 <DefaultButton
-                    disabled={status === 'in-progress' || status === 'completed'}
+                    disabled={status === 'in-progress' || status === 'completed' || isPending}
                     onClick={() => startExercise(_id)}
                 >
-                    Start Exercise
+                    {isPending ? 'Starting Exercise...' : 'Start Exercise'}
                 </DefaultButton>
             </div>
 
@@ -87,7 +87,7 @@ const ExerciseItem = ({ exercise, startExercise }) => {
     )
 }
 
-const ExercisesQueue = ({ exercises, startExercise }) => {
+const ExercisesQueue = ({ exercises, startExercise, isPending }) => {
     if (!exercises?.length) return null;
 
     return (
@@ -98,7 +98,7 @@ const ExercisesQueue = ({ exercises, startExercise }) => {
                 lg:overscroll-contain flex flex-col gap-lg pr-xs"
             >
                 {exercises?.map(exercise => {
-                    return <ExerciseItem key={exercise._id} exercise={exercise} startExercise={startExercise} />
+                    return <ExerciseItem key={exercise._id} exercise={exercise} startExercise={startExercise} isPending={isPending} />
                 })}
             </div>
         </Card>

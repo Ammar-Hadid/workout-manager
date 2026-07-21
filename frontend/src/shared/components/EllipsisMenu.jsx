@@ -14,7 +14,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 
-const EllipsisMenu = ({ actions = [] }) => {
+const EllipsisMenu = ({ actions = [], buttonClassname = '' }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const visibleActions = actions.filter(action => !action.hidden);
@@ -29,7 +29,7 @@ const EllipsisMenu = ({ actions = [] }) => {
             shift({ padding: 8 })
         ],
         strategy: "fixed",
-        whileElementsMounted: autoUpdate
+        whileElementsMounted: autoUpdate,
     });
 
     const click = useClick(context);
@@ -51,7 +51,7 @@ const EllipsisMenu = ({ actions = [] }) => {
                 type="button"
                 aria-label="Open menu"
                 disabled={visibleActions.length === 0}
-                className="absolute right-lg top-lg rounded-pill p-sm text-text-secondary transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+                className={`absolute right-lg top-lg rounded-pill p-sm text-text-secondary transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/20 ${buttonClassname}`}
                 {...getReferenceProps({ onClick: (e) => e.stopPropagation() })}
             >
                 <FontAwesomeIcon icon={faEllipsisVertical} className="cursor-pointer text-body-lg font-bold" />

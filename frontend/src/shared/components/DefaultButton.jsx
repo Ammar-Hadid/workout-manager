@@ -10,16 +10,16 @@ const DefaultButton = ({
     to,
 }) => {
     const variantStyles = {
-        primary: "bg-primary border border-primary",
-        secondary: "bg-transparent border border-text-primary",
+        primary: "bg-primary border border-primary text-text-primary",
+        secondary: "bg-transparent border border-text-primary text-text-primary",
+        danger: "bg-transparent border border-danger text-danger hover:bg-danger hover:text-text-primary"
     };
 
     const buttonClasses = `
-        ${variantStyles[variant] ?? variantStyles.primary}
         flex items-center justify-center
         rounded-md
         px-lg py-md
-        text-body font-medium text-text-primary
+        text-body font-medium
         transition duration-200 ease-in-out
         hover:brightness-110
         focus-visible:outline-none
@@ -28,6 +28,7 @@ const DefaultButton = ({
         disabled:cursor-not-allowed
         disabled:opacity-50
         cursor-pointer
+        ${variantStyles[variant] ?? variantStyles.primary}
         ${className}
     `;
 

@@ -36,7 +36,7 @@ const workoutSessionSchema = new mongoose.Schema({
 
     status: {
         type: String,
-        enum: ['completed', 'in-progress', 'cancelled'],
+        enum: ['completed', 'in-progress', 'paused'],
         default: 'in-progress',
         required: true,
     },
@@ -44,7 +44,16 @@ const workoutSessionSchema = new mongoose.Schema({
     startedAt: {
         type: Date,
         default: Date.now,
-        required: true,
+    },
+
+    activeStartedAt: {
+        type: Date,
+        default: Date.now,
+    },
+
+    accumulatedMs: {
+        type: Number,
+        default: 0,
     },
 
     completedAt: {
@@ -52,10 +61,11 @@ const workoutSessionSchema = new mongoose.Schema({
         default: null,
     },
 
-    cancelledAt: {
+    pausedAt: {
         type: Date,
         default: null,
     },
+
 }, { timestamps: true });
 
 const WorkoutSession = mongoose.model('WorkoutSession', workoutSessionSchema);

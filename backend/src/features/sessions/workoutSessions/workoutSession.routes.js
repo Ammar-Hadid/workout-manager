@@ -6,7 +6,7 @@ import {
     getActiveWorkoutSession,
     getWorkoutSessionById,
     completeWorkoutSession,
-    cancelWorkoutSession,
+    pauseWorkoutSession,
 } from "./workoutSession.controller.js";
 
 const router = express.Router();
@@ -19,6 +19,6 @@ router.get('/:workoutSessionId', requireAuth, getWorkoutSessionById);
 
 router.post('/:workoutSessionId/complete', requireAuth, completeWorkoutSession);
 
-router.post('/:workoutSessionId/cancel', requireAuth, cancelWorkoutSession);
+router.post('/:workoutSessionId/pause', requireAuth, pauseWorkoutSession);
 
 export default router;

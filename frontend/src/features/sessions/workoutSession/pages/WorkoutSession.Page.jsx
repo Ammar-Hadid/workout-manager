@@ -28,12 +28,12 @@ const WorkoutSession = () => {
 
     const featuredExerciseSession = getFeaturedExerciseSession(exerciseSessions);
 
-    const { progress, progressPercentage, estimatedTimeLeft } = getWorkoutProgress({ workoutSession, exerciseSessions });
+    const { progress, progressPercentage } = getWorkoutProgress({ exerciseSessions });
 
     return (
         <div className="flex flex-col gap-xl pb-3xl">
 
-            <WorkoutSessionHeader />
+            <WorkoutSessionHeader workoutSession={workoutSession} />
 
             <div className="flex min-w-0 flex-col gap-lg lg:items-start lg:flex-row ">
                 <CurrentExercise
@@ -42,10 +42,14 @@ const WorkoutSession = () => {
                     skipExercise={skipExercise}
                 />
 
-                <ExercisesQueue exercises={exerciseSessions} startExercise={startExercise} />
+                <ExercisesQueue exercises={exerciseSessions} startExercise={startExercise} isPending={isPending} />
             </div>
 
-            <WorkoutProgress progress={progress} progressPercentage={progressPercentage} estimatedTimeLeft={estimatedTimeLeft} />
+            <WorkoutProgress
+                workoutSession={workoutSession}
+                progress={progress}
+                progressPercentage={progressPercentage}
+            />
         </div>
     );
 }

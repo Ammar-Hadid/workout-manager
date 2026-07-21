@@ -14,6 +14,11 @@ const statusVariants = {
         className:
             "border-success bg-success-200 text-success",
     },
+    paused: {
+        label: "Paused",
+        className:
+            "border-warning bg-warning-200 text-warning",
+    },
     skipped: {
         label: "Skipped",
         className:

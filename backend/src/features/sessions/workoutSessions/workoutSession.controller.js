@@ -21,12 +21,12 @@ export const createWorkoutSession = async (req, res) => {
     try {
         const activeWorkoutSession = await WorkoutSession.findOne({
             user: req.userId,
-            status: 'in-progress'
+            status: { $in: ['in-progress', 'paused'] },
         });
 
         if (activeWorkoutSession) {
             return res.status(409).json({
-                error: 'You already have an active workout session. Complete or cancel it before starting a new workout.',
+                error: 'You already have an unfinished workout session. Resume and complete it before starting a new workout.',
                 activeWorkoutSession
             })
         }
@@ -86,7 +86,7 @@ export const getActiveWorkoutSession = async (req, res) => {
     try {
         const workoutSession = await WorkoutSession.findOne({
             user: req.userId,
-            status: 'in-progress',
+            status: { $in: ['in-progress', 'paused'] },
         });
 
         if (!workoutSession) {
@@ -186,7 +186,7 @@ export const completeWorkoutSession = async (req, res) => {
     }
 }
 
-export const cancelWorkoutSession = async (req, res) => {
+export const pauseWorkoutSession = async (req, res) => {
     const { workoutSessionId } = req.params;
 
     if (!mongoose.isValidObjectId(workoutSessionId)) {
@@ -198,17 +198,32 @@ export const cancelWorkoutSession = async (req, res) => {
             {
                 user: req.userId,
                 _id: workoutSessionId,
-                status: 'in-progress'
+                status: 'in-progress',
             },
 
-            {
-                status: 'cancelled',
-                cancelledAt: new Date(),
-            },
+            [
+                {
+                    $set: {
+                        status: 'paused',
+                        pausedAt: "$$NOW",
+                        accumulatedMs: {
+                            $add: [
+                                "$accumulatedMs",
+                                {
+                                    $subtract: [
+                                        "$$NOW",
+                                        "$activeStartedAt",
+                                    ],
+                                },
+                            ],
+                        },
+                        activeStartedAt: null,
+                    },
+                },
+            ],
 
             {
                 new: true,
-                runValidators: true,
             },
         );
 

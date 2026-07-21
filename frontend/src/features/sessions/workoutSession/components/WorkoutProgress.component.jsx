@@ -1,18 +1,19 @@
 import Card from "../../../../shared/layout/Card";
 import SectionHeading from "../../../../shared/layout/SectionHeading";
 
-import { Dumbbell, BookmarkCheck } from "lucide-react";
+import { Dumbbell, BookmarkCheck, Clock } from "lucide-react";
 
 import IconBadge from "../../../../shared/components/IconBadge.component";
 import DefaultButton from "../../../../shared/components/DefaultButton";
+
+import { useEstimatedTimeLeft } from "../hooks/useEstimatedTimeLeft.hook";
 
 
 const LoadingBar = ({ width }) => {
     if (!Number.isFinite(width)) return null;
 
-
     return (
-        <div className="relative bg-bg-surface w-full h-md rounded-xl overflow-hidden border border-primary/75">
+        <div className="relative bg-bg-surface w-full h-md rounded-xl overflow-hidden border border-success/25">
             <div
                 className={`
                      absolute content-[''] top-0 left-0 bottom-0 h-md
@@ -23,19 +24,23 @@ const LoadingBar = ({ width }) => {
     )
 }
 
-const ProgressItem = ({ label, value }) => {
+const ProgressItem = ({ label, value, icon: Icon = '' }) => {
     if (!label || !value) return null;
 
     return (
         <div className="flex flex-col gap-md">
             <span className="text-text-secondary text-body uppercase">{label}</span>
-            <span className="text-text-primary text-body-lg">{value}</span>
+            <span className="text-body-lg flex items-center gap-md">
+                <Icon className="text-text-secondary" />
+                {value}
+            </span>
         </div>
     )
 }
 
-const WorkoutProgress = ({ progress, progressPercentage, estimatedTimeLeft }) => {
+const WorkoutProgress = ({ workoutSession, progress, progressPercentage }) => {
     const { totalExercisesCount, completedExercisesCount } = progress;
+    const estimatedTimeLeft = useEstimatedTimeLeft(workoutSession)
 
     if (
         !Number.isFinite(totalExercisesCount) ||
@@ -47,22 +52,22 @@ const WorkoutProgress = ({ progress, progressPercentage, estimatedTimeLeft }) =>
     return (
         <Card className="flex flex-col lg:flex-row lg:items-center justify-between">
 
-            <div className="flex lg:gap-3xl lg:divide-x lg:divide-text-secondary lg:items-center">
-                <div className="flex flex-col lg:flex-row lg:items-center lg:gap-lg pr-3xl">
+            <div className="flex flex-col lg:flex-row gap-2xl lg:gap-3xl lg:divide-x lg:divide-text-secondary lg:items-center">
+                <div className="flex flex-col items-start gap-lg lg:flex-row lg:items-center pr-3xl">
                     <IconBadge
                         icon={Dumbbell}
                         className="p-lg"
                         iconClassName="size-3xl text-text-primary"
                     />
 
-                    <div className="flex flex-col">
+                    <div className="flex flex-col gap-sm lg:gap-0">
                         <SectionHeading heading="Workout Progress" />
                         <span className="text-h2">
                             <span>{completedExercisesCount}</span>
                             <span className="text-text-secondary">/{totalExercisesCount}</span>
                         </span>
 
-                        <div className="flex flex-col gap-sm">
+                        <div className="flex flex-col gap-md lg:gap-sm">
                             <div className="flex gap-xl">
                                 <span className="text-pr">Exercises completed</span>
                                 <span>{progressPercentage}%</span>
@@ -74,7 +79,10 @@ const WorkoutProgress = ({ progress, progressPercentage, estimatedTimeLeft }) =>
                 </div>
 
                 <div>
-                    <ProgressItem label="est. time left" value={`${estimatedTimeLeft} min`} />
+                    <ProgressItem
+                        label="est. time left"
+                        value={`${estimatedTimeLeft} min`}
+                        icon={Clock} />
                 </div>
             </div>
 

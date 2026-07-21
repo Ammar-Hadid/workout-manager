@@ -26,27 +26,9 @@ const calculateProgressPercentage = (exerciseSessions) => {
 }
 
 
-const calculateEstimatedTimeLeft = (workoutSession) => {
-    if (
-        !workoutSession?.workoutDurationSnapshot ||
-        !workoutSession?.startedAt
-    ) return null;
-
-    const now = Date.now();
-
-    const durationMs = workoutSession.workoutDurationSnapshot * 60_000;
-    const startedAtMs = new Date(workoutSession.startedAt).getTime();
-
-    const elapsedMs = now - startedAtMs;
-    const remainingMs = Math.max(0, durationMs - elapsedMs);
-
-    return Math.ceil(remainingMs / 60_000);
-}
-
-export const getWorkoutProgress = ({ workoutSession, exerciseSessions }) => {
+export const getWorkoutProgress = ({ exerciseSessions }) => {
     return {
         progress: calculateProgress(exerciseSessions),
         progressPercentage: calculateProgressPercentage(exerciseSessions),
-        estimatedTimeLeft: calculateEstimatedTimeLeft(workoutSession),
     }
 }
