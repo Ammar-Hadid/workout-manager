@@ -4,7 +4,6 @@ import ExerciseSession from "./ExerciseSession.model.js";
 export const startExerciseSession = async (req, res) => {
     const { exerciseSessionId } = req.params;
 
-
     if (!mongoose.isValidObjectId(exerciseSessionId)) {
         return res.status(400).json({ error: 'Invalid exercise session id.' })
     }
@@ -52,7 +51,7 @@ export const startExerciseSession = async (req, res) => {
             {
                 new: true,
                 runValidators: true,
-                updatePipeline: true,   
+                updatePipeline: true,
                 session,
             }
         );
@@ -163,4 +162,3 @@ export const skipExerciseSession = async (req, res) => {
         return res.status(500).json({ error: 'Server error.' });
     }
 }
-

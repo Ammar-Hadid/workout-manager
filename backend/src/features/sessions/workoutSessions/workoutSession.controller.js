@@ -239,3 +239,106 @@ export const pauseWorkoutSession = async (req, res) => {
         return res.status(500).json({ error: 'Server error.' });
     }
 }
+
+export const resumeWorkoutSession = async (req, res) => {
+    const { workoutSessionId } = req.params;
+
+    if (!mongoose.isValidObjectId(workoutSessionId)) {
+        return res.status(400).json({ error: 'Invalid workout session id.' });
+    }
+
+    try {
+        const workoutSession = await WorkoutSession.findOneAndUpdate(
+            {
+                user: req.userId,
+                _id: workoutSessionId,
+                status: 'paused',
+            },
+
+            {
+                status: 'in-progress',
+                activeStartedAt: new Date(),
+                pausedAt: null,
+            },
+
+            {
+                runValidators: true,
+                new: true,
+            }
+        );
+
+        if (!workoutSession) {
+            return res.status(404).json({ error: 'Workout session not found.' });
+        }
+
+        return res.status(200).json({ workoutSession });
+    }
+
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Server error.' });
+    }
+}
+
+export const discardWorkoutSession = async (req, res) => {
+    const { workoutSessionId } = req.params;
+
+    if (!mongoose.isValidObjectId(workoutSessionId)) {
+        return res.status(400).json({ error: 'Invalid workout session id.' });
+    }
+
+    const session = await mongoose.startSession();
+
+    try {
+
+        const workoutSession = await WorkoutSession.findOne(
+            {
+                user: req.userId,
+                _id: workoutSessionId,
+            },
+
+            { id: 1 },
+
+            {
+                session,
+            }
+        );
+
+        if (!workoutSession) {
+            return res.status(404).json({ error: 'Workout session not found.' });
+        }
+
+        session.startTransaction();
+
+        const exerciseSessions = await ExerciseSession.deleteMany(
+            {
+                user: req.userId,
+                workoutSession: workoutSession._id,
+            },
+
+            { session },
+        );
+
+        await WorkoutSession.deleteOne(
+            {
+                user: req.userId,
+                _id: workoutSession._id,
+            },
+
+            { session },
+        );
+
+        await session.commitTransaction();
+        return res.status(200).json({ workoutSession, exerciseSessions });
+    }
+
+    catch (error) {
+        await session.abortTransaction();
+        console.error(error);
+        return res.status(500).json({ error: 'Server error.' });
+    }
+
+    finally {
+        session.endSession();
+    }
+}
