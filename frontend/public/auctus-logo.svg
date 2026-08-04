@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title description">
+  <title id="title">Auctus logo</title>
+  <desc id="description">A stylized white letter A with a blue rising accent on a dark rounded square.</desc>
+
+  <defs>
+    <linearGradient id="tile" x1="72" y1="38" x2="448" y2="474" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#111d31"/>
+      <stop offset=".48" stop-color="#091426"/>
+      <stop offset="1" stop-color="#020711"/>
+    </linearGradient>
+    <linearGradient id="letter" x1="178" y1="105" x2="292" y2="398" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset=".52" stop-color="#f1f4f9"/>
+      <stop offset="1" stop-color="#dce2eb"/>
+    </linearGradient>
+    <linearGradient id="ribbon" x1="205" y1="389" x2="338" y2="302" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#082763"/>
+      <stop offset=".52" stop-color="#0a42b4"/>
+      <stop offset="1" stop-color="#1269f6"/>
+    </linearGradient>
+    <linearGradient id="rise" x1="327" y1="302" x2="400" y2="389" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0877ff"/>
+      <stop offset="1" stop-color="#0660e9"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="78" y1="28" x2="433" y2="474" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#263650"/>
+      <stop offset=".5" stop-color="#111e33"/>
+      <stop offset="1" stop-color="#060b14"/>
+    </linearGradient>
+    <filter id="mark-shadow" x="-12%" y="-12%" width="124%" height="130%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#000" flood-opacity=".5"/>
+    </filter>
+  </defs>
+
+  <rect x="5" y="5" width="502" height="502" rx="112" fill="url(#tile)" stroke="url(#edge)" stroke-width="5"/>
+
+  <g filter="url(#mark-shadow)">
+    <path
+      fill="url(#letter)"
+      d="M93 390 228 109c3-7 8-10 16-10h48c8 0 13 3 16 10l69 164h-68l-38-88c-2-6-7-9-13-9s-11 3-14 9l-83 205H93Z"
+    />
+    <path
+      fill="url(#ribbon)"
+      d="m201 390 122-90 29 57-51 33H201Z"
+    />
+    <path
+      fill="url(#rise)"
+      d="M323 300h66l43 90h-70l-39-90Z"
+    />
+    <path
+      fill="none"
+      stroke="#1680ff"
+      stroke-linecap="round"
+      stroke-width="2"
+      d="m202 389 121-89h66"
+      opacity=".9"
+    />
+  </g>
+</svg>

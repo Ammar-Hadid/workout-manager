@@ -17,7 +17,7 @@ import exerciseSessionsRouter from "./features/sessions/exerciseSessions/exercis
 const app = express();
 
 const allowedOrigins = (
-    process.env.CLIENT_URL || 'https://workout-manager.ammarhadid.com'
+    process.env.CLIENT_URL || 'https://auctus.ammarhadid.com'
 )
     .split(',')
     .map(origin => origin.trim())

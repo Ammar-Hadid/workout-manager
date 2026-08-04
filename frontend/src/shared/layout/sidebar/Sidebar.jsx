@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import SideBarButton from "./SideBarButton";
@@ -49,9 +48,21 @@ const Sidebar = ({ isOpen, onToggle }) => {
             </button>
 
             <div className={`flex items-center ${isOpen ? 'justify-between' : 'justify-center'} w-full`}>
-                {isOpen && <button className="font-display text-body-sm font-medium">
-                    <Link to="/">Workout Manager</Link>
-                </button>}
+                {isOpen && (
+                    <Link
+                        to="/"
+                        className="flex items-center gap-sm font-display text-body-sm font-medium"
+                        aria-label="Auctus home"
+                    >
+                        <img
+                            src="/auctus-logo.svg"
+                            alt=""
+                            className="w-xl h-xl shrink-0"
+                            aria-hidden="true"
+                        />
+                        <span>Auctus</span>
+                    </Link>
+                )}
 
                 <button
                     className="text-text-primary/75 hover:text-text-primary cursor-pointer hidden lg:block w-lg h-lg"
