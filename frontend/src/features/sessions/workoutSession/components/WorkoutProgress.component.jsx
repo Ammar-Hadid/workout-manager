@@ -38,7 +38,13 @@ const ProgressItem = ({ label, value, icon: Icon = '' }) => {
     )
 }
 
-const WorkoutProgress = ({ workoutSession, progress, progressPercentage }) => {
+const WorkoutProgress = ({
+    workoutSession,
+    progress,
+    progressPercentage,
+    completeWorkout,
+    isPending,
+}) => {
     const { totalExercisesCount, completedExercisesCount } = progress;
     const estimatedTimeLeft = useEstimatedTimeLeft(workoutSession)
 
@@ -86,9 +92,13 @@ const WorkoutProgress = ({ workoutSession, progress, progressPercentage }) => {
                 </div>
             </div>
 
-            <DefaultButton className="flex items-center gap-sm">
+            <DefaultButton
+                className="flex items-center gap-sm"
+                onClick={completeWorkout}
+                disabled={isPending || workoutSession.status !== "in-progress"}
+            >
                 <BookmarkCheck />
-                Finish workout
+                {isPending ? "Updating workout..." : "Finish workout"}
             </DefaultButton>
         </Card >
     )

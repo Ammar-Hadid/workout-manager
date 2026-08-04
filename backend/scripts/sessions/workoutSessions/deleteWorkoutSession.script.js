@@ -4,7 +4,6 @@ import mongoose from "mongoose";
 import WorkoutSession from "../../../src/features/sessions/workoutSessions/WorkoutSession.model.js";
 import ExerciseSession from "../../../src/features/sessions/exerciseSessions/ExerciseSession.model.js";
 
-
 const deleteWorkoutSession = async ({ userId, workoutSessionId }) => {
 
     if (!mongoose.isObjectIdOrHexString(userId)) {
@@ -66,9 +65,9 @@ const deleteWorkoutSession = async ({ userId, workoutSessionId }) => {
         return console.log('Workout session successfully deleted');
     }
 
-    catch {
+    catch (error) {
         await session.abortTransaction();
-        throw new Error('Something went wrong');
+        throw new Error(error);
     }
 
     finally {
@@ -88,6 +87,7 @@ const main = async () => {
     if (confirmation !== '--confirm') {
         throw new Error("Deletion requires userId, workoutSessionId and --confirm.");
     }
+
 
     try {
         await mongoose.connect(process.env.MONGO_URI);

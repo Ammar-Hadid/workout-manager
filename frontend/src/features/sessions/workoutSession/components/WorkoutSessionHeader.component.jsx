@@ -1,5 +1,5 @@
 import { Circle, Clock } from "lucide-react";
-import { faPause, faCircleMinus } from "@fortawesome/free-solid-svg-icons";
+import { faPause, faCircleMinus, faPlay } from "@fortawesome/free-solid-svg-icons";
 import Card from "../../../../shared/layout/Card";
 
 import { useElapsedTime } from "../hooks/useElapsedTime.hook";
@@ -9,16 +9,25 @@ import { formatElapsedTime } from "../utils/WorkoutTimeElapsed.util";
 
 import EllipsisMenu from "../../../../shared/components/EllipsisMenu";
 
-const WorkoutSessionHeader = ({ workoutSession }) => {
-    const elapsedTime = useElapsedTime(workoutSession.startedAt);
+const WorkoutSessionHeader = ({
+    workoutSession,
+    pauseWorkout,
+    resumeWorkout,
+    discardWorkout,
+    pendingAction,
+    isPending,
+}) => {
+    const elapsedTime = useElapsedTime(workoutSession);
     const formattedElapsedTime = formatElapsedTime(elapsedTime);
+    const isPaused = workoutSession.status === "paused";
 
     const menuActions = [
         {
-            id: 'pause:workout-session',
-            label: 'Pause Session',
-            icon: faPause,
-            onclick: () => console.log('pause button clicked'),
+            id: `${isPaused ? "resume" : "pause"}:workout-session`,
+            label: isPaused ? "Resume Session" : "Pause Session",
+            icon: isPaused ? faPlay : faPause,
+            onClick: isPaused ? resumeWorkout : pauseWorkout,
+            disabled: isPending,
         },
 
         {
@@ -26,15 +35,20 @@ const WorkoutSessionHeader = ({ workoutSession }) => {
             label: 'Discard Session',
             icon: faCircleMinus,
             variant: 'danger',
-            onClick: () => console.log('discard button clicked'),
+            onClick: discardWorkout,
+            disabled: isPending,
         }
     ];
 
+    const pausedHeaderClass = isPaused ? 'border-warning text-warning' : '';
+
     return (
-        <Card className="flex flex-row md:p-lg lg:items-center justify-between">
-            <div className="flex items-center gap-md text-primary">
+        <Card className={`${pausedHeaderClass} flex flex-row md:p-lg lg:items-center justify-between`}>
+            <div className={`flex items-center gap-md ${isPaused ? 'text-warning' : 'text-primary'}`}>
                 <Circle className="size-md fill-current" aria-hidden="true" />
-                <span className="text-body whitespace-nowrap">In Progress</span>
+                <span className="text-body whitespace-nowrap">
+                    {isPaused ? "Paused" : "In Progress"}
+                </span>
             </div>
 
             <div className="flex items-center gap-sm justify-between">
@@ -47,7 +61,15 @@ const WorkoutSessionHeader = ({ workoutSession }) => {
                     </div>
                 </div>
 
-                <EllipsisMenu actions={menuActions} buttonClassname="block inset-auto static" />
+                <EllipsisMenu
+                    actions={menuActions}
+                    buttonClassname="block inset-auto static"
+                    ariaLabel={
+                        pendingAction
+                            ? `Workout action in progress: ${pendingAction}`
+                            : "Workout actions"
+                    }
+                />
             </div>
         </Card>
     )

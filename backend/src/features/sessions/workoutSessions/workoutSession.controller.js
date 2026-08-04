@@ -224,6 +224,7 @@ export const pauseWorkoutSession = async (req, res) => {
 
             {
                 new: true,
+                updatePipeline: true,
             },
         );
 

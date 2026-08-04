@@ -1,13 +1,15 @@
-import { getApiUrl } from "../../../config/api";
+import { API_ENDPOINTS } from "../../../config/apiEndpoints";
 import { getErrorMessage } from "../../../shared/utils/errorHelper";
 
-const AUTH_ME_API = getApiUrl('auth/me');
-const LOGIN_API_URL = getApiUrl('auth/login');
-const REGISTER_API_URL = getApiUrl('auth/register');
-const LOGOUT_API_URL = getApiUrl('auth/logout');
+const authEndpoint = (action) => `${API_ENDPOINTS.auth}/${action}`;
+
+const AUTH_ME_URL = authEndpoint("me");
+const LOGIN_URL = authEndpoint("login");
+const REGISTER_URL = authEndpoint("register");
+const LOGOUT_URL = authEndpoint("logout");
 
 export const getCurrentUser = async () => {
-    const res = await fetch(AUTH_ME_API, { credentials: "include" });
+    const res = await fetch(AUTH_ME_URL, { credentials: "include" });
 
     const data = await res.json();
 
@@ -23,7 +25,7 @@ export const getCurrentUser = async () => {
 }
 
 export const login = async (form) => {
-    const res = await fetch(LOGIN_API_URL, {
+    const res = await fetch(LOGIN_URL, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -42,7 +44,7 @@ export const login = async (form) => {
 }
 
 export const register = async (form) => {
-    const res = await fetch(REGISTER_API_URL, {
+    const res = await fetch(REGISTER_URL, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -61,7 +63,7 @@ export const register = async (form) => {
 }
 
 export const logout = async () => {
-    const res = await fetch(LOGOUT_API_URL, {
+    const res = await fetch(LOGOUT_URL, {
         method: "POST",
         credentials: "include",
     });

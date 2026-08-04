@@ -1,10 +1,14 @@
 import { throwApiError } from "../../../shared/utils/errorHelper.js";
-import { getApiUrl } from "../../../config/api.js";
+import { API_ENDPOINTS } from "../../../config/apiEndpoints.js";
 
-const PROGRAMS_URL = getApiUrl("/programs");
+const exercisesUrl = (programId, workoutId) =>
+    `${API_ENDPOINTS.programs}/${encodeURIComponent(programId)}/workouts/${encodeURIComponent(workoutId)}/exercises`;
+
+const exerciseUrl = (programId, workoutId, exerciseId) =>
+    `${exercisesUrl(programId, workoutId)}/${encodeURIComponent(exerciseId)}`;
 
 export const getAllExercises = async (programId, workoutId) => {
-    const res = await fetch(`${PROGRAMS_URL}/${programId}/workouts/${workoutId}/exercises`, { credentials: "include" });
+    const res = await fetch(exercisesUrl(programId, workoutId), { credentials: "include" });
 
     const data = await res.json();
 
@@ -14,7 +18,7 @@ export const getAllExercises = async (programId, workoutId) => {
 };
 
 export const createExercise = async (programId, workoutId, formData) => {
-    const res = await fetch(`${PROGRAMS_URL}/${programId}/workouts/${workoutId}/exercises`, {
+    const res = await fetch(exercisesUrl(programId, workoutId), {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -31,7 +35,7 @@ export const createExercise = async (programId, workoutId, formData) => {
 };
 
 export const editExercise = async (programId, workoutId, exerciseId, formData) => {
-    const res = await fetch(`${PROGRAMS_URL}/${programId}/workouts/${workoutId}/exercises/${exerciseId}`, {
+    const res = await fetch(exerciseUrl(programId, workoutId, exerciseId), {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json"
@@ -48,7 +52,7 @@ export const editExercise = async (programId, workoutId, exerciseId, formData) =
 };
 
 export const deleteExercise = async (programId, workoutId, exerciseId) => {
-    const res = await fetch(`${PROGRAMS_URL}/${programId}/workouts/${workoutId}/exercises/${exerciseId}`, {
+    const res = await fetch(exerciseUrl(programId, workoutId, exerciseId), {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",

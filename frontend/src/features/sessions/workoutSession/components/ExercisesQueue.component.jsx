@@ -19,7 +19,7 @@ const ExerciseDataItem = ({ label, value }) => {
     )
 }
 
-const ExerciseItem = ({ exercise, startExercise, isPending }) => {
+const ExerciseItem = ({ exercise, startExercise, isPending, pendingAction }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const {
@@ -46,7 +46,20 @@ const ExerciseItem = ({ exercise, startExercise, isPending }) => {
         !restTimeSnapshot) return null;
 
     const chevronStateStyles = isOpen ? 'rotate-180' : 'rotate-0';
-    const dataWrapperStateStyles = isOpen ? 'max-h-1000 translate-y-0 opacity-100 p-lg pointer-events-auto' : 'max-h-0 translate-y-2 opacity-0 pointer-events-none'
+    const dataWrapperStateStyles = isOpen ? 'max-h-1000 translate-y-0 opacity-100 p-lg pointer-events-auto' : 'max-h-0 translate-y-2 opacity-0 pointer-events-none';
+
+    const getButtonString = () => {
+        if (!pendingAction) return 'Start Exercise';
+
+        const [action, id] = pendingAction?.split(':');
+
+        if (action === 'start' && id === _id) {
+            return 'Starting Exercise...';
+        }
+
+        return 'Start Exercise'
+
+    }
 
     return (
         <div className={`border text-body flex flex-col gap-sm rounded-xl ${status === 'in-progress' ? 'border-primary/75' : 'border-text-primary/25'}`}>
@@ -79,7 +92,7 @@ const ExerciseItem = ({ exercise, startExercise, isPending }) => {
                     disabled={status === 'in-progress' || status === 'completed' || isPending}
                     onClick={() => startExercise(_id)}
                 >
-                    {isPending ? 'Starting Exercise...' : 'Start Exercise'}
+                    {getButtonString()}
                 </DefaultButton>
             </div>
 
@@ -87,7 +100,7 @@ const ExerciseItem = ({ exercise, startExercise, isPending }) => {
     )
 }
 
-const ExercisesQueue = ({ exercises, startExercise, isPending }) => {
+const ExercisesQueue = ({ exercises, startExercise, isPending, pendingAction }) => {
     if (!exercises?.length) return null;
 
     return (
@@ -98,7 +111,7 @@ const ExercisesQueue = ({ exercises, startExercise, isPending }) => {
                 lg:overscroll-contain flex flex-col gap-lg pr-xs"
             >
                 {exercises?.map(exercise => {
-                    return <ExerciseItem key={exercise._id} exercise={exercise} startExercise={startExercise} isPending={isPending} />
+                    return <ExerciseItem key={exercise._id} exercise={exercise} startExercise={startExercise} isPending={isPending} pendingAction={pendingAction} />
                 })}
             </div>
         </Card>

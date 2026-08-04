@@ -7,7 +7,12 @@ import formatMuscleGroup from "../../../muscleGroups/utils/formatMuscleGroup.js"
 
 import NoActiveExercise from "./NoActiveExercise.component.jsx";
 
-const CurrentExercise = ({ featuredExercise, completeExercise, skipExercise }) => {
+const CurrentExercise = ({
+    featuredExercise,
+    completeExercise,
+    skipExercise,
+    isPending,
+}) => {
     if (!featuredExercise) return <NoActiveExercise />
 
     const {
@@ -68,6 +73,7 @@ const CurrentExercise = ({ featuredExercise, completeExercise, skipExercise }) =
                 <div className="flex flex-col lg:flex-row gap-md">
                     <DefaultButton
                         onClick={() => completeExercise(_id)}
+                        disabled={isPending}
                     >
                         Complete exercise
                     </DefaultButton>
@@ -75,6 +81,7 @@ const CurrentExercise = ({ featuredExercise, completeExercise, skipExercise }) =
                     <DefaultButton
                         onClick={() => skipExercise(_id)}
                         variant="secondary"
+                        disabled={isPending}
                     >
                         Skip exercise
                     </DefaultButton>

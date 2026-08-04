@@ -14,7 +14,11 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 
-const EllipsisMenu = ({ actions = [], buttonClassname = '' }) => {
+const EllipsisMenu = ({
+    actions = [],
+    buttonClassname = '',
+    ariaLabel = "Open menu",
+}) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const visibleActions = actions.filter(action => !action.hidden);
@@ -49,7 +53,7 @@ const EllipsisMenu = ({ actions = [], buttonClassname = '' }) => {
                     refs.setReference(node);
                 }}
                 type="button"
-                aria-label="Open menu"
+                aria-label={ariaLabel}
                 disabled={visibleActions.length === 0}
                 className={`absolute right-lg top-lg rounded-pill p-sm text-text-secondary transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/20 ${buttonClassname}`}
                 {...getReferenceProps({ onClick: (e) => e.stopPropagation() })}
@@ -77,9 +81,11 @@ const EllipsisMenu = ({ actions = [], buttonClassname = '' }) => {
                                 >
                                     <button
                                         type="button"
-                                        className={`${buttonStyles} ${isDanger ? "text-danger hover:bg-danger-200" : "text-text-primary hover:bg-primary/10"}`}
+                                        disabled={action.disabled}
+                                        className={`${buttonStyles} disabled:cursor-not-allowed disabled:opacity-50 ${isDanger ? "text-danger hover:bg-danger-200" : "text-text-primary hover:bg-primary/10"}`}
                                         onClick={(e) => {
                                             e.stopPropagation();
+                                            if (action.disabled) return;
                                             action.onClick();
                                             setIsOpen(false);
                                         }}

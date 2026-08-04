@@ -1,11 +1,11 @@
-import { getApiUrl } from "../../../../config/api";
+import { API_ENDPOINTS } from "../../../../config/apiEndpoints";
 import { throwApiError } from "../../../../shared/utils/errorHelper";
 
-const EXERCISE_SESSION_API_URL = getApiUrl('exercise-sessions');
+const exerciseSessionActionUrl = (exerciseSessionId, action) =>
+    `${API_ENDPOINTS.exerciseSessions}/${encodeURIComponent(exerciseSessionId)}/${action}`;
 
-const transitionExerciseSession = async (id, action) => {
-
-    const res = await fetch(`${EXERCISE_SESSION_API_URL}/${id}/${action}`, {
+const transitionExerciseSession = async (exerciseSessionId, action) => {
+    const res = await fetch(exerciseSessionActionUrl(exerciseSessionId, action), {
         method: "POST",
         credentials: "include"
     });

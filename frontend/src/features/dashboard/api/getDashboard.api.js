@@ -1,10 +1,8 @@
-import { getApiUrl } from "../../../config/api";
+import { API_ENDPOINTS } from "../../../config/apiEndpoints";
 import { throwApiError } from "../../../shared/utils/errorHelper";
 
-const GET_DASHBOARD_API_URL = getApiUrl('dashboard')
-
 export const getDashboard = async () => {
-    const res = await fetch(GET_DASHBOARD_API_URL, {
+    const res = await fetch(API_ENDPOINTS.dashboard, {
         credentials: "include"
     });
 

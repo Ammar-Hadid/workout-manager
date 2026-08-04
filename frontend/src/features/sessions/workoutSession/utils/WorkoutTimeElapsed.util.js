@@ -1,15 +1,28 @@
 export const calculateElapsedSeconds = (
-    startedAt,
+    workoutSession,
     now,
 ) => {
-    const startedAtMs = new Date(startedAt).getTime();
+    if (
+        !Number.isFinite(workoutSession?.accumulatedMs)
+    ) return null;
 
-    if (!Number.isFinite(startedAtMs)) return 0;
+    const accumulatedMs = workoutSession?.accumulatedMs / 1000
 
+    let totalSeconds = accumulatedMs;
 
-    return Math.floor(
-        Math.max(0, (now - startedAtMs) / 1000)
-    );
+    if (workoutSession?.status === 'in-progress') {
+        if (!workoutSession?.activeStartedAt) return null;
+
+        const activeStartedAtMs = new Date(workoutSession.activeStartedAt).getTime();
+
+        if (!Number.isFinite(activeStartedAtMs)) {
+            return null;
+        }
+
+        totalSeconds += Math.max(0, now - activeStartedAtMs) / 1000;
+    }
+
+    return totalSeconds;
 }
 
 export const calculateEstimatedTimeLeft = (
@@ -17,23 +30,42 @@ export const calculateEstimatedTimeLeft = (
     now,
 ) => {
     if (
-        !workoutSession?.workoutDurationSnapshot ||
-        !workoutSession?.startedAt
-    ) return null;
+        workoutSession?.workoutDurationSnapshot == null ||
+        workoutSession?.accumulatedMs == null
+    ) {
+        return null;
+    }
 
-    const startedAtMs = new Date(workoutSession.startedAt).getTime();
+    const durationMs =
+        workoutSession.workoutDurationSnapshot * 60_000;
 
-    if (!Number.isFinite(startedAtMs)) return null;
+    let elapsedMs = workoutSession.accumulatedMs;
 
-    const durationMs = workoutSession.workoutDurationSnapshot * 60_000;
+    if (workoutSession?.status === "in-progress") {
+        if (!workoutSession.activeStartedAt) {
+            return null;
+        }
 
+        const activeStartedAtMs =
+            new Date(workoutSession.activeStartedAt).getTime();
 
-    const elapsedMs = now - startedAtMs;
+        if (!Number.isFinite(activeStartedAtMs)) {
+            return null;
+        }
 
-    const remainingMs = Math.max(0, durationMs - elapsedMs);
+        elapsedMs += Math.max(
+            0,
+            now - activeStartedAtMs
+        );
+    }
+
+    const remainingMs = Math.max(
+        0,
+        durationMs - elapsedMs
+    );
 
     return Math.ceil(remainingMs / 60_000);
-}
+};
 
 export const formatElapsedTime = (totalSeconds) => {
     const safeSeconds = Math.max(0, Math.floor(totalSeconds));

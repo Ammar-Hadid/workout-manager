@@ -1,95 +1,109 @@
 import { useState } from "react";
-import { useRevalidator } from "react-router-dom";
+import { useNavigate, useRevalidator } from "react-router-dom";
 
 import {
-    startExerciseSession,
-    completeExerciseSession,
-    skipExerciseSession
-} from "../../exerciseSession/api/exerciseSession.api";
+    completeWorkoutSession,
+    discardWorkoutSession,
+    pauseWorkoutSession,
+    resumeWorkoutSession,
+} from "../api/workoutSession.api";
 
 import { useConfirm } from "../../../../shared/context/confirmContext";
 import { useToast } from "../../../../shared/context/toastContext";
 import { getErrorMessage } from "../../../../shared/utils/errorHelper";
 
-export const useWorkoutSessionActions = ({ exerciseSessions }) => {
+export const useWorkoutSessionActions = (workoutSessionId) => {
     const { confirm } = useConfirm();
     const { showToast } = useToast();
-    const revalidate = useRevalidator();
+    const navigate = useNavigate();
+    const revalidator = useRevalidator();
 
     const [pendingAction, setPendingAction] = useState(null);
 
     const runAction = async ({
         action,
         pendingKey,
-        successMessage
+        successMessage,
+        navigateToDashboard = false,
     }) => {
+        if (!workoutSessionId || pendingAction) return null;
+
         try {
             setPendingAction(pendingKey);
 
             const result = await action();
 
-            await revalidate.revalidate();
+            if (navigateToDashboard) {
+                navigate("/", { replace: true });
+            } else {
+                await revalidator.revalidate();
+            }
 
-            showToast(successMessage, 'success');
+            showToast(successMessage, "success");
 
             return result;
-        }
-
-        catch (error) {
+        } catch (error) {
             showToast(getErrorMessage(error));
             return null;
-        }
-
-        finally {
+        } finally {
             setPendingAction(null);
         }
     };
 
-    const startExercise = async (id) => {
+    const pauseWorkout = () => runAction({
+        action: () => pauseWorkoutSession(workoutSessionId),
+        pendingKey: "pause",
+        successMessage: "Workout paused",
+    });
 
-        const isSwitchingExercise = exerciseSessions?.find(({ status }) =>
-            status === 'in-progress'
-        )
+    const resumeWorkout = () => runAction({
+        action: () => resumeWorkoutSession(workoutSessionId),
+        pendingKey: "resume",
+        successMessage: "Workout resumed",
+    });
 
-        if (isSwitchingExercise) {
-            const isConfirmed = await confirm({
-                mode: 'warning',
-                title: 'Start another exercise?',
-                text: 'You already have an exercise in progress. Starting a new one will mark your current exercise as skipped. Any completed sets will be saved, and you can resume it later during this workout session.',
-                confirmText: 'Start New Exercise',
-            });
+    const completeWorkout = async () => {
+        const isConfirmed = await confirm({
+            mode: "warning",
+            title: "Finish workout?",
+            text: "This will complete your current workout session.",
+            confirmText: "Finish Workout",
+        });
 
-            if (!isConfirmed) return null;
-        }
+        if (!isConfirmed) return null;
 
-        return await runAction({
-            action: () => startExerciseSession(id),
-            pendingKey: `start:${id}`,
-            successMessage: 'Exercise started',
+        return runAction({
+            action: () => completeWorkoutSession(workoutSessionId),
+            pendingKey: "complete",
+            successMessage: "Workout completed",
+            navigateToDashboard: true,
         });
     };
 
-    const completeExercise = async (id) => {
-        return await runAction({
-            action: () => completeExerciseSession(id),
-            pendingKey: `complete:${id}`,
-            successMessage: 'Exercise completed',
+    const discardWorkout = async () => {
+        const isConfirmed = await confirm({
+            mode: "danger",
+            title: "Discard workout?",
+            text: "Your workout progress will be permanently deleted.",
+            confirmText: "Discard Workout",
         });
-    };
 
-    const skipExercise = async (id) => {
-        return await runAction({
-            action: () => skipExerciseSession(id),
-            pendingKey: `skip:${id}`,
-            successMessage: 'Exercise skipped',
+        if (!isConfirmed) return null;
+
+        return runAction({
+            action: () => discardWorkoutSession(workoutSessionId),
+            pendingKey: "discard",
+            successMessage: "Workout discarded",
+            navigateToDashboard: true,
         });
     };
 
     return {
-        startExercise,
-        completeExercise,
-        skipExercise,
+        pauseWorkout,
+        resumeWorkout,
+        completeWorkout,
+        discardWorkout,
         pendingAction,
         isPending: pendingAction !== null,
-    }
-}
+    };
+};
