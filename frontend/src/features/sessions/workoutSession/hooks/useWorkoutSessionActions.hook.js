@@ -12,7 +12,7 @@ import { useConfirm } from "../../../../shared/context/confirmContext";
 import { useToast } from "../../../../shared/context/toastContext";
 import { getErrorMessage } from "../../../../shared/utils/errorHelper";
 
-export const useWorkoutSessionActions = (workoutSessionId) => {
+export const useWorkoutSessionActions = (workoutSessionId, exerciseSessions) => {
     const { confirm } = useConfirm();
     const { showToast } = useToast();
     const navigate = useNavigate();
@@ -26,7 +26,7 @@ export const useWorkoutSessionActions = (workoutSessionId) => {
         successMessage,
         navigateToDashboard = false,
     }) => {
-        if (!workoutSessionId || pendingAction) return null;
+        if (!workoutSessionId || pendingAction || !exerciseSessions.length) return null;
 
         try {
             setPendingAction(pendingKey);
@@ -63,14 +63,22 @@ export const useWorkoutSessionActions = (workoutSessionId) => {
     });
 
     const completeWorkout = async () => {
-        const isConfirmed = await confirm({
-            mode: "warning",
-            title: "Finish workout?",
-            text: "This will complete your current workout session.",
-            confirmText: "Finish Workout",
+
+        const notCompletedExercises = exerciseSessions?.filter(exercise => {
+            return exercise.status !== 'completed';
         });
 
-        if (!isConfirmed) return null;
+        if (notCompletedExercises.length) {
+            const exerciseText = notCompletedExercises.length === 1 ? 'exercise' : 'exercises'
+            const isConfirmed = await confirm({
+                mode: "warning",
+                title: "Finish workout?",
+                text: `You still have ${notCompletedExercises.length} ${exerciseText} left. Are you sure you want to end your workout?`,
+                confirmText: "Finish Workout",
+            });
+
+            if (!isConfirmed) return null;
+        }
 
         return runAction({
             action: () => completeWorkoutSession(workoutSessionId),

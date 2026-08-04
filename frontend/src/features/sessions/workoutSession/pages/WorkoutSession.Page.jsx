@@ -32,7 +32,7 @@ const WorkoutSession = () => {
         discardWorkout,
         pendingAction: pendingWorkoutAction,
         isPending: isWorkoutActionPending,
-    } = useWorkoutSessionActions(workoutSession?._id);
+    } = useWorkoutSessionActions(workoutSession?._id, exerciseSessions);
 
     if (!workoutSession || !exerciseSessions) return null;
 
