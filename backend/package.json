@@ -16,7 +16,9 @@
   },
   "scripts": {
     "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "workout-session:delete": "node scripts/sessions/workoutSessions/deleteWorkoutSession.script.js",
+    "workout-session:delete-all": "node scripts/sessions/workoutSessions/deleteAllWorkoutSessions.script.js"
   },
   "type": "module"
 }

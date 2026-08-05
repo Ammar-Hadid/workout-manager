@@ -1,4 +1,4 @@
-import { MUSCLE_GROUP_IDS } from "../../constants/muscleGroups.js";
+import { VALID_MUSCLE_GROUP_IDS } from "../../constants/muscleGroups.js";
 
 const exerciseValidator = ({ name, muscleGroup, restTime, sets, minReps, maxReps }, isUpdate = false) => {
     const errors = {};
@@ -14,7 +14,7 @@ const exerciseValidator = ({ name, muscleGroup, restTime, sets, minReps, maxReps
 
     // MuscleGroup validation
     if (!isUpdate || muscleGroup !== undefined) {
-        if (!MUSCLE_GROUP_IDS.includes(muscleGroup)) {
+        if (!VALID_MUSCLE_GROUP_IDS.includes(muscleGroup)) {
             errors.muscleGroup = 'Please select a valid muscle group.';
         };
     };

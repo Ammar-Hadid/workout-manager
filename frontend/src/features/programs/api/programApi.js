@@ -1,10 +1,14 @@
 import { throwApiError } from "../../../shared/utils/errorHelper.js";
-import { getApiUrl } from "../../../config/api.js";
+import { API_ENDPOINTS } from "../../../config/apiEndpoints.js";
 
-const PROGRAMS_URL = getApiUrl("/programs");
+const programUrl = (programId) =>
+    `${API_ENDPOINTS.programs}/${encodeURIComponent(programId)}`;
+
+const programActionUrl = (programId, action) =>
+    `${programUrl(programId)}/${action}`;
 
 export const getAllPrograms = async () => {
-    const res = await fetch(PROGRAMS_URL, { credentials: "include" });
+    const res = await fetch(API_ENDPOINTS.programs, { credentials: "include" });
 
     const data = await res.json();
 
@@ -16,7 +20,7 @@ export const getAllPrograms = async () => {
 }
 
 export const getOneProgram = async (id) => {
-    const res = await fetch(`${PROGRAMS_URL}/${id}`, { credentials: "include", });
+    const res = await fetch(programUrl(id), { credentials: "include", });
 
     const data = await res.json();
 
@@ -28,7 +32,7 @@ export const getOneProgram = async (id) => {
 }
 
 export const createProgram = async (formData) => {
-    const res = await fetch(PROGRAMS_URL, {
+    const res = await fetch(API_ENDPOINTS.programs, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -47,7 +51,7 @@ export const createProgram = async (formData) => {
 }
 
 export const updateProgram = async (id, formData) => {
-    const res = await fetch(`${PROGRAMS_URL}/${id}`, {
+    const res = await fetch(programUrl(id), {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json"
@@ -66,7 +70,7 @@ export const updateProgram = async (id, formData) => {
 }
 
 export const deleteProgram = async (id) => {
-    const res = await fetch(`${PROGRAMS_URL}/${id}`, {
+    const res = await fetch(programUrl(id), {
         method: "DELETE",
         credentials: "include",
     })
@@ -81,7 +85,7 @@ export const deleteProgram = async (id) => {
 }
 
 export const activateProgram = async (id) => {
-    const res = await fetch(`${PROGRAMS_URL}/${id}/activate`, {
+    const res = await fetch(programActionUrl(id, "activate"), {
         method: "PATCH",
         credentials: "include"
     });

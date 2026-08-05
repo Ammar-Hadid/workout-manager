@@ -1,10 +1,8 @@
 import { throwApiError } from "../../../shared/utils/errorHelper.js";
-import { getApiUrl } from "../../../config/api.js";
-
-const MUSCLE_GROUPS_URL = getApiUrl("/muscle-groups");
+import { API_ENDPOINTS } from "../../../config/apiEndpoints.js";
 
 export const getAllMuscleGroups = async () => {
-    const res = await fetch(MUSCLE_GROUPS_URL);
+    const res = await fetch(API_ENDPOINTS.muscleGroups);
 
     const data = await res.json();
 

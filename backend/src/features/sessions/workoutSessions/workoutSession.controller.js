@@ -21,12 +21,12 @@ export const createWorkoutSession = async (req, res) => {
     try {
         const activeWorkoutSession = await WorkoutSession.findOne({
             user: req.userId,
-            status: 'in-progress'
+            status: { $in: ['in-progress', 'paused'] },
         });
 
         if (activeWorkoutSession) {
             return res.status(409).json({
-                error: 'You already have an active workout session. Complete or cancel it before starting a new workout.',
+                error: 'You already have an unfinished workout session. Resume and complete it before starting a new workout.',
                 activeWorkoutSession
             })
         }
@@ -86,7 +86,7 @@ export const getActiveWorkoutSession = async (req, res) => {
     try {
         const workoutSession = await WorkoutSession.findOne({
             user: req.userId,
-            status: 'in-progress',
+            status: { $in: ['in-progress', 'paused'] },
         });
 
         if (!workoutSession) {
@@ -186,7 +186,7 @@ export const completeWorkoutSession = async (req, res) => {
     }
 }
 
-export const cancelWorkoutSession = async (req, res) => {
+export const pauseWorkoutSession = async (req, res) => {
     const { workoutSessionId } = req.params;
 
     if (!mongoose.isValidObjectId(workoutSessionId)) {
@@ -198,17 +198,33 @@ export const cancelWorkoutSession = async (req, res) => {
             {
                 user: req.userId,
                 _id: workoutSessionId,
-                status: 'in-progress'
+                status: 'in-progress',
             },
 
-            {
-                status: 'cancelled',
-                cancelledAt: new Date(),
-            },
+            [
+                {
+                    $set: {
+                        status: 'paused',
+                        pausedAt: "$$NOW",
+                        accumulatedMs: {
+                            $add: [
+                                "$accumulatedMs",
+                                {
+                                    $subtract: [
+                                        "$$NOW",
+                                        "$activeStartedAt",
+                                    ],
+                                },
+                            ],
+                        },
+                        activeStartedAt: null,
+                    },
+                },
+            ],
 
             {
                 new: true,
-                runValidators: true,
+                updatePipeline: true,
             },
         );
 
@@ -222,5 +238,108 @@ export const cancelWorkoutSession = async (req, res) => {
     catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'Server error.' });
+    }
+}
+
+export const resumeWorkoutSession = async (req, res) => {
+    const { workoutSessionId } = req.params;
+
+    if (!mongoose.isValidObjectId(workoutSessionId)) {
+        return res.status(400).json({ error: 'Invalid workout session id.' });
+    }
+
+    try {
+        const workoutSession = await WorkoutSession.findOneAndUpdate(
+            {
+                user: req.userId,
+                _id: workoutSessionId,
+                status: 'paused',
+            },
+
+            {
+                status: 'in-progress',
+                activeStartedAt: new Date(),
+                pausedAt: null,
+            },
+
+            {
+                runValidators: true,
+                new: true,
+            }
+        );
+
+        if (!workoutSession) {
+            return res.status(404).json({ error: 'Workout session not found.' });
+        }
+
+        return res.status(200).json({ workoutSession });
+    }
+
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Server error.' });
+    }
+}
+
+export const discardWorkoutSession = async (req, res) => {
+    const { workoutSessionId } = req.params;
+
+    if (!mongoose.isValidObjectId(workoutSessionId)) {
+        return res.status(400).json({ error: 'Invalid workout session id.' });
+    }
+
+    const session = await mongoose.startSession();
+
+    try {
+
+        const workoutSession = await WorkoutSession.findOne(
+            {
+                user: req.userId,
+                _id: workoutSessionId,
+            },
+
+            { id: 1 },
+
+            {
+                session,
+            }
+        );
+
+        if (!workoutSession) {
+            return res.status(404).json({ error: 'Workout session not found.' });
+        }
+
+        session.startTransaction();
+
+        const exerciseSessions = await ExerciseSession.deleteMany(
+            {
+                user: req.userId,
+                workoutSession: workoutSession._id,
+            },
+
+            { session },
+        );
+
+        await WorkoutSession.deleteOne(
+            {
+                user: req.userId,
+                _id: workoutSession._id,
+            },
+
+            { session },
+        );
+
+        await session.commitTransaction();
+        return res.status(200).json({ workoutSession, exerciseSessions });
+    }
+
+    catch (error) {
+        await session.abortTransaction();
+        console.error(error);
+        return res.status(500).json({ error: 'Server error.' });
+    }
+
+    finally {
+        session.endSession();
     }
 }

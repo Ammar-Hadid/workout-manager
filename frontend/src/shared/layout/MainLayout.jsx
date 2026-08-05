@@ -6,16 +6,19 @@ import Header from "./Header.jsx";
 import Sidebar from "./sidebar/Sidebar.jsx";
 
 const MainLayout = () => {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
 
     return (
 
         <div
             className={`
-            grid min-h-screen lg:gap-3xl pt-3xl lg:pt-0
+            grid min-h-screen 
+            grid-cols-[minmax(0,1fr)]
+            pt-3xl
+            lg:gap-3xl lg:pt-0
             ${isSidebarOpen
-                    ? "lg:grid-cols-[280px_1fr]"
+                    ? "lg:grid-cols-[320px_1fr]"
                     : "lg:grid-cols-[95px_1fr]"
                 }
             `}

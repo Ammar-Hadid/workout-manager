@@ -32,3 +32,4 @@ build/
 
 # Markdown files
 *.md
+!frontend/THIRD_PARTY_NOTICES.md

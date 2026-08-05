@@ -11,7 +11,7 @@ import {
     editExercise,
     deleteExercise
 } from "../api/exerciseApi.js";
-import { getAllMuscleGroups } from "../api/muscleGroups.js";
+import { getAllMuscleGroups } from "../../muscleGroups/api/muscleGroups.js";
 
 import ExerciseCard from "../components/ExerciseCard.jsx";
 import ExerciseForm from "../components/ExerciseForm.jsx";

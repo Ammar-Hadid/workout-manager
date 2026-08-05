@@ -17,6 +17,10 @@ import ExercisePage from "../features/exercises/pages/Exercises.page.jsx";
 import { requireUser } from "../features/auth/loaders/requireUser.loader.js";
 import { redirectIfAuthenticated } from "../features/auth/loaders/redirectIfAuthenticated.loader.js";
 
+import { dashboardLoader } from "../features/dashboard/loaders/getDashboard.loader.js";
+import WorkoutSession from "../features/sessions/workoutSession/pages/WorkoutSession.page.jsx";
+import { workoutSessionLoader } from "../features/sessions/workoutSession/loaders/workoutSession.loader.js";
+
 const router = createBrowserRouter([
 
   {
@@ -28,6 +32,7 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <Dashboard />,
+        loader: dashboardLoader,
         handle: {
           getTitle: (user) => `Welcome back ${user.userName}`,
         },
@@ -56,6 +61,15 @@ const router = createBrowserRouter([
           title: 'Exercises',
         },
       },
+
+      {
+        path: '/workout-sessions/:workoutSessionId',
+        element: <WorkoutSession />,
+        loader: workoutSessionLoader,
+        handle: {
+          title: 'Workout session',
+        },
+      }
     ]
   },
 

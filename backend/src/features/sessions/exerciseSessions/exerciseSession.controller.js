@@ -4,51 +4,82 @@ import ExerciseSession from "./ExerciseSession.model.js";
 export const startExerciseSession = async (req, res) => {
     const { exerciseSessionId } = req.params;
 
-
     if (!mongoose.isValidObjectId(exerciseSessionId)) {
         return res.status(400).json({ error: 'Invalid exercise session id.' })
     }
 
+    const session = await mongoose.startSession();
+
     try {
+        session.startTransaction();
+
+        await ExerciseSession.findOneAndUpdate(
+            {
+                user: req.userId,
+                status: "in-progress",
+                _id: { $ne: exerciseSessionId },
+            },
+            {
+                status: "skipped",
+                skippedAt: new Date(),
+            },
+            {
+                runValidators: true,
+                session,
+            }
+        );
+
         const exerciseSession = await ExerciseSession.findOneAndUpdate(
             {
                 user: req.userId,
                 _id: exerciseSessionId,
                 status: {
-                    $in: ['not-started', 'skipped'],
+                    $in: ["not-started", "skipped"],
                 },
             },
-
             [
                 {
                     $set: {
-                        status: 'in-progress',
-
+                        status: "in-progress",
                         startedAt: {
-                            $ifNull: ['$startedAt', '$$NOW'],
+                            $ifNull: ["$startedAt", "$$NOW"],
                         },
-
                         skippedAt: null,
-                    }
+                    },
                 },
             ],
-
             {
                 new: true,
                 runValidators: true,
-            },
+                updatePipeline: true,
+                session,
+            }
         );
 
         if (!exerciseSession) {
-            return res.status(404).json({ error: 'Exercise session not found.' });
+            await session.abortTransaction();
+
+            return res.status(404).json({
+                error: "Exercise session not found.",
+            });
         }
+
+        await session.commitTransaction();
 
         return res.status(200).json({ exerciseSession });
     }
 
     catch (error) {
+        await session.abortTransaction();
         console.error(error);
-        return res.status(500).json({ error: 'Server error.' });
+
+        return res.status(500).json({
+            error: "Server error.",
+        });
+    }
+
+    finally {
+        await session.endSession();
     }
 }
 
@@ -131,4 +162,3 @@ export const skipExerciseSession = async (req, res) => {
         return res.status(500).json({ error: 'Server error.' });
     }
 }
-

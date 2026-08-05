@@ -10,9 +10,8 @@ import {
     editWorkout,
     deleteWorkout,
 } from "../api/workoutApi.js";
-import { getOneProgram } from "../../programs/api/programApi.js";
 
-import { throwApiError, getErrorMessage } from "../../../shared/utils/errorHelper.js";
+import { getErrorMessage } from "../../../shared/utils/errorHelper.js";
 
 import WorkoutCard from "../components/WorkoutCard.jsx";
 import WorkoutForm from "../components/WorkoutForm.jsx";
