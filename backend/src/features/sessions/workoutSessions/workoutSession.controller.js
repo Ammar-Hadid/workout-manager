@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-import Program from "../../programs/Program.model.js";
 import Workout from "../../workouts/Workout.model.js";
 import Exercise from "../../exercises/Exercise.model.js";
 

@@ -7,3 +7,5 @@ const SetsProgress = () => {
         </Card>
     )
 }
+
+export default SetsProgress;

@@ -67,7 +67,7 @@ const deleteWorkoutSession = async ({ userId, workoutSessionId }) => {
 
     catch (error) {
         await session.abortTransaction();
-        throw new Error(error);
+        throw error;
     }
 
     finally {

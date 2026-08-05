@@ -51,7 +51,7 @@ const ExerciseItem = ({ exercise, startExercise, isPending, pendingAction }) => 
     const getButtonString = () => {
         if (!pendingAction) return 'Start Exercise';
 
-        const [action, id] = pendingAction?.split(':');
+        const [action, id] = pendingAction.split(':');
 
         if (action === 'start' && id === _id) {
             return 'Starting Exercise...';

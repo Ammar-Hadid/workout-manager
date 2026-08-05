@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider, Navigate, redirect } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import { ToastProvider } from "../shared/context/toastContext.jsx";
 import { ConfirmProvider } from "../shared/context/confirmContext.jsx";
@@ -7,7 +7,6 @@ import { ConfirmProvider } from "../shared/context/confirmContext.jsx";
 import AuthPage from "../features/auth/pages/AuthPage.jsx"
 
 import MainLayout from "../shared/layout/MainLayout.jsx";
-import DevelopmentPreviewBanner from "../shared/layout/DevelopmentPreviewBanner.jsx";
 import Dashboard from "../features/dashboard/pages/Dashboard.page.jsx";
 
 import ProgramsPage from "../features/programs/pages/Programs.page.jsx";
@@ -18,7 +17,7 @@ import { requireUser } from "../features/auth/loaders/requireUser.loader.js";
 import { redirectIfAuthenticated } from "../features/auth/loaders/redirectIfAuthenticated.loader.js";
 
 import { dashboardLoader } from "../features/dashboard/loaders/getDashboard.loader.js";
-import WorkoutSession from "../features/sessions/workoutSession/pages/WorkoutSession.page.jsx";
+import WorkoutSession from "../features/sessions/workoutSession/pages/WorkoutSession.Page.jsx";
 import { workoutSessionLoader } from "../features/sessions/workoutSession/loaders/workoutSession.loader.js";
 
 const router = createBrowserRouter([

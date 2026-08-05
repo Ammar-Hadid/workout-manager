@@ -1,4 +1,4 @@
-import { Dumbbell, Icon } from "lucide-react";
+import { Dumbbell } from "lucide-react";
 import DefaultButton from "../../../shared/components/DefaultButton";
 
 import { SectionHeading } from "./SectionHeading.component";
