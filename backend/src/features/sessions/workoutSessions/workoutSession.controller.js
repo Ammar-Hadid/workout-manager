@@ -161,14 +161,30 @@ export const completeWorkoutSession = async (req, res) => {
                 status: 'in-progress',
             },
 
-            {
-                status: 'completed',
-                completedAt: new Date(),
-            },
+            [
+                {
+                    $set: {
+                        status: 'completed',
+                        completedAt: "$$NOW",
+                        accumulatedMs: {
+                            $add: [
+                                "$accumulatedMs",
+                                {
+                                    $subtract: [
+                                        "$$NOW",
+                                        "$activeStartedAt",
+                                    ],
+                                },
+                            ],
+                        },
+                        activeStartedAt: null,
+                    },
+                },
+            ],
 
             {
                 new: true,
-                runValidators: true,
+                updatePipeline: true,
             },
         );
 
