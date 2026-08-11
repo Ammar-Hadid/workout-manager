@@ -7,6 +7,7 @@ import WorkoutSession from "./WorkoutSession.model.js";
 import ExerciseSession from "../exerciseSessions/ExerciseSession.model.js";
 
 import { createExerciseSessionsFromExercises } from "../exerciseSessions/exerciseSession.service.js";
+import { createSetSessionsFromExerciseSessions } from "../setSessions/setSession.service.js";
 
 export const createWorkoutSession = async (req, res) => {
     const { workoutId } = req.body;
@@ -66,8 +67,15 @@ export const createWorkoutSession = async (req, res) => {
             workoutSession: workoutSession._id,
         });
 
+        const setSessions = await createSetSessionsFromExerciseSessions({
+            user: req.userId,
+            exerciseSessions,
+            workoutSessionId: workoutSession._id,
+            session
+        });
+
         await session.commitTransaction();
-        return res.status(201).json({ workoutSession, exerciseSessions });
+        return res.status(201).json({ workoutSession, exerciseSessions, setSessions });
     }
 
     catch (error) {
