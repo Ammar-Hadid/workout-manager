@@ -52,7 +52,7 @@ const setSessionSchema = new mongoose.Schema({
         type: Number,
         min: 1,
         validate: {
-            validator: Number.isInteger,
+            validator: value => value === null || Number.isInteger(value),
             message: 'Reps must be a whole number.',
         },
         default: null,

@@ -2,7 +2,7 @@ import { useLoaderData } from "react-router-dom";
 
 import { getFeaturedExerciseSession } from "../selectors/workoutsession.selectors.js";
 
-import CurrentExercise from "../../exerciseSession/components/CurrentExercise.component.jsx";
+import ActiveExercisePanel from "../../exerciseSession/components/ActiveExercisePanel.component.jsx";
 
 import ExercisesQueue from "../components/ExercisesQueue.component.jsx";
 
@@ -15,7 +15,7 @@ import { getWorkoutProgress } from "../selectors/workoutProgress.selector.js";
 import WorkoutSessionHeader from "../components/WorkoutSessionHeader.component.jsx";
 
 const WorkoutSession = () => {
-    const { workoutSession, exerciseSessions } = useLoaderData();
+    const { workoutSession, exerciseSessions, setSessions } = useLoaderData();
 
     const {
         startExercise,
@@ -57,7 +57,8 @@ const WorkoutSession = () => {
             />
 
             <div className="flex min-w-0 flex-col gap-lg lg:items-start lg:flex-row ">
-                <CurrentExercise
+
+                <ActiveExercisePanel
                     featuredExercise={featuredExerciseSession}
                     completeExercise={completeExercise}
                     skipExercise={skipExercise}
