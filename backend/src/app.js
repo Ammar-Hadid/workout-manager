@@ -5,6 +5,7 @@ import express from 'express';
 import cookieParser from "cookie-parser"
 
 import authRouter from './features/auth/auth.routes.js';
+import userRouter from './features/users/user.routes.js'
 import dashboardRouter from "./features/dashboard/dashboard.routes.js";
 import programRouter from './features/programs/program.routes.js';
 import workoutRouter from './features/workouts/workout.routes.js';
@@ -38,6 +39,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/api/auth', authRouter);
+
+app.use('/api/users', userRouter);
 
 app.use('/api/dashboard', dashboardRouter)
 
