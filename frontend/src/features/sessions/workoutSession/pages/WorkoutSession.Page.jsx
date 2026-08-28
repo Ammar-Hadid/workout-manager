@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useRouteLoaderData } from "react-router-dom";
 
 import { getFeaturedExerciseSession } from "../selectors/workoutsession.selectors.js";
 
@@ -16,6 +16,7 @@ import WorkoutSessionHeader from "../components/WorkoutSessionHeader.component.j
 
 const WorkoutSession = () => {
     const { workoutSession, exerciseSessions, setSessions } = useLoaderData();
+    const { user } = useRouteLoaderData('root');
 
     const {
         startExercise,
@@ -34,13 +35,22 @@ const WorkoutSession = () => {
         isPending: isWorkoutActionPending,
     } = useWorkoutSessionActions(workoutSession?._id, exerciseSessions);
 
-    if (!workoutSession || !exerciseSessions) return null;
+    if (!workoutSession ||
+        !exerciseSessions ||
+        !user?.preferences?.weightUnit
+    ) return null;
 
     const featuredExerciseSession = getFeaturedExerciseSession(exerciseSessions);
     const areExerciseActionsDisabled =
         isExerciseActionPending ||
         isWorkoutActionPending ||
         workoutSession.status !== "in-progress";
+
+    const featuredSetSessions = setSessions
+        ?.filter(session => {
+            return session?.exerciseSession === featuredExerciseSession?._id
+        })
+        ?.sort((a, b) => a.order - b.order);
 
     const { progress, progressPercentage } = getWorkoutProgress({ exerciseSessions });
 
@@ -56,21 +66,26 @@ const WorkoutSession = () => {
                 isPending={isWorkoutActionPending}
             />
 
-            <div className="flex min-w-0 flex-col gap-lg lg:items-start lg:flex-row ">
-
+            <div className="grid min-w-0 grid-cols-1 gap-lg lg:grid-cols-2">
                 <ActiveExercisePanel
                     featuredExercise={featuredExerciseSession}
                     completeExercise={completeExercise}
                     skipExercise={skipExercise}
-                    isPending={areExerciseActionsDisabled}
+                    areExerciseActionsDisabled={areExerciseActionsDisabled}
+                    setSessions={featuredSetSessions}
+                    weightUnit={user.preferences.weightUnit}
                 />
 
-                <ExercisesQueue
-                    exercises={exerciseSessions}
-                    startExercise={startExercise}
-                    isPending={areExerciseActionsDisabled}
-                    pendingAction={pendingExerciseAction}
-                />
+                <div className="min-h-0 min-w-0 lg:relative">
+                    <div className="lg:absolute lg:inset-0">
+                        <ExercisesQueue
+                            exercises={exerciseSessions}
+                            startExercise={startExercise}
+                            isPending={areExerciseActionsDisabled}
+                            pendingAction={pendingExerciseAction}
+                        />
+                    </div>
+                </div>
             </div>
 
             <WorkoutProgress

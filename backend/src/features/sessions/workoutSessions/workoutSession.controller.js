@@ -8,6 +8,7 @@ import ExerciseSession from "../exerciseSessions/ExerciseSession.model.js";
 
 import { createExerciseSessionsFromExercises } from "../exerciseSessions/exerciseSession.service.js";
 import { createSetSessionsFromExerciseSessions } from "../setSessions/setSession.service.js";
+import SetSession from "../setSessions/SetSession.model.js";
 
 export const createWorkoutSession = async (req, res) => {
     const { workoutId } = req.body;
@@ -99,7 +100,8 @@ export const getActiveWorkoutSession = async (req, res) => {
         if (!workoutSession) {
             return res.status(200).json({
                 workoutSession: null,
-                exerciseSessions: []
+                exerciseSessions: [],
+                setSessions: [],
             });
         }
 
@@ -108,9 +110,15 @@ export const getActiveWorkoutSession = async (req, res) => {
             workoutSession: workoutSession._id,
         }).sort({ orderSnapshot: 1 });
 
+        const setSessions = await SetSession.find({
+            user: req.userId,
+            workoutSession: workoutSession._id,
+        });
+
         return res.status(200).json({
             workoutSession,
             exerciseSessions,
+            setSessions,
         });
     }
 
@@ -142,9 +150,15 @@ export const getWorkoutSessionById = async (req, res) => {
             workoutSession: workoutSession._id,
         }).sort({ orderSnapshot: 1 });
 
+        const setSessions = await SetSession.find({
+            user: req.userId,
+            workoutSession: workoutSession._id,
+        })
+
         return res.status(200).json({
             workoutSession,
-            exerciseSessions
+            exerciseSessions,
+            setSessions
         });
     }
 
@@ -342,6 +356,17 @@ export const discardWorkoutSession = async (req, res) => {
 
             { session },
         );
+
+        await SetSession.deleteMany(
+            {
+                user: req.userId,
+                workoutSession: workoutSessionId,
+            },
+
+            {
+                session,
+            },
+        )
 
         await WorkoutSession.deleteOne(
             {
